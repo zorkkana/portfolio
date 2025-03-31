@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oskari - Portfolio</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@400;500&display=swap">
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            color: #fff;
+            background: #0a0a23;
+            overflow-x: hidden;
+        }
+
+        
+        .center {
+            text-align: center;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            z-index: 100;
+        }
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        nav .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            color: #00ffcc;
+            text-shadow: 0 0 10px #00ffcc;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+        }
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        nav ul li a:hover {
+            color: #00ffcc;
+            cursor: pointer;
+        }
+
+        /* Hero Section with Particles */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(135deg, #1e1e3f, #3a3a6b);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+        }
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+        .hero .container {
+            z-index: 1;
+        }
+        .hero h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4rem;
+            color: #00ffcc;
+            text-shadow: 0 0 20px rgba(0, 255, 204, 0.8);
+            animation: fadeInDown 1s ease-out;
+        }
+        .hero p {
+            font-size: 1.5rem;
+            margin: 1rem 0 2rem;
+            color: #ccc;
+            animation: fadeInUp 1s ease-out 0.5s forwards;
+            opacity: 0;
+        }
+        .hero .btn {
+            background: #ff007a;
+            color: #fff;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            box-shadow: 0 0 15px #ff007a;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .hero .btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 25px #ff007a;
+            cursor: pointer;
+        }
+
+        /* Sections */
+        section {
+            padding: 6rem 0;
+            position: relative;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            color: #00ffcc;
+            margin-bottom: 2rem;
+            text-align: center;
+            text-shadow: 0 0 10px #00ffcc;
+        }
+
+        /* About Section */
+        .about {
+            background: #1e1e3f;
+        }
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 3rem;
+            align-items: center;
+        }
+        .avatar {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 3px solid #00ffcc;
+            box-shadow: 0 0 20px #00ffcc;
+            object-fit: cover;
+            animation: fadeIn 1s ease-out;
+            object-fit: contain;
+        }
+        .bio p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: #ccc;
+            animation: fadeInUp 1s ease-out 0.5s forwards;
+            opacity: 0;
+        }
+        .bio .skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .bio .skills span {
+            background: rgba(0, 255, 204, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: #00ffcc;
+            transition: all 0.3s;
+        }
+        .bio .skills span:hover {
+            box-shadow: 0 0 30px rgba(0, 255, 204, 0.5);
+            transform: scale(1.05);
+            cursor: pointer;
+        }
+        .bio .languages {
+            margin-top: 1rem;
+        }
+        .bio .languages h3 {
+            font-size: 1.2rem;
+            color: #00ffcc;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Projects Section */
+        .projects {
+            background: #0a0a23;
+        }
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        .project-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid #00ffcc;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 0 30px rgba(0, 255, 204, 0.5);
+            cursor: pointer;
+        }
+        .project-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+        .project-card h3 {
+            font-size: 1.5rem;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+        .project-card p {
+            color: #ccc;
+            margin-bottom: 1rem;
+        }
+        .project-card a {
+            color: #ff007a;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        /* Experience Section */
+        .experience {
+            background: #1e1e3f;
+        }
+        .experience-list {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        .experience-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid #00ffcc;
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .experience-item.animate {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .experience-item:hover {
+            transform: translateX(10px);
+            cursor: pointer;
+        }
+
+        .experience-item h3 {
+            font-size: 1.5rem;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+
+        .experience-item p {
+            color: #ccc;
+        }
+
+        /* Company Section */
+        .company {
+            background: #0a0a23;
+            text-align: center;
+        }
+        .company-logo {
+            width: 250px;
+            margin-bottom: 2rem;
+            border-radius: 10px;
+        }
+        .company p {
+            font-size: 1.2rem;
+            color: #ccc;
+            max-width: 800px;
+            margin: 0 auto 1rem;
+        }
+        .company a {
+            color: #ff007a;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        /* Contact Section */
+        .contact {
+            background: #1e1e3f;
+        }
+        .contact form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+        .contact input, .contact textarea {
+            padding: 1rem;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 1rem;
+        }
+        .contact .btn {
+            background: #ff007a;
+            color: #fff;
+            padding: 1rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: transform 0.3s;
+        }
+        .contact .btn:hover {
+            transform: scale(1.05);
+            cursor: pointer;
+        }
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+        }
+        .social-links a {
+            color: #00ffcc;
+            text-decoration: none;
+            font-weight: 700;
+            transition: color 0.3s;
+        }
+        .social-links a:hover {
+            color: #ff007a;
+            cursor: pointer;
+        }
+
+        /* Footer */
+        footer {
+            background: #0a0a23;
+            text-align: center;
+            padding: 2rem 0;
+            color: #ccc;
+        }
+        /* Initial hidden state for animated elements */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        /* Visible state when the animation triggers */
+        .fade-in.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Optional: Avatar scaling effect */
+        .avatar {
+            opacity: 0;
+            transform: scale(0.8);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .avatar.animate {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Project cards slide-in effect */
+        .project-card {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .project-card.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        
+
+        /* Company logo zoom-in effect */
+        .company-logo {
+            opacity: 0;
+            transform: scale(0.8);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .company-logo.animate {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @media (max-width: 768px) {
+            .about-content {
+                grid-template-columns: 1fr;
+            }
+            .avatar {
+                width: 150px;
+                height: 150px;
+                margin: 0 auto;
+            }
+        }
+
+        .languages ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+            padding: 0;
+        }
+
+        @media (max-width: 480px) {
+            .languages ul {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+        /* Hamburger icon styling */
+        .hamburger {
+            display: none; /* Hidden on big screens */
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background: #fff; /* White lines, adjust color as needed */
+            margin: 5px 0;
+        }
+
+        /* Default nav links styling for larger screens */
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 2rem; /* Space between links */
+        }
+
+        /* Mobile styles */
+        @media (max-width: 768px) {
+            .hamburger {
+                display: block; /* Show hamburger on small screens */
+            }
+            .nav-links {
+                display: none; /* Hide links by default on mobile */
+                flex-direction: column; /* Stack links vertically */
+                position: absolute;
+                top: 60px; /* Below the nav bar */
+                left: 0;
+                width: 100%;
+                background: rgba(0, 0, 0, 0.9); /* Dark background */
+                padding: 1rem 0;
+            }
+            .nav-links.active {
+                display: flex; /* Show links when hamburger is clicked */
+            }
+            .nav-links li {
+                margin: 1rem 0; /* Space between stacked links */
+                text-align: center; /* Center align text */
+            }
+        }
+
+        
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <a href="#" class="logo">Oskari</a>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#about">About</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#experience">Experience</a></li>
+                <li><a href="#company">Company</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+    <script>
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+        const links = document.querySelectorAll('.nav-links li a');
+    
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+    
+        links.forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+            });
+        });
+    </script>
+
+    <div class="hero">
+        <div id="particles-js"></div>
+        <div class="container">
+            <h1>Oskari Kaile</h1>
+            <p>Coding the Future | Innovator | Problem Solver</p>
+            <a href="#contact" class="btn">Connect With Me</a>
+        </div>
+    </div>
+
+    <section id="about" class="about">
+        <div class="container">
+            <h2 class="fade-in">About Me</h2>
+            <div class="about-content">
+                <img src="1743422114448 - Copy.jpg" alt="Oskari" class="avatar">
+                <div class="bio">
+                    <p class="fade-in">Hey, I’m Oskari—a 19-year-old programmer with a passion for pushing boundaries and crafting solutions that matter. I’m currently working at my own company, Portawebia, where I dive deep into web development, software engineering, and cutting-edge tech like AI. I’ve built many projects that solve real problems, interned at top-tier companies, and even started my own venture. Beyond coding, I’m fascinated by space exploration and dream of contributing to humanity’s journey to becoming a multiplanetary species. Whether it’s through software or innovation, I want my work to help us reach the stars.</p>
+                    <div class="languages">
+                        <h3>Languages</h3>
+                        <ul>
+                            <li><b>Finnish:</b> Mother Language</li>
+                            <li><b>English:</b> Excellent</li>
+                        </ul>
+                    </div>
+                    <div class="skills">
+                        <span>Python: God Tier</span>
+                        <span>React: Excellent</span>
+                        <span>Docker: Great</span>
+                        <span>AWS: Excellent</span>
+                        <span>Visual Basic: Very Great</span>
+                        <span>C#: Very Great</span>
+                        <span>cPanel: Great</span>
+                        <span>JavaScript: Great</span>
+                        <span>Php: Great</span>
+                        <span>Html: Excellent</span>
+                        <span>Css: Excellent</span>
+                        <span>Sass: Excellent</span>
+                        <span>GitHub: Excellent</span>
+                        <span>Unity: Excellent</span>
+                    </div>
+                   
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="projects">
+        <div class="container">
+            <h2>School Projects & Education</h2>
+            <div class="project-grid">
+                <div class="project-card">
+                    <img src="fanikauppa.png" alt="SwordShop">
+                    <h3>School Project: SwordShop</h3>
+                    <p>Developed a web application for purchasing Minecraft swords, featuring a responsive design and an SQL database for inventory management. Built using React for the frontend.</p>
+                    <!-- <a href="https://github.com/Oskari/swordshop" target="_blank">Check It Out</a> -->
+                </div>
+                <div class="project-card">
+                    <img src="music.png" alt="Spotity">
+                    <h3>School Project: Spotity</h3>
+                    <p>Created a gig information platform with a NoSQL database and React frontend. Although not media responsive, it provides updates on music events.</p>
+                    <!-- <a href="https://github.com/Oskari/spotity" target="_blank">Check It Out</a> -->
+                </div>
+                <div class="project-card">
+                    <img src="Yesmansky.png" alt="Yes Man's Sky">
+                    <h3>Personal Project: Yes Man's Sky</h3>
+                    <p>A downloadable space action-adventure game built in Unity with C#. Explore the galaxy, complete missions, and experience the thrill of interstellar space travel.</p>
+                    <a href="https://zorkkana.itch.io/yes-mans-sky" target="_blank">Check It Out</a>
+                </div>
+            </div>
+            <div class="experience-item">
+                <h3>Education: Tampereen seudun ammattiopisto Tredu (Software Developer)</h3>
+                <p>2021 - 2024</p>
+                <p>Studied software development, gaining hands-on experience in various programming languages and tools through project-based learning.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="experience" class="experience">
+        <div class="container">
+            <h2>Internships & Work</h2>
+            <div class="experience-list">
+              
+                <div class="experience-item">
+                    <h3>Summer Job @ Lemonsoft Oyj</h3>
+                    <p>June 1, 2022 - June 30, 2022</p>
+                    <p>Worked with SQL reports in Visual Studio, gaining practical experience in database management and report generation.</p>
+                </div>
+                <div class="experience-item">
+                    <h3>Internship @ Lemonsoft Oyj</h3>
+                    <p>October 24, 2022 - December 15, 2022</p>
+                    <p>Focused on software development and managing upgrade load handling, enhancing skills in system maintenance and optimization.</p>
+                </div>
+                <div class="experience-item">
+                    <h3>Summer Job @ Lemonsoft Oyj</h3>
+                    <p>May 29, 2023 - July 21, 2023</p>
+                    <p>Developed a billing tool/feature and contributed to various small tasks, improving proficiency in software engineering and teamwork.</p>
+                </div>
+                <div class="experience-item">
+                    <h3>International Internship @ Pco GmbH & Co. KG</h3>
+                    <p>January 14, 2024 - February 25, 2024</p>
+                    <p>Focused on cybersecurity and automation, implementing solutions to enhance system security and operational efficiency.</p>
+                </div>
+                <div class="experience-item">
+                    <h3>Internship @ Lingonperry (ArtXperience Oy)</h3>
+                    <p>Approx. March 15, 2024 - May 15, 2024</p>
+                    <p>Developed features for a music streaming platform, utilizing web development technologies to improve user experience.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="company" class="company">
+        <div class="container">
+            <h2>My Company</h2>
+            <img src="https://storage.googleapis.com/msgsndr/FpZM3NUjoCDV2jQTpY0E/media/668fd21c74ee2e0c6679e6fb.png" alt="Portawebia Logo" class="company-logo">
+            <p>Meet Portawebia—mine and my brother venture started in August 2023, born from a passion for tech and innovation. We specialize in developing custom software solutions and websites for businesses, helping them streamline operations and boost their online presence. From concept to launch, I’ve poured my skills into building tools that make a difference. Want to know more?</p>
+            <a href="https://www.portawebia.com/" target="_blank">Visit Portawebia</a>
+        </div>
+    </section>
+
+    <section id="contact" class="contact">
+   
+        <div class="container">
+            <h2>Get in Touch</h2>
+            <div class="project-grid">
+                <div class="project-card">
+                    <h3 class="center">Email: </h3>
+                    <h3 class="center">oskari.o.m.k@hotmail.com</h3>
+                </div>
+                <div class="project-card">
+                    <h3 class="center">Phone: </h3>
+                    <h3 class="center">+358 40 1340637 </h3>
+                </div>
+                <div class="project-card">
+                    <h3 class="center">location: </h3>
+                    <h3 class="center">Finland tampere</h3>
+
+                </div>
+            </div>
+            <!-- <div class="social-links">
+                <a href="https://github.com/Oskari" target="_blank">GitHub</a>
+                <a href="https://linkedin.com/in/oskari" target="_blank">LinkedIn</a>
+                <a href="https://twitter.com/Oskari" target="_blank">Twitter</a>
+            </div> -->
+           
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2025 Oskari. Built from Scratch.</p>
+    </footer>
+
+    <!-- Particles.js for Hero Background -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script>
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: '#ffffff' },
+                shape: { type: 'circle' },
+                opacity: { value: 0.5, random: true },
+                size: { value: 3, random: true },
+                line_linked: { enable: true, distance: 150, color: '#00ffcc', opacity: 0.4, width: 1 },
+                move: { enable: true, speed: 2, direction: 'none', random: false, straight: false, out_mode: 'out' }
+            },
+            interactivity: {
+                detect_on: 'canvas',
+                events: { onhover: { enable: true, mode: 'repulse' }, onclick: { enable: true, mode: 'push' }, resize: true },
+                modes: { repulse: { distance: 100, duration: 0.4 }, push: { particles_nb: 4 } }
+            },
+            retina_detect: true
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Create the Intersection Observer
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate');
+                        observer.unobserve(entry.target); // Stop observing after animation triggers
+                    }
+                });
+            }, {
+                threshold: 0.1 // Trigger when 10% of the element is visible
+            });
+        
+            // Target elements to animate
+            document.querySelectorAll('h2, .avatar, .bio p, .project-card, .experience-item, .company-logo, .contact form').forEach(element => {
+                observer.observe(element);
+            });
+        
+            // Add staggered effect for project cards
+            document.querySelectorAll('.project-card').forEach((card, index) => {
+                card.style.transitionDelay = `${index * 0.1}s`; // 0.1s delay per card
+                observer.observe(card);
+            });
+        });
+        </script>
+</body>
+</html>
