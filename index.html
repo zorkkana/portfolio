@@ -501,14 +501,16 @@
                 display: block; /* Show hamburger on small screens */
             }
             .nav-links {
-                display: none; /* Hide links by default on mobile */
-                flex-direction: column; /* Stack links vertically */
-                position: absolute;
-                top: 60px; /* Below the nav bar */
-                left: 0;
-                width: 100%;
-                background: rgba(0, 0, 0, 0.9); /* Dark background */
-                padding: 1rem 0;
+                    display: none;
+                    flex-direction: column;
+                    position: absolute;
+                    top: 36px;
+                    left: 0;
+                    width: 100%;
+                    z-index: -1;
+                    background: rgb(7 7 14);
+                    padding: 1rem 0;
+                    border-radius: 0 0 50px 50px;
             }
             .nav-links.active {
                 display: flex; /* Show links when hamburger is clicked */
@@ -517,8 +519,23 @@
                 margin: 1rem 0; /* Space between stacked links */
                 text-align: center; /* Center align text */
             }
-        }
+            nav{
+                background: rgb(7 7 14) !important;
+            }
+            .hero {
+                flex-direction: column !important;   
+            }
 
+            .hero .btn,
+            .hero .btn-hollow {
+                width: 100%;     
+                display: block;       
+                max-width: 320px;     
+                margin: 0.8rem 0;       
+                text-align: center;
+            }
+        }
+      
         
     </style>
 </head>
