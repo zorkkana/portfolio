@@ -29,12 +29,15 @@
         /* Navigation */
         nav {
             position: fixed;
-            top: 0;
-            width: 100%;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
             background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(10px);
             padding: 1rem 0;
             z-index: 100;
+            border-radius: 100px;
         }
         nav .container {
             display: flex;
@@ -64,6 +67,9 @@
         nav ul li a:hover {
             color: #00ffcc;
             cursor: pointer;
+        }
+        nav ul li a:active {
+            color: #00ffcc;
         }
 
         /* Hero Section with Particles */
@@ -112,6 +118,29 @@
             transition: transform 0.3s, box-shadow 0.3s;
         }
         .hero .btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 25px #fd7a33;
+            cursor: pointer;
+        }
+        .hero .btn-hollow {
+            background: transparent;
+            color: #fd7a33;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            border: 2px solid #fd7a33;
+            box-shadow: 0 0 15px rgba(253, 122, 51, 0.4);   /* softer glow */
+            transition: 
+                transform 0.3s,
+                box-shadow 0.3s,
+                background 0.3s,
+                color 0.3s;
+        }
+
+        .hero .btn-hollow:hover {
+            background: #fd7a33;
+            color: #fff;
             transform: scale(1.1);
             box-shadow: 0 0 25px #fd7a33;
             cursor: pointer;
@@ -526,13 +555,47 @@
             });
         });
     </script>
+    <script>
+    // Same logic, but apply style directly (no .active class needed)
+    document.addEventListener("DOMContentLoaded", () => {
+        const sections = document.querySelectorAll("section[id]");
+        const navLinks = document.querySelectorAll("nav ul li a");
 
+        function highlightCurrent() {
+            let currentId = "";
+
+            sections.forEach(section => {
+                const rect = section.getBoundingClientRect();
+                // Section is "current" if its top is near or above the nav
+                if (rect.top <= 120 && rect.bottom >= 120) {   // 120 ≈ nav height + buffer
+                    currentId = section.getAttribute("id");
+                }
+            });
+
+            navLinks.forEach(link => {
+                // Reset everyone first
+                link.style.color = "#fff";
+
+                if (link.getAttribute("href") === "#" + currentId) {
+                    link.style.color = "#00ffcc";
+                    // Optional: link.style.fontWeight = "600";
+                }
+            });
+        }
+
+        // Run once + on scroll
+        highlightCurrent();
+        window.addEventListener("scroll", highlightCurrent);
+    });
+    </script>
     <div class="hero">
         <div id="particles-js"></div>
         <div class="container">
             <h1>Oskari Kaile</h1>
             <p>Coding the Future | Entrepreneur | Problem Solver</p>
-            <a href="#contact" class="btn">Connect With Me</a>
+            <a href="#experience" class="btn">View My Work</a>
+            <a href="#contact" class="btn-hollow">Connect With Me</a>
+
         </div>
     </div>
 
