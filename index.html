@@ -649,93 +649,111 @@
         .hud-title { color: #fd7a33; margin-bottom: 5px; border-bottom: 1px solid #fd7a33; padding-bottom: 3px; }
         .hud-row { display: flex; justify-content: space-between; margin: 2px 0; }
         .hud-val { color: #00ffcc; }
+        .live-dot {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 8px;
+            height: 8px;
+            background-color: #ff3e3e; /* Red for recording/live, or #00ff41 for green */
+            border-radius: 50%;
+            box-shadow: 0 0 8px #ff3e3e;
+            animation: pulse 1.5s infinite;
+        }
+
+        /* The "blinking" effect */
+        @keyframes pulse {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.3; transform: scale(1.2); }
+            100% { opacity: 1; transform: scale(1); }
+        }
       
         .spacer {
-  width: 100%;
-  position: relative;
-  margin-top:  -5rem;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-}
+            width: 100%;
+            position: relative;
+            margin-top:  -5rem;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            }
 
-/* Ensure the SVG fills the width and removes the bottom gap */
-svg {
-  display: block;
-  width: 100%;
-}
-.custom-shape-divider-bottom-1777285824 {
-    
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    overflow: hidden;
-    line-height: 0;
-    transform: rotate(180deg);
-}
+            /* Ensure the SVG fills the width and removes the bottom gap */
+            svg {
+            display: block;
+            width: 100%;
+            }
+            .custom-shape-divider-bottom-1777285824 {
+                
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                overflow: hidden;
+                line-height: 0;
+                transform: rotate(180deg);
+            }
 
-.custom-shape-divider-bottom-1777285824 svg {
-    position: relative;
-    display: block;
-    width: calc(100% + 1.3px);
-    height: 81px;
-}
+            .custom-shape-divider-bottom-1777285824 svg {
+                position: relative;
+                display: block;
+                width: calc(100% + 1.3px);
+                height: 81px;
+            }
 
-.custom-shape-divider-bottom-1777285824 .shape-fill {
-    fill: #1E1E3F;
-}
-        
-
-
-
-.custom-shape-divider-top-1777286135 {
-    top: 0;
-    left: 0;
-    width: 100%;
-    overflow: hidden;
-    line-height: 0;
-}
-
-.custom-shape-divider-top-1777286135 svg {
-    position: relative;
-    display: block;
-    width: calc(100% + 1.3px);
-    height: 93px;
-    transform: rotateY(180deg);
-}
-
-.custom-shape-divider-top-1777286135 .shape-fill {
-    fill: #1E1E3F;
-}
+            .custom-shape-divider-bottom-1777285824 .shape-fill {
+                fill: #1E1E3F;
+            }
+                    
 
 
 
+            .custom-shape-divider-top-1777286135 {
+                top: 0;
+                left: 0;
+                width: 100%;
+                overflow: hidden;
+                line-height: 0;
+            }
 
-.custom-shape-divider-bottom-1777286268 {
-    position: relative;
-    bottom: -1px;
-    left: 0;
-    width: 100%;
-    overflow: hidden;
-    line-height: 0;
-    transform: rotate(180deg);
-}
+            .custom-shape-divider-top-1777286135 svg {
+                position: relative;
+                display: block;
+                width: calc(100% + 1.3px);
+                height: 93px;
+                transform: rotateY(180deg);
+            }
 
-.custom-shape-divider-bottom-1777286268 svg {
-    position: relative;
-    display: block;
-    width: calc(100% + 1.3px);
-    height: 93px;
-    transform: rotateY(180deg);
-}
+            .custom-shape-divider-top-1777286135 .shape-fill {
+                fill: #1E1E3F;
+            }
 
-.custom-shape-divider-bottom-1777286268 .shape-fill {
-    fill: #1E1E3F;
-}
-.auto-type {
-    /* Keeps the line height so the page doesn't jump */
-    min-height: 1.2em; 
-}
+
+
+
+            .custom-shape-divider-bottom-1777286268 {
+                position: relative;
+                bottom: -1px;
+                left: 0;
+                width: 100%;
+                overflow: hidden;
+                line-height: 0;
+                transform: rotate(180deg);
+            }
+
+            .custom-shape-divider-bottom-1777286268 svg {
+                position: relative;
+                display: block;
+                width: calc(100% + 1.3px);
+                height: 93px;
+                transform: rotateY(180deg);
+            }
+
+            .custom-shape-divider-bottom-1777286268 .shape-fill {
+                fill: #1E1E3F;
+            }
+            .auto-type {
+                /* Keeps the line height so the page doesn't jump */
+                min-height: 1.2em; 
+            }
     </style>
 </head>
 <body>
@@ -842,6 +860,7 @@ svg {
 
     <section id="about" class="about">
         <div class="iss-hud">
+            <div class="live-dot"></div>
             <div class="hud-title">ISS_LIVE_TELEMETRY</div>
             <div class="hud-row"><span>STATUS:</span> <span class="hud-val">TRACKING...</span></div>
             <div class="hud-row"><span>LAT:</span> <span class="hud-val" id="lat-val">0.00</span></div>
