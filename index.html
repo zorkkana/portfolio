@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Oskari - Portfolio</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@400;500&display=swap">
+    
+    <script src="https://unpkg.com/three"></script>
+    <script src="https://unpkg.com/globe.gl"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/satellite.js/4.1.3/satellite.min.js"></script>
+
     <style>
         html {
             scroll-behavior: smooth;
@@ -21,7 +26,6 @@
             overflow-x: hidden;
         }
 
-        
         .center {
             text-align: center;
         }
@@ -81,8 +85,30 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            overflow: hidden;
+            overflow: hidden; /* Important to cut the globe */
         }
+
+        /* ISS GLOBE CONTAINER */
+        #hero-globe {
+            position: absolute;
+            bottom: -50%; /* Pushed further down for flatter horizon at the bottom */
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+        }
+          @media (max-height: 1000px) {
+            #hero-globe {
+                height: 100vh; /* Adjusted for smaller screens */
+            }
+        }
+         @media (max-height: 850px) {
+            #hero-globe {
+                height: 100vh; /* Adjusted for smaller screens */
+            }
+        }
+
         #particles-js {
             position: absolute;
             width: 100%;
@@ -91,7 +117,9 @@
             left: 0;
         }
         .hero .container {
-            z-index: 1;
+            z-index: 2; /* Sit above the globe */
+            top: -5rem;
+            position: relative;
         }
         .hero h1 {
             font-family: 'Orbitron', sans-serif;
@@ -168,6 +196,7 @@
         /* About Section */
         .about {
             background: #1e1e3f;
+            z-index: 5; /* Ensures it covers the bottom of the globe */
         }
         .about-content {
             display: grid;
@@ -198,17 +227,29 @@
             gap: 1rem;
             margin-top: 1rem;
         }
-        .bio .skills span {
+
+        .skills span {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(20px);
             background: rgba(0, 255, 204, 0.1);
             padding: 0.5rem 1rem;
             border-radius: 20px;
             font-size: 0.9rem;
             color: #00ffcc;
-            transition: all 0.3s;
+            /* transition for both entrance and hover */
+            transition: opacity 0.5s ease, transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
         }
-        .bio .skills span:hover {
+
+        .skills span.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .skills span:hover {
             box-shadow: 0 0 30px rgba(0, 255, 204, 0.5);
             transform: scale(1.05);
+            background: rgba(0, 255, 204, 0.2);
             cursor: pointer;
         }
         .bio .languages {
@@ -450,7 +491,18 @@
             from { opacity: 0; }
             to { opacity: 1; }
         }
+        .bio-typed-container {
+
+        min-height: 250px; width: 100%; max-width: 800px;
+        }
+        
         @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            .bio-typed-container{
+                min-height: 500px;
+            }
             .about-content {
                 grid-template-columns: 1fr;
             }
@@ -535,14 +587,117 @@
                 text-align: center;
             }
         }
+
+        /* TELEMETRY HUD STYLE (Separated view) */
+        .iss-hud {
+            position: relative;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid #00ffcc;
+            padding: 10px;
+            border-radius: 8px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            backdrop-filter: blur(5px);
+            min-width: 180px;
+            max-width: 300px;
+            margin: auto;
+            top: -10rem;
+        }
+        .hud-title { color: #fd7a33; margin-bottom: 5px; border-bottom: 1px solid #fd7a33; padding-bottom: 3px; }
+        .hud-row { display: flex; justify-content: space-between; margin: 2px 0; }
+        .hud-val { color: #00ffcc; }
       
+        .spacer {
+  width: 100%;
+  position: relative;
+  margin-top:  -5rem;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+/* Ensure the SVG fills the width and removes the bottom gap */
+svg {
+  display: block;
+  width: 100%;
+}
+.custom-shape-divider-bottom-1777285824 {
+    
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    transform: rotate(180deg);
+}
+
+.custom-shape-divider-bottom-1777285824 svg {
+    position: relative;
+    display: block;
+    width: calc(100% + 1.3px);
+    height: 81px;
+}
+
+.custom-shape-divider-bottom-1777285824 .shape-fill {
+    fill: #1E1E3F;
+}
         
+
+
+
+.custom-shape-divider-top-1777286135 {
+    top: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+}
+
+.custom-shape-divider-top-1777286135 svg {
+    position: relative;
+    display: block;
+    width: calc(100% + 1.3px);
+    height: 93px;
+    transform: rotateY(180deg);
+}
+
+.custom-shape-divider-top-1777286135 .shape-fill {
+    fill: #1E1E3F;
+}
+
+
+
+
+.custom-shape-divider-bottom-1777286268 {
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    transform: rotate(180deg);
+}
+
+.custom-shape-divider-bottom-1777286268 svg {
+    position: relative;
+    display: block;
+    width: calc(100% + 1.3px);
+    height: 93px;
+    transform: rotateY(180deg);
+}
+
+.custom-shape-divider-bottom-1777286268 .shape-fill {
+    fill: #1E1E3F;
+}
+.auto-type {
+    /* Keeps the line height so the page doesn't jump */
+    min-height: 1.2em; 
+}
     </style>
 </head>
 <body>
     <nav>
         <div class="container">
-            <a href="#" class="logo">Oskari</a>
+            <a href="#" class="logo">Oskari Kaile</a>
             <div class="hamburger">
                 <span></span>
                 <span></span>
@@ -595,7 +750,7 @@
 
                 if (link.getAttribute("href") === "#" + currentId) {
                     link.style.color = "#00ffcc";
-                    // Optional: link.style.fontWeight = "600";
+                    link.style.fontWeight = "600";
                 }
             });
         }
@@ -605,24 +760,83 @@
         window.addEventListener("scroll", highlightCurrent);
     });
     </script>
+
     <div class="hero">
+        <div id="hero-globe"></div>
+        
         <div id="particles-js"></div>
         <div class="container">
-            <h1>Oskari Kaile</h1>
-            <p>Coding the Future | Entrepreneur | Problem Solver</p>
+            <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+            <h1><span id="typed_h1"></span></h1>
+            <p><span id="typed"></span></p>
+            <script>
+                var typed = new Typed('#typed', {
+                strings: ['Coding the Future', 'Entrepreneur', 'Problem Solver', 'Science Lover', 'Lifelong Learner'],
+                typeSpeed: 50,
+                backSpeed: 30,
+                loop: true
+                });
+                var typed_h1 = new Typed('#typed_h1', {
+                    strings: ['Oskari Kaile'],
+                    typeSpeed: 50,
+                    backSpeed: 30,
+                });
+            </script>
             <a href="#experience" class="btn">View My Work</a>
             <a href="#contact" class="btn-hollow">Connect With Me</a>
-
         </div>
     </div>
 
+<div class="spacer">
+<div class="custom-shape-divider-bottom-1777285824">
+    <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+        <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25" class="shape-fill"></path>
+        <path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5" class="shape-fill"></path>
+        <path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" class="shape-fill"></path>
+    </svg>
+</div><div>
+
     <section id="about" class="about">
+        <div class="iss-hud">
+            <div class="hud-title">ISS_LIVE_TELEMETRY</div>
+            <div class="hud-row"><span>STATUS:</span> <span class="hud-val">TRACKING...</span></div>
+            <div class="hud-row"><span>LAT:</span> <span class="hud-val" id="lat-val">0.00</span></div>
+            <div class="hud-row"><span>LNG:</span> <span class="hud-val" id="lng-val">0.00</span></div>
+            <div class="hud-row"><span>ALT:</span> <span class="hud-val" id="alt-val">0 KM</span></div>
+        </div>
         <div class="container">
-            <h2 class="fade-in">About Me</h2>
+            <h2 class="fade-in auto-type">About Me</h2>
+            
+          
             <div class="about-content">
                 <img src="omaa2.png" alt="Oskari" class="avatar">
                 <div class="bio">
-                    <p class="fade-in">Hey, I’m Oskari—a 20-year-old programmer with a passion for pushing boundaries and crafting solutions that matter. I’m currently working at my own company, Portawebia, where I dive deep into web development, software engineering, and cutting-edge tech like AI. I’ve built many projects that solve real problems, interned at top-tier companies, and even started my own venture. Beyond coding, I’m fascinated by space exploration and dream of contributing to humanity’s journey to becoming a multiplanetary species. Whether it’s through software or innovation, I want my work to help us reach the stars.</p>
+                    <div id="typed-container" class="bio-typed-container" ">
+                        <p class="fade-in"><span id="biotyped"></span></p>
+                        </div>
+
+                        <script>
+                        const target = document.querySelector('#typed-container');
+
+                        const observer = new IntersectionObserver((entries) => {
+                            entries.forEach(entry => {
+                            // If the element is visible in the viewport
+                            if (entry.isIntersecting) {
+                                new Typed('#biotyped', {
+                                strings: ['Hey, I’m Oskari—a 20-year-old programmer with a passion for pushing boundaries and crafting solutions that matter. I’m currently working at my own company, Portawebia, where I dive deep into web development, software engineering, and cutting-edge tech like AI. I’ve built many projects that solve real problems, interned at top-tier companies, and even started my own venture. Beyond coding, I’m fascinated by space exploration and dream of contributing to humanity’s journey to becoming a multiplanetary species. Whether it’s through software or innovation, I want my work to help us reach the stars.'],
+                                typeSpeed: 0.1,
+                                showCursor: true,
+                                cursorChar: '|',
+                                });
+                                
+                                // Stop observing once the animation has started
+                                observer.unobserve(entry.target);
+                            }
+                            });
+                        }, { threshold: 0.5 }); // 0.5 means it starts when 50% of the box is visible
+
+                        observer.observe(target);
+                        </script>
                     <div class="languages">
                         <h3>Languages</h3>
                         <ul>
@@ -630,7 +844,7 @@
                             <li><b>English:</b> Excellent</li>
                         </ul>
                     </div>
-                    <div class="skills">
+                    <div class="skills stagger-animation">
                         <span>Python: God Tier</span>
                         <span>React: Excellent</span>
                         <span>Docker: Great</span>
@@ -652,31 +866,32 @@
                         <span>NoSQL: Great</span>
                         <span>Cyber Security: Great</span>
                         <span>Many more...</span>
-
-                        
-
                     </div>
                    
                 </div>
             </div>
         </div>
     </section>
-
+<div class="custom-shape-divider-top-1777286135">
+    <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+        <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25" class="shape-fill"></path>
+        <path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5" class="shape-fill"></path>
+        <path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" class="shape-fill"></path>
+    </svg>
+</div>
     <section id="projects" class="projects">
         <div class="container">
-            <h2>School Projects & Education</h2>
+            <h2 class="auto-type">School Projects & Education</h2>
             <div class="project-grid">
                 <div class="project-card">
                     <img src="fanikauppa.png" alt="SwordShop">
                     <h3>School Project: SwordShop</h3>
                     <p>Developed a web application for purchasing Minecraft swords, featuring a responsive design and an SQL database for inventory management. Built using React for the frontend.</p>
-                    <!-- <a href="https://github.com/Oskari/swordshop" target="_blank">Check It Out</a> -->
                 </div>
                 <div class="project-card">
                     <img src="music.png" alt="Spotity">
                     <h3>School Project: Spotity</h3>
                     <p>Created a gig information platform with a NoSQL database and React frontend. Although not media responsive, it provides updates on music events.</p>
-                    <!-- <a href="https://github.com/Oskari/spotity" target="_blank">Check It Out</a> -->
                 </div>
                 <div class="project-card">
                     <img src="Yesmansky.png" alt="Yes Man's Sky">
@@ -692,10 +907,16 @@
             </div>
         </div>
     </section>
-
+<div class="custom-shape-divider-bottom-1777286268">
+    <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+        <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25" class="shape-fill"></path>
+        <path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5" class="shape-fill"></path>
+        <path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" class="shape-fill"></path>
+    </svg>
+</div>
     <section id="experience" class="experience">
         <div class="container">
-            <h2>Internships & Work</h2>
+            <h2 class="auto-type">Internships & Work</h2>
             <div class="experience-list">
               
                 <div class="experience-item">
@@ -731,20 +952,32 @@
             </div>
         </div>
     </section>
-
+<div class="custom-shape-divider-top-1777286135">
+    <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+        <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25" class="shape-fill"></path>
+        <path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5" class="shape-fill"></path>
+        <path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" class="shape-fill"></path>
+    </svg>
+</div>
     <section id="company" class="company">
         <div class="container">
-            <h2>My Company</h2>
+            <h2 class="auto-type">My Company</h2>
             <img src="https://storage.googleapis.com/msgsndr/FpZM3NUjoCDV2jQTpY0E/media/668fd21c74ee2e0c6679e6fb.png" alt="Portawebia Logo" class="company-logo">
             <p>Meet Portawebia—mine and my brother venture started in August 2023, born from a passion for tech and innovation. We specialize in developing custom software solutions and websites for businesses, helping them streamline operations and boost their online presence. From concept to launch, I’ve poured my skills into building tools that make a difference. Want to know more?</p>
             <a href="https://www.portawebia.com/" target="_blank">Visit Portawebia</a>
         </div>
     </section>
-
+<div class="custom-shape-divider-bottom-1777286268">
+    <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+        <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25" class="shape-fill"></path>
+        <path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5" class="shape-fill"></path>
+        <path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" class="shape-fill"></path>
+    </svg>
+</div>
     <section id="contact" class="contact">
    
         <div class="container">
-            <h2>Get in Touch</h2>
+            <h2 class="auto-type">Get in Touch</h2>
             <div class="project-grid">
                 <div class="project-card">
                     <h3 class="center">Email: </h3>
@@ -760,11 +993,6 @@
 
                 </div>
             </div>
-            <!-- <div class="social-links">
-                <a href="https://github.com/Oskari" target="_blank">GitHub</a>
-                <a href="https://linkedin.com/in/oskari" target="_blank">LinkedIn</a>
-                <a href="https://twitter.com/Oskari" target="_blank">Twitter</a>
-            </div> -->
            
         </div>
     </section>
@@ -773,7 +1001,139 @@
         <p>© 2025 Oskari. Built from Scratch.</p>
     </footer>
 
-    <!-- Particles.js for Hero Background -->
+    <script>
+      let world, satrec;
+      const ISS_ID = 25544;
+      
+      // 1. Create a stable object reference so the DOM element isn't destroyed every frame
+      const issMarker = { name: 'ISS', lat: 0, lng: 0, alt: 0 };
+      let lastTrailUpdate = 0;
+
+      function getLatLngAlt(date) {
+        const posVel = satellite.propagate(satrec, date);
+        const gmst = satellite.gstime(date);
+        const posGd = satellite.eciToGeodetic(posVel.position, gmst);
+        
+        // Use a smaller, consistent offset for both the dot and the line
+        // 0.01 to 0.02 is usually plenty to clear the globe surface
+        const orbitHeight = (posGd.height / 6371) + 0.015; 
+
+        return {
+            lat: satellite.degreesLat(posGd.latitude),
+            lng: satellite.degreesLong(posGd.longitude),
+            alt: orbitHeight, 
+            rawHeight: posGd.height
+        };
+        }
+
+      // 2. Function to calculate a 90-minute orbit trail
+      function generateOrbitTrail(centerDate) {
+        const trail = [];
+        // Loop from 45 mins ago to 45 mins in the future (approx 1 orbit)
+        for (let i = -45; i <= 45; i++) {
+            const d = new Date(centerDate.getTime() + i * 60000); // add 'i' minutes
+            const pos = getLatLngAlt(d);
+            trail.push({ lat: pos.lat, lng: pos.lng, alt: pos.alt });
+        }
+        return trail;
+      }
+
+      async function initGlobe() {
+        const landData = await fetch('https://raw.githubusercontent.com/vasturiano/globe.gl/master/example/datasets/ne_110m_admin_0_countries.geojson').then(res => res.json());
+
+        try {
+          const tleData = await fetch(`https://tle.ivanstanojevic.me/api/tle/${ISS_ID}`).then(res => res.json());
+          satrec = satellite.twoline2satrec(tleData.line1, tleData.line2);
+        } catch (e) {
+          // Fallback TLE
+          satrec = satellite.twoline2satrec('1 25544U 98067A   24117.50000000  .00016717  00000-0  30164-3 0  9994', '2 25544  51.6416 281.3340 0004928  14.0044  51.2185 15.49815024450654');
+        }
+
+        world = Globe()(document.getElementById('hero-globe'))
+          .backgroundColor('rgba(0,0,0,0)')
+          .showGlobe(true)
+          .showAtmosphere(true)
+          .atmosphereColor('#00ffcc')
+          .atmosphereAltitude(0.25)
+          .showGraticules(true)
+          .polygonsData(landData.features)
+          .polygonCapColor(() => 'rgba(0, 255, 204, 0.1)')
+          .polygonStrokeColor(() => '#00ffcc')
+          .polygonAltitude(0.01)
+          
+          // 3. Configure the path for the orbit trail
+            .pathPoints('coords')
+            .pathPointLat(p => p.lat)
+            .pathPointLng(p => p.lng)
+            .pathPointAlt(p => p.alt)
+            .pathColor(() => 'rgba(253, 122, 51, 0.5)')
+            .pathStroke(1.5)
+            
+            // Use the stable reference inside an array
+            .htmlElementsData([issMarker])
+            .htmlAltitude(p => p.alt) // <--- ADD THIS LINE HERE
+            .htmlElement(() => {
+            const el = document.createElement('div');
+            // 1. Make the parent element a 0x0 point
+            el.style.width = '0px';
+            el.style.height = '0px';
+            el.style.pointerEvents = 'none';
+                
+            // 2. Wrap the content and offset it by half the dot's size (top: -6px, left: -6px)
+            el.innerHTML = `
+                <div style="position: absolute; top: -6px; left: -6px; display: flex; align-items: center;">
+                <div style="width:12px; height:12px; background:#fd7a33; border-radius:50%; box-shadow:0 0 15px #fd7a33; animation: pulse 1.5s infinite; flex-shrink: 0;"></div>
+                <div style="color:#fd7a33; font-size:10px; margin-left:10px; font-weight:bold; font-family:Orbitron; text-shadow: 0 0 5px #000; white-space: nowrap;">ISS</div>
+                </div>
+            `;
+            return el;
+            });
+
+        world.controls().enableRotate = false;
+        world.controls().enableZoom = false;
+        world.controls().enablePan = false;
+
+        const style = document.createElement('style');
+        style.innerHTML = `@keyframes pulse { 0% { transform: scale(0.8); opacity: 0.6; } 50% { transform: scale(1.3); opacity: 1; } 100% { transform: scale(0.8); opacity: 0.6; } }`;
+        document.head.appendChild(style);
+
+        updateFrame();
+      }
+
+      function updateFrame() {
+        if (!satrec) return;
+        const now = new Date();
+        const current = getLatLngAlt(now);
+
+        // Directly sync the marker to the calculated current alt
+        issMarker.lat = current.lat;
+        issMarker.lng = current.lng;
+        issMarker.alt = current.alt; 
+
+        
+        // Update trail every 60 seconds (prevents heavy recalculations every frame)
+        if (now.getTime() - lastTrailUpdate > 60000) {
+            const trailCoords = generateOrbitTrail(now);
+            world.pathsData([{ coords: trailCoords }]);
+            lastTrailUpdate = now.getTime();
+        }
+
+        world.pointOfView({ lat: current.lat - 20, lng: current.lng, altitude: 1.8 }, 0);
+        
+        // Feed the stable array back in; D3 will reuse the DOM element since the reference is unchanged
+        world.htmlElementsData([issMarker]);
+
+        // Update Separate Telemetry HUD
+        document.getElementById('lat-val').innerText = current.lat.toFixed(2);
+        document.getElementById('lng-val').innerText = current.lng.toFixed(2);
+        document.getElementById('alt-val').innerText = Math.round(current.rawHeight) + " KM";
+
+        requestAnimationFrame(updateFrame);
+      }
+
+      initGlobe();
+    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <script>
         particlesJS('particles-js', {
@@ -796,29 +1156,81 @@
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Create the Intersection Observer
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('animate');
-                        observer.unobserve(entry.target); // Stop observing after animation triggers
+                        observer.unobserve(entry.target);
                     }
                 });
-            }, {
-                threshold: 0.1 // Trigger when 10% of the element is visible
-            });
-        
-            // Target elements to animate
-            document.querySelectorAll('h2, .avatar, .bio p, .project-card, .experience-item, .company-logo, .contact form').forEach(element => {
+            }, { threshold: 0.1 });
+
+            // 1. Target your standard elements + the new skill spans
+            const selectors = 'h2, .avatar, .bio p, .project-card, .experience-item, .company-logo, .contact form, .skills span';
+            
+            document.querySelectorAll(selectors).forEach(element => {
                 observer.observe(element);
             });
-        
-            // Add staggered effect for project cards
+
+            // 2. Add staggered effect for project cards
             document.querySelectorAll('.project-card').forEach((card, index) => {
-                card.style.transitionDelay = `${index * 0.1}s`; // 0.1s delay per card
-                observer.observe(card);
+                card.style.transitionDelay = `${index * 0.1}s`;
+            });
+
+            // Add staggered effect for SKILLS
+            document.querySelectorAll('.skills span').forEach((skill, index) => {
+                skill.style.transitionDelay = `${index * 0.05}s`; 
+                
+                // NEW: Remove the delay after the entrance animation finishes
+                skill.addEventListener('transitionend', () => {
+                    skill.style.transitionDelay = '0s';
+                }, { once: true }); // 'once: true' ensures this only runs once
             });
         });
-        </script>
+    </script>
+        <script>
+        const initTypewriter = () => {
+            const elements = document.querySelectorAll('.auto-type');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const el = entry.target;
+                        
+                        // 1. Get the text and then clear the element
+                        const text = el.getAttribute('data-text') || el.innerText; 
+                        el.innerText = ''; 
+                        el.style.visibility = 'visible';
+                        el.style.opacity = '1';
+
+                        // 2. Initialize Typed
+                        new Typed(el, {
+                            strings: [text],
+                            typeSpeed: 50,
+                            showCursor: false,
+                           
+                        });
+
+                        // 3. Stop watching this element
+                        observer.unobserve(el);
+                    }
+                });
+            }, { 
+                threshold: 0.2, // Trigger earlier so the user doesn't see a blank space
+                rootMargin: '0px 0px -50px 0px' // Starts typing slightly before it hits the viewport
+            });
+
+            elements.forEach(el => {
+                // Store the text in a data-attribute so we don't lose it when we clear el.innerText
+                el.setAttribute('data-text', el.innerText);
+                el.style.visibility = 'hidden'; 
+                observer.observe(el);
+            });
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', initTypewriter);
+    </script>
+  
 </body>
 </html>
