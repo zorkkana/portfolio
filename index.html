@@ -43,7 +43,8 @@
             padding: 1rem 0;
             z-index: 100;
             border-radius: 100px;
-            
+            border: #00ffcc 1px solid;
+
             /* Animation Trigger */
             animation: dropDown 0.8s ease-out forwards;
         }
@@ -569,19 +570,42 @@
                 display: block; /* Show hamburger on small screens */
             }
             .nav-links {
-                    display: none;
-                    flex-direction: column;
-                    position: absolute;
-                    top: 36px;
-                    left: 0;
-                    width: 100%;
-                    z-index: -1;
-                    background: rgb(7 7 14);
-                    padding: 1rem 0;
-                    border-radius: 0 0 50px 50px;
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: 36px;
+                width: calc(100% + 2px); 
+                left: -1px;
+                z-index: -1;
+                background: rgb(7 7 14);
+                padding: 1rem 0;
+                border-radius: 0 0 50px 50px;
+                border: none;
+                overflow: hidden;
+                
+                /* CLOSED STATE */
+                max-height: 0;
+                opacity: 0;
+
+                /* CLOSING LOGIC: Wait for max-height (0.5s) before snapping opacity to 0 */
+                transition: 
+                    max-height 0.5s ease, 
+                    opacity 0s ease 0.4s, /* 0s duration, but 0.5s DELAY */
+                    border 0s ease 0.4s; /* Remove border after closing animation */
             }
+
             .nav-links.active {
-                display: flex; /* Show links when hamburger is clicked */
+                /* OPEN STATE */
+                max-height: 500px;
+                opacity: 1;
+                border: 1px #00ffcc solid;
+                border-top: none;
+
+                /* OPENING LOGIC: Snap opacity to 1 immediately, animate height */
+                transition: 
+                    max-height 0.5s ease, 
+                    opacity 0s ease 0s, /* 0s duration, 0s delay */
+                    border 0s ease 0s; /* Show border immediately */
             }
             .nav-links li {
                 margin: 1rem 0; /* Space between stacked links */
