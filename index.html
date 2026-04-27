@@ -152,7 +152,7 @@
             animation: fadeInUp 1s ease-out 0.5s forwards;
             opacity: 0;
         }
-        .hero .btn {
+        .btn {
             background: #fd7a33;
             color: #fff;
             padding: 1rem 2rem;
@@ -162,12 +162,12 @@
             box-shadow: 0 0 15px #fd7a33;
             transition: transform 0.3s, box-shadow 0.3s;
         }
-        .hero .btn:hover {
+        .btn:hover {
             transform: scale(1.1);
             box-shadow: 0 0 25px #fd7a33;
             cursor: pointer;
         }
-        .hero .btn-hollow {
+        .btn-hollow {
             background: transparent;
             color: #fd7a33;
             padding: 1rem 2rem;
@@ -183,7 +183,7 @@
                 color 0.3s;
         }
 
-        .hero .btn-hollow:hover {
+        .btn-hollow:hover {
             background: #fd7a33;
             color: #fff;
             transform: scale(1.1);
@@ -328,6 +328,7 @@
         /* Experience Section */
         .experience {
             background: #1e1e3f;
+            z-index: 2;
         }
         .experience-list {
             display: flex;
@@ -378,7 +379,7 @@
             font-size: 1.2rem;
             color: #ccc;
             max-width: 800px;
-            margin: 0 auto 1rem;
+            margin: 0 auto 3rem;
         }
         .company a {
             color: #fd7a33;
@@ -621,8 +622,8 @@
                 flex-direction: column !important;   
             }
 
-            .hero .btn,
-            .hero .btn-hollow {
+            .btn,
+            .btn-hollow {
                 width: 100%;     
                 display: block;       
                 max-width: 320px;     
@@ -712,6 +713,8 @@
                 width: 100%;
                 overflow: hidden;
                 line-height: 0;
+                z-index: 1;
+                position: relative;
             }
 
             .custom-shape-divider-top-1777286135 svg {
@@ -754,6 +757,98 @@
                 /* Keeps the line height so the page doesn't jump */
                 min-height: 1.2em; 
             }
+
+        .shotingstarspan {
+        position: absolute;
+        top: 50%;
+        filter: blur(3px) !important;
+        left: 50%;
+        width: 4px;
+        height: 4px;
+        background: #fff;
+        
+        border-radius: 50%;
+        box-shadow: 0 0 0 4px rgba(255,255,255,0.1), 0 0 50px 30px rgba(255,255,255,0.1);
+        animation: animate 10s linear infinite;
+        z-index: 0;
+        contain: layout;
+        filter: blur(0px); /* Start with no blur */
+        transition: filter 0.3s ease; /* Smooth blur transition */
+    }
+    .shotingstarspan::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 300px;
+        height: 1px;
+        background: linear-gradient(90deg, #fff, transparent);
+    }
+    .shotingstarspan.absolute {
+        position: absolute; /* Switches to absolute when class is added */
+    }
+    @keyframes animate {
+        0% {
+            transform: rotate(315deg) translateX(0);
+            opacity: 1;
+        }
+        70% {
+            opacity: 1;
+        }
+        100% {
+            transform: rotate(315deg) translateX(-1000px);
+            opacity: 0;
+        }
+    }
+    .shotingstarspan:nth-child(1) {
+        top: -100px;
+        right: -10px;
+        left: initial;
+        animation-delay: 0s;
+        animation-duration: 1s;
+    }
+    .shotingstarspan:nth-child(2) {
+        top: -100px;
+        right: 80px;
+        left: initial;
+        animation-delay: 0.2s;
+        animation-duration: 3s;
+    }
+    .shotingstarspan:nth-child(3) {
+        top: -100px;
+        right: -10px;
+        left: initial;
+        animation-delay: 0.4s;
+        animation-duration: 2s;
+    }
+    .shotingstarspan:nth-child(4) {
+        top: -100px;
+        right: 180px;
+        left: initial;
+        animation-delay: 0.6s;
+        animation-duration: 1.5s;
+    }
+    .shotingstarspan:nth-child(5) {
+        top: -100px;
+        right: 400px;
+        left: initial;
+        animation-delay: 0.8s;
+        animation-duration: 2.5s;
+    }
+    .shotingstarspan:nth-child(6) {
+        top: -10px;
+        right: 600px;
+        left: initial;
+        animation-delay: 1s;
+        animation-duration: 3s;
+    }
+    .shotingstarspan:nth-child(7) {
+        top: 300px;
+        right: -10px;
+        left: initial;
+        animation-delay: 1.2s;
+        animation-duration: 1.75s;
+    }
     </style>
 </head>
 <body>
@@ -1025,10 +1120,16 @@
 </div>
     <section id="company" class="company">
         <div class="container">
+            <span class="shotingstarspan"></span>
+            <span class="shotingstarspan"></span>
+            <span class="shotingstarspan"></span>
+            <span class="shotingstarspan"></span>
+            <span class="shotingstarspan"></span>
             <h2 class="auto-type">My Company</h2>
             <img src="https://storage.googleapis.com/msgsndr/FpZM3NUjoCDV2jQTpY0E/media/668fd21c74ee2e0c6679e6fb.png" alt="Portawebia Logo" class="company-logo">
-            <p>Meet Portawebia—mine and my brother venture started in August 2023, born from a passion for tech and innovation. We specialize in developing custom software solutions and websites for businesses, helping them streamline operations and boost their online presence. From concept to launch, I’ve poured my skills into building tools that make a difference. Want to know more?</p>
-            <a href="https://www.portawebia.com/" target="_blank">Visit Portawebia</a>
+            <p>Meet Portawebia, mine and my brother venture started in August 2023, born from a passion for tech and innovation. We specialize in developing custom software solutions and websites for businesses, helping them streamline operations and boost their online presence. From concept to launch, I’ve poured my skills into building tools that make a difference. Want to know more?</p>
+            <a href="https://www.portawebia.com/" class="btn-hollow">Visit Portawebia</a>
+
         </div>
     </section>
 <div class="custom-shape-divider-bottom-1777286268">
