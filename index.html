@@ -300,6 +300,7 @@
             transform: translateY(-10px);
             box-shadow: 0 0 30px rgba(0, 255, 204, 0.5);
             cursor: pointer;
+            
         }
         .project-card img {
             width: 100%;
@@ -326,44 +327,98 @@
             padding: 2rem 0 ;
         }
         /* Experience Section */
-        .experience {
-            background: #1e1e3f;
-            z-index: 2;
-        }
-        .experience-list {
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-        }
-        .experience-item {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 2rem;
-            border-radius: 15px;
-            border: 1px solid #00ffcc;
-            opacity: 0;
-            transform: translateX(-20px);
-            transition: opacity 0.5s ease, transform 0.5s ease;
-        }
+/* Experience Section */
+.experience {
+    background: #1e1e3f;
+    z-index: 2;
+}
 
-        .experience-item.animate {
-            opacity: 1;
-            transform: translateX(0);
-        }
+.experience-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    position: relative;
+    padding-left: 50px;
+}
 
-        .experience-item:hover {
-            transform: translateX(10px);
-            cursor: pointer;
-        }
+/* 1. THE LINE SEGMENTS (Static) */
+.experience-item::after {
+    content: '';
+    position: absolute;
+    left: -35px; /* Matches the dot center */
+    top: 3rem;   /* Starts at the center of the dot */
+    width: 2px;
+    height: calc(100% + 2rem); /* Reaches the next dot exactly */
+    background: #00ffcc;
+    transform: translateX(-50%);
+    z-index: 0;
+}
 
-        .experience-item h3 {
-            font-size: 1.5rem;
-            color: #fff;
-            margin-bottom: 0.5rem;
-        }
+/* Stops the line at the very last dot */
+.experience-item:last-child::after {
+    display: none;
+}
 
-        .experience-item p {
-            color: #ccc;
-        }
+/* 2. THE DOTS (Static) */
+.experience-item::before {
+    content: '';
+    position: absolute;
+    left: -35px;
+    top: 3rem; 
+    width: 16px;
+    height: 16px;
+    background: #1e1e3f;
+    border: 2px solid #00ffcc;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* 3. THE CARD (The part that moves) */
+.experience-card {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2rem;
+    border-radius: 15px;
+    border: 1px solid #00ffcc;
+    position: relative;
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: opacity 0.6s ease, transform 0.6s ease, background 0.3s ease; /* Smooth move */
+}
+.experience-card.animate {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* HOVER EFFECT: Only the card moves, the dot stays and lights up */
+ .experience-card:hover {
+    transform: translateX(15px); /* Card slides right */
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.experience-item:hover::before {
+    background: #00ffcc;
+    box-shadow: 0 0 12px #00ffcc;
+}
+
+/* 4. ENTRY ANIMATION (Keeps your sliding entry effect) */
+.experience-item {
+ position: relative;
+}
+
+
+
+/* Typography */
+.experience-item h3 {
+    font-size: 1.5rem;
+    color: #fff;
+    margin-bottom: 0.5rem;
+}
+
+.experience-item p {
+    color: #ccc;
+}
 
         /* Company Section */
         .company {
@@ -1058,7 +1113,7 @@
                     <a href="https://zorkkana.itch.io/yes-mans-sky" target="_blank">Check It Out</a>
                 </div>
             </div>
-            <div class="experience-item">
+            <div class="experience-card">
                 <h3>Education: Tampereen seudun ammattiopisto Tredu (Software Developer) Vocational degree</h3>
                 <p>2021 - 2024</p>
                 <p>Vocational degree</p>
@@ -1079,34 +1134,46 @@
             <div class="experience-list">
               
                 <div class="experience-item">
-                    <h3>Summer Job @ Lemonsoft Oyj</h3>
-                    <p>June 1, 2022 - June 30, 2022</p>
-                    <p>Worked with SQL reports in Visual Studio, gaining practical experience in database management and report generation.</p>
+                    <div class="experience-card">
+                        <h3>Summer Job @ Lemonsoft Oyj</h3>
+                        <p>June 1, 2022 - June 30, 2022</p>
+                        <p>Worked with SQL reports in Visual Studio, gaining practical experience in database management and report generation.</p>
+                    </div>
                 </div>
                 <div class="experience-item">
-                    <h3>Internship @ Lemonsoft Oyj</h3>
-                    <p>October 24, 2022 - December 15, 2022</p>
-                    <p>Focused on software development and managing upgrade load handling, enhancing skills in system maintenance and optimization.</p>
+                    <div class="experience-card">
+                        <h3>Internship @ Lemonsoft Oyj</h3>
+                        <p>October 24, 2022 - December 15, 2022</p>
+                        <p>Focused on software development and managing upgrade load handling, enhancing skills in system maintenance and optimization.</p>
+                    </div>
                 </div>
                 <div class="experience-item">
-                    <h3>Summer Job @ Lemonsoft Oyj</h3>
-                    <p>May 29, 2023 - July 21, 2023</p>
-                    <p>Developed a billing tool/feature and contributed to various small tasks, improving proficiency in software engineering and teamwork.</p>
+                    <div class="experience-card">
+                        <h3>Summer Job @ Lemonsoft Oyj</h3>
+                        <p>May 29, 2023 - July 21, 2023</p>
+                        <p>Developed a billing tool/feature and contributed to various small tasks, improving proficiency in software engineering and teamwork.</p>
+                    </div>
                 </div>
                 <div class="experience-item">
-                    <h3>International Internship @ Pco GmbH & Co. KG</h3>
-                    <p>January 14, 2024 - February 25, 2024</p>
-                    <p>Focused on cybersecurity and automation, implementing solutions to enhance system security and operational efficiency.</p>
+                    <div class="experience-card">
+                        <h3>International Internship @ Pco GmbH & Co. KG</h3>
+                        <p>January 14, 2024 - February 25, 2024</p>
+                        <p>Focused on cybersecurity and automation, implementing solutions to enhance system security and operational efficiency.</p>
+                    </div>
                 </div>
                 <div class="experience-item">
-                    <h3>Internship @ Lingonperry (ArtXperience Oy)</h3>
-                    <p>March 15, 2024 - May 15, 2024</p>
-                    <p>Developed features for a music streaming platform, utilizing web development technologies to improve user experience.</p>
+                    <div class="experience-card">
+                        <h3>Internship @ Lingonperry (ArtXperience Oy)</h3>
+                        <p>March 15, 2024 - May 15, 2024</p>
+                        <p>Developed features for a music streaming platform, utilizing web development technologies to improve user experience.</p>
+                    </div>
                 </div>
                 <div class="experience-item">
-                    <h3>Own company @  Portawebia Oy</h3>
-                    <p>August 26, 2023 - Present Day</p>
-                    <p>Web development and software development, utilizing WordPress, Shopify, Portawebia and other web development technologies to make business websites</p>
+                    <div class="experience-card">
+                        <h3>Own company @  Portawebia Oy</h3>
+                        <p>August 26, 2023 - Present Day</p>
+                        <p>Web development and software development, utilizing WordPress, Shopify, Portawebia and other web development technologies to make business websites</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1331,7 +1398,7 @@
             }, { threshold: 0.1 });
 
             // 1. Target your standard elements + the new skill spans
-            const selectors = 'h2, .avatar, .bio p, .project-card, .experience-item, .company-logo, .contact form, .skills span';
+            const selectors = 'h2, .avatar, .bio p, .project-card, .experience-card, .company-logo, .contact form, .skills span';
             
             document.querySelectorAll(selectors).forEach(element => {
                 observer.observe(element);
