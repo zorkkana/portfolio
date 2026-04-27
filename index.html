@@ -327,98 +327,116 @@
             padding: 2rem 0 ;
         }
         /* Experience Section */
-/* Experience Section */
-.experience {
-    background: #1e1e3f;
-    z-index: 2;
-}
+        .experience {
+            background: #1e1e3f;
+            z-index: 2;
+        }
 
-.experience-list {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    position: relative;
-    padding-left: 50px;
-}
+        .experience-list {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            position: relative;
+            padding-left: 90px; /* Increased from 50px to make room for years */
+        }
+        .experience-year {
+            position: absolute;
+            left: -85px; /* Positioned to the left of the timeline line */
+            top: 3rem;   /* Aligned with the center of the dot */
+            transform: translateY(-50%) rotate(-90deg); /* Centers it and flips it sideways */
+            transform-origin: center;
+            color: #00ffcc;
+            font-weight: bold;
+            font-family: monospace; /* Looks great for tech/dev timelines */
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            white-space: nowrap;
+            opacity: 0.7; /* Makes it look slightly more integrated */
+        }
+        /* Optional: Make the year light up when you hover the item */
+        .experience-item:hover .experience-year {
+            opacity: 1;
+            text-shadow: 0 0 8px #00ffcc;
+        }
 
-/* 1. THE LINE SEGMENTS (Static) */
-.experience-item::after {
-    content: '';
-    position: absolute;
-    left: -35px; /* Matches the dot center */
-    top: 3rem;   /* Starts at the center of the dot */
-    width: 2px;
-    height: calc(100% + 2rem); /* Reaches the next dot exactly */
-    background: #00ffcc;
-    transform: translateX(-50%);
-    z-index: 0;
-}
+        /* 1. THE LINE SEGMENTS (Static) */
+        .experience-item::after {
+            content: '';
+            position: absolute;
+            left: -35px; 
+            top: 3rem;
+            width: 2px;
+            height: calc(100% + 2rem);
+            background: #00ffcc;
+            transform: translateX(-50%);
+            z-index: 0;
+        }
 
-/* Stops the line at the very last dot */
-.experience-item:last-child::after {
-    display: none;
-}
+        /* Stops the line at the very last dot */
+        .experience-item:last-child::after {
+            display: none;
+        }
 
-/* 2. THE DOTS (Static) */
-.experience-item::before {
-    content: '';
-    position: absolute;
-    left: -35px;
-    top: 3rem; 
-    width: 16px;
-    height: 16px;
-    background: #1e1e3f;
-    border: 2px solid #00ffcc;
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 2;
-    transition: background 0.3s ease, box-shadow 0.3s ease;
-}
+        /* 2. THE DOTS (Static) */
+        .experience-item::before {
+            content: '';
+            position: absolute;
+            left: -35px;
+            top: 3rem; 
+            width: 16px;
+            height: 16px;
+            background: #1e1e3f;
+            border: 2px solid #00ffcc;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+        }
 
-/* 3. THE CARD (The part that moves) */
-.experience-card {
-    background: rgba(255, 255, 255, 0.05);
-    padding: 2rem;
-    border-radius: 15px;
-    border: 1px solid #00ffcc;
-    position: relative;
-    opacity: 0;
-    transform: translateX(-20px);
-    transition: opacity 0.6s ease, transform 0.6s ease, background 0.3s ease; /* Smooth move */
-}
-.experience-card.animate {
-    opacity: 1;
-    transform: translateX(0);
-}
+        /* 3. THE CARD (The part that moves) */
+        .experience-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid #00ffcc;
+            position: relative;
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: opacity 0.6s ease, transform 0.6s ease, background 0.3s ease; /* Smooth move */
+        }
+        .experience-card.animate {
+            opacity: 1;
+            transform: translateX(0);
+        }
 
-/* HOVER EFFECT: Only the card moves, the dot stays and lights up */
- .experience-card:hover {
-    transform: translateX(15px); /* Card slides right */
-    background: rgba(255, 255, 255, 0.08);
-}
+        /* HOVER EFFECT: Only the card moves, the dot stays and lights up */
+        .experience-card:hover {
+            transform: translateX(15px); /* Card slides right */
+            background: rgba(255, 255, 255, 0.08);
+        }
 
-.experience-item:hover::before {
-    background: #00ffcc;
-    box-shadow: 0 0 12px #00ffcc;
-}
+        .experience-item:hover::before {
+            background: #00ffcc;
+            box-shadow: 0 0 12px #00ffcc;
+        }
 
-/* 4. ENTRY ANIMATION (Keeps your sliding entry effect) */
-.experience-item {
- position: relative;
-}
+        /* 4. ENTRY ANIMATION (Keeps your sliding entry effect) */
+        .experience-item {
+        position: relative;
+        }
 
 
 
-/* Typography */
-.experience-item h3 {
-    font-size: 1.5rem;
-    color: #fff;
-    margin-bottom: 0.5rem;
-}
+        /* Typography */
+        .experience-item h3 {
+            font-size: 1.5rem;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
 
-.experience-item p {
-    color: #ccc;
-}
+        .experience-item p {
+            color: #ccc;
+        }
 
         /* Company Section */
         .company {
@@ -586,6 +604,18 @@
                 width: 150px;
                 height: 150px;
                 margin: 0 auto;
+            }
+            .experience-list {
+                padding-left: 20px; /* Less space for years on mobile */
+            }
+            .experience-item::after {
+                left: -20px; /* Adjust line position for mobile */
+            }
+            .experience-item::before {
+                left: -20px; /* Adjust dot position for mobile */
+            }
+            .experience-year {
+                left: -60px; /* Move years to the right of the line on mobile */
             }
         }
 
@@ -1134,6 +1164,7 @@
             <div class="experience-list">
               
                 <div class="experience-item">
+                    <span class="experience-year">2022</span>
                     <div class="experience-card">
                         <h3>Summer Job @ Lemonsoft Oyj</h3>
                         <p>June 1, 2022 - June 30, 2022</p>
@@ -1141,6 +1172,7 @@
                     </div>
                 </div>
                 <div class="experience-item">
+                    <span class="experience-year">2022</span>
                     <div class="experience-card">
                         <h3>Internship @ Lemonsoft Oyj</h3>
                         <p>October 24, 2022 - December 15, 2022</p>
@@ -1148,6 +1180,7 @@
                     </div>
                 </div>
                 <div class="experience-item">
+                    <span class="experience-year">2023</span>
                     <div class="experience-card">
                         <h3>Summer Job @ Lemonsoft Oyj</h3>
                         <p>May 29, 2023 - July 21, 2023</p>
@@ -1155,6 +1188,7 @@
                     </div>
                 </div>
                 <div class="experience-item">
+                    <span class="experience-year">2024</span>
                     <div class="experience-card">
                         <h3>International Internship @ Pco GmbH & Co. KG</h3>
                         <p>January 14, 2024 - February 25, 2024</p>
@@ -1162,6 +1196,7 @@
                     </div>
                 </div>
                 <div class="experience-item">
+                    <span class="experience-year">2024</span>
                     <div class="experience-card">
                         <h3>Internship @ Lingonperry (ArtXperience Oy)</h3>
                         <p>March 15, 2024 - May 15, 2024</p>
@@ -1169,6 +1204,7 @@
                     </div>
                 </div>
                 <div class="experience-item">
+                    <span class="experience-year">Now</span>
                     <div class="experience-card">
                         <h3>Own company @  Portawebia Oy</h3>
                         <p>August 26, 2023 - Present Day</p>
