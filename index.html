@@ -9,7 +9,7 @@
     <script src="https://unpkg.com/three"></script>
     <script src="https://unpkg.com/globe.gl"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/satellite.js/4.1.3/satellite.min.js"></script>
-
+    <link rel="icon" type="image/x-icon" href="O.png">
     <style>
         html {
             scroll-behavior: smooth;
@@ -220,16 +220,131 @@
             grid-template-columns: 1fr 2fr;
             gap: 3rem;
             align-items: center;
+            margin-bottom: 3rem;
         }
-        .avatar {
-            width: 200px;
-            height: 200px;
+          .avatar {
+            width: 100% !important;
+            height: 100% !important;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #00ffcc;
+            padding: 5px;
+            background: rgba(0, 255, 204, 0.05);
             border-radius: 50%;
             border: 3px solid #00ffcc;
             box-shadow: 0 0 20px #00ffcc;
             object-fit: cover;
             animation: fadeIn 1s ease-out;
-            object-fit: contain;
+        }
+           /* Optional: Avatar scaling effect */
+        .avatar {
+            opacity: 0;
+            transform: scale(0.8);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .avatar.animate {
+            opacity: 1;
+            transform: scale(1);
+        }
+      
+     
+        /* Avatar Card Styling */
+        .avatar-card {
+           
+            text-align: center;
+            max-width: 350px;
+            margin: 0 auto;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Hover Effect: The whole card glows and lifts */
+        .avatar-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 255, 204, 0.15);
+            border-color: #00ffcc;
+        }
+
+        /* Avatar Image & Container */
+        .avatar-container {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 1.5rem;
+        }
+
+      
+
+        /* The "Online/Available" Dot */
+        .status-dot {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            width: 18px;
+            height: 18px;
+            background: #fd7a33;
+            border: 3px solid #1e1e3f;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #fd7a33;
+        }
+
+        /* Text Content */
+        .profile-name {
+            font-size: 1.8rem;
+            color: #fff;
+            margin-bottom: 0.2rem;
+            letter-spacing: 1px;
+        }
+
+        .last-name {
+            color: #00ffcc; /* Accent color for the last name */
+        }
+
+        .profile-title {
+            color: #ccc;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 2rem;
+            font-family: monospace;
+        }
+
+        /* Bottom Stats Row */
+        .profile-stats {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1.5rem;
+            background: rgba(0, 255, 204, 0.05);
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px dashed rgba(0, 255, 204, 0.3);
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            color: #888;
+            margin-bottom: 2px;
+        }
+
+        .stat-value {
+            font-size: 1.1rem;
+            color: #fff;
+            font-weight: bold;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .stat-divider {
+            width: 1px;
+            height: 30px;
+            background: rgba(0, 255, 204, 0.2);
         }
         .bio p {
             font-size: 1.2rem;
@@ -238,7 +353,7 @@
             animation: fadeInUp 1s ease-out 0.5s forwards;
             opacity: 0;
         }
-        .bio .skills {
+        .skills {
             display: flex;
             flex-wrap: wrap;
             gap: 1rem;
@@ -638,22 +753,7 @@
             transform: translateY(0);
         }
 
-        /* Optional: Avatar scaling effect */
-        .avatar {
-            opacity: 0;
-            transform: scale(0.8);
-            transition: opacity 0.5s ease, transform 0.5s ease;
-        }
-
-        .avatar.animate {
-            opacity: 1;
-            transform: scale(1);
-        }
-        .avatar:hover {
-            
-            transform: scale(1.1);
-            
-        }
+     
 
         /* Project cards slide-in effect */
         .project-card {
@@ -1165,7 +1265,29 @@
             
           
             <div class="about-content">
-                <img src="omaa2.png" alt="Oskari" class="avatar">
+                <div class="project-card avatar-card">
+                    <div class="avatar-container">
+                        <img src="omaa2.png" alt="Oskari" class="avatar">
+                        <span class="status-dot"></span>
+                    </div>
+                    
+                    <div class="profile-info">
+                        <h3 class="profile-name">Oskari <span class="last-name">Kaile</span></h3>
+                        <p class="profile-title">Founder & Full-Stack Developer</p>
+                        
+                        <div class="profile-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">AGE</span>
+                                <span class="stat-value">20</span>
+                            </div>
+                            <div class="stat-divider"></div>
+                            <div class="stat-item">
+                                <span class="stat-label">EXP</span>
+                                <span class="stat-value">1,5+ YRS</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="bio">
                     <div id="typed-container" class="bio-typed-container" ">
                         <p class="fade-in"><span id="biotyped"></span></p>
@@ -1200,7 +1322,11 @@
                             <li><b>English:</b> Excellent</li>
                         </ul>
                     </div>
-                    <div class="skills stagger-animation">
+                    
+                   
+                </div>
+            </div>
+            <div class="skills stagger-animation">
                         <span>Python: God Tier</span>
                         <span>React: Excellent</span>
                         <span>Docker: Great</span>
@@ -1223,9 +1349,6 @@
                         <span>Cyber Security: Great</span>
                         <span>Many more...</span>
                     </div>
-                   
-                </div>
-            </div>
         </div>
     </section>
 <div class="custom-shape-divider-top-1777286135">
