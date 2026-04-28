@@ -1412,137 +1412,137 @@
     </footer>
 
     <script>
-      let world, satrec;
-      const ISS_ID = 25544;
-      
-      // 1. Create a stable object reference so the DOM element isn't destroyed every frame
-      const issMarker = { name: 'ISS', lat: 0, lng: 0, alt: 0 };
-      let lastTrailUpdate = 0;
+  let world, satrec;
+  const ISS_ID = 25544;
+  const issMarker = { name: 'ISS', lat: 0, lng: 0, alt: 0 };
+  let lastTrailUpdate = 0;
+  let isVisible = true; // Optimization: Track visibility
 
-      function getLatLngAlt(date) {
-        const posVel = satellite.propagate(satrec, date);
-        const gmst = satellite.gstime(date);
-        const posGd = satellite.eciToGeodetic(posVel.position, gmst);
-        
-        // Use a smaller, consistent offset for both the dot and the line
-        // 0.01 to 0.02 is usually plenty to clear the globe surface
-        const orbitHeight = (posGd.height / 6371) + 0.015; 
+  function getLatLngAlt(date) {
+    const posVel = satellite.propagate(satrec, date);
+    const gmst = satellite.gstime(date);
+    const posGd = satellite.eciToGeodetic(posVel.position, gmst);
+    const orbitHeight = (posGd.height / 6371) + 0.015;
 
-        return {
-            lat: satellite.degreesLat(posGd.latitude),
-            lng: satellite.degreesLong(posGd.longitude),
-            alt: orbitHeight, 
-            rawHeight: posGd.height
-        };
-        }
+    return {
+      lat: satellite.degreesLat(posGd.latitude),
+      lng: satellite.degreesLong(posGd.longitude),
+      alt: orbitHeight,
+      rawHeight: posGd.height
+    };
+  }
 
-      // 2. Function to calculate a 90-minute orbit trail
-      function generateOrbitTrail(centerDate) {
-        const trail = [];
-        // Loop from 45 mins ago to 45 mins in the future (approx 1 orbit)
-        for (let i = -45; i <= 45; i++) {
-            const d = new Date(centerDate.getTime() + i * 60000); // add 'i' minutes
-            const pos = getLatLngAlt(d);
-            trail.push({ lat: pos.lat, lng: pos.lng, alt: pos.alt });
-        }
-        return trail;
-      }
+  function generateOrbitTrail(centerDate) {
+    const trail = [];
+    for (let i = -45; i <= 45; i++) {
+      const d = new Date(centerDate.getTime() + i * 60000);
+      const pos = getLatLngAlt(d);
+      trail.push({ lat: pos.lat, lng: pos.lng, alt: pos.alt });
+    }
+    return trail;
+  }
 
-      async function initGlobe() {
-        const landData = await fetch('https://raw.githubusercontent.com/vasturiano/globe.gl/master/example/datasets/ne_110m_admin_0_countries.geojson').then(res => res.json());
+  async function initGlobe() {
+    const landData = await fetch('https://raw.githubusercontent.com/vasturiano/globe.gl/master/example/datasets/ne_110m_admin_0_countries.geojson').then(res => res.json());
 
-        try {
-          const tleData = await fetch(`https://tle.ivanstanojevic.me/api/tle/${ISS_ID}`).then(res => res.json());
-          satrec = satellite.twoline2satrec(tleData.line1, tleData.line2);
-        } catch (e) {
-          // Fallback TLE
-          satrec = satellite.twoline2satrec('1 25544U 98067A   24117.50000000  .00016717  00000-0  30164-3 0  9994', '2 25544  51.6416 281.3340 0004928  14.0044  51.2185 15.49815024450654');
-        }
+    try {
+      const tleData = await fetch(`https://tle.ivanstanojevic.me/api/tle/${ISS_ID}`).then(res => res.json());
+      satrec = satellite.twoline2satrec(tleData.line1, tleData.line2);
+    } catch (e) {
+      satrec = satellite.twoline2satrec('1 25544U 98067A   24117.50000000  .00016717  00000-0  30164-3 0  9994', '2 25544  51.6416 281.3340 0004928  14.0044  51.2185 15.49815024450654');
+    }
 
-        world = Globe()(document.getElementById('hero-globe'))
-          .backgroundColor('rgba(0,0,0,0)')
-          .showGlobe(true)
-          .showAtmosphere(true)
-          .atmosphereColor('#00ffcc')
-          .atmosphereAltitude(0.25)
-          .showGraticules(true)
-          .polygonsData(landData.features)
-          .polygonCapColor(() => 'rgba(0, 255, 204, 0.1)')
-          .polygonStrokeColor(() => '#00ffcc')
-          .polygonAltitude(0.01)
-          
-          // 3. Configure the path for the orbit trail
-            .pathPoints('coords')
-            .pathPointLat(p => p.lat)
-            .pathPointLng(p => p.lng)
-            .pathPointAlt(p => p.alt)
-            .pathColor(() => 'rgba(253, 122, 51, 0.5)')
-            .pathStroke(1.5)
-            
-            // Use the stable reference inside an array
-            .htmlElementsData([issMarker])
-            .htmlAltitude(p => p.alt) // <--- ADD THIS LINE HERE
-            .htmlElement(() => {
-            const el = document.createElement('div');
-            // 1. Make the parent element a 0x0 point
-            el.style.width = '0px';
-            el.style.height = '0px';
-            el.style.pointerEvents = 'none';
-                
-            // 2. Wrap the content and offset it by half the dot's size (top: -6px, left: -6px)
-            el.innerHTML = `
-                <div style="position: absolute; top: -6px; left: -6px; display: flex; align-items: center;">
-                <div style="width:12px; height:12px; background:#fd7a33; border-radius:50%; box-shadow:0 0 15px #fd7a33; animation: pulse 1.5s infinite; flex-shrink: 0;"></div>
-                <div style="color:#fd7a33; font-size:10px; margin-left:10px; font-weight:bold; font-family:Orbitron; text-shadow: 0 0 5px #000; white-space: nowrap;">ISS</div>
-                </div>
-            `;
-            return el;
-            });
+    const globeEl = document.getElementById('hero-globe');
+    world = Globe()(globeEl)
+      .backgroundColor('rgba(0,0,0,0)')
+      .showGlobe(true)
+      .showAtmosphere(true)
+      .atmosphereColor('#00ffcc')
+      .atmosphereAltitude(0.25)
+      .showGraticules(true)
+      .polygonsData(landData.features)
+      .polygonCapColor(() => 'rgba(0, 255, 204, 0.1)')
+      .polygonStrokeColor(() => '#00ffcc')
+      .polygonAltitude(0.01)
+      .pathPoints('coords')
+      .pathPointLat(p => p.lat)
+      .pathPointLng(p => p.lng)
+      .pathPointAlt(p => p.alt)
+      .pathColor(() => 'rgba(253, 122, 51, 0.5)')
+      .pathStroke(1.5)
+      .htmlElementsData([issMarker])
+      .htmlAltitude(p => p.alt)
+      .htmlElement(() => {
+        const el = document.createElement('div');
+        el.style.width = '0px';
+        el.style.height = '0px';
+        el.style.pointerEvents = 'none';
+        el.innerHTML = `
+          <div style="position: absolute; top: -6px; left: -6px; display: flex; align-items: center;">
+            <div style="width:12px; height:12px; background:#fd7a33; border-radius:50%; box-shadow:0 0 15px #fd7a33; animation: pulse 1.5s infinite; flex-shrink: 0;"></div>
+            <div style="color:#fd7a33; font-size:10px; margin-left:10px; font-weight:bold; font-family:Orbitron; text-shadow: 0 0 5px #000; white-space: nowrap;">ISS</div>
+          </div>
+        `;
+        return el;
+      });
 
-        world.controls().enableRotate = false;
-        world.controls().enableZoom = false;
-        world.controls().enablePan = false;
+    // 1. Optimization: Cap Pixel Ratio for Mobile
+    // High-end phones try to render at 3x or 4x resolution, which kills performance.
+    // Capping at 2x keeps it sharp but much faster.
+    world.renderer().setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-        const style = document.createElement('style');
-        style.innerHTML = `@keyframes pulse { 0% { transform: scale(0.8); opacity: 0.6; } 50% { transform: scale(1.3); opacity: 1; } 100% { transform: scale(0.8); opacity: 0.6; } }`;
-        document.head.appendChild(style);
+    world.controls().enableRotate = false;
+    world.controls().enableZoom = false;
+    world.controls().enablePan = false;
 
-        updateFrame();
-      }
+    // 2. Optimization: Intersection Observer
+    // This stops the globe from rendering when you scroll away from it.
+    const observer = new IntersectionObserver(([entry]) => {
+      isVisible = entry.isIntersecting;
+    }, { threshold: 0.1 });
+    observer.observe(globeEl);
 
-      function updateFrame() {
-        if (!satrec) return;
-        const now = new Date();
-        const current = getLatLngAlt(now);
+    const style = document.createElement('style');
+    style.innerHTML = `@keyframes pulse { 0% { transform: scale(0.8); opacity: 0.6; } 50% { transform: scale(1.3); opacity: 1; } 100% { transform: scale(0.8); opacity: 0.6; } }`;
+    document.head.appendChild(style);
 
-        // Directly sync the marker to the calculated current alt
-        issMarker.lat = current.lat;
-        issMarker.lng = current.lng;
-        issMarker.alt = current.alt; 
+    updateFrame();
+  }
 
-        
-        // Update trail every 60 seconds (prevents heavy recalculations every frame)
-        if (now.getTime() - lastTrailUpdate > 60000) {
-            const trailCoords = generateOrbitTrail(now);
-            world.pathsData([{ coords: trailCoords }]);
-            lastTrailUpdate = now.getTime();
-        }
+  function updateFrame() {
+    // 3. Optimization: Skip calculations if globe is not visible
+    if (!isVisible) {
+      requestAnimationFrame(updateFrame);
+      return;
+    }
 
-        world.pointOfView({ lat: current.lat - 20, lng: current.lng, altitude: 1.8 }, 0);
-        
-        // Feed the stable array back in; D3 will reuse the DOM element since the reference is unchanged
-        world.htmlElementsData([issMarker]);
+    if (!satrec) return;
+    const now = new Date();
+    const current = getLatLngAlt(now);
 
-        // Update Separate Telemetry HUD
-        document.getElementById('lat-val').innerText = current.lat.toFixed(2);
-        document.getElementById('lng-val').innerText = current.lng.toFixed(2);
-        document.getElementById('alt-val').innerText = Math.round(current.rawHeight) + " KM";
+    issMarker.lat = current.lat;
+    issMarker.lng = current.lng;
+    issMarker.alt = current.alt; 
 
-        requestAnimationFrame(updateFrame);
-      }
+    if (now.getTime() - lastTrailUpdate > 60000) {
+        const trailCoords = generateOrbitTrail(now);
+        world.pathsData([{ coords: trailCoords }]);
+        lastTrailUpdate = now.getTime();
+    }
 
-      initGlobe();
-    </script>
+    world.pointOfView({ lat: current.lat - 20, lng: current.lng, altitude: 1.8 }, 0);
+    world.htmlElementsData([issMarker]);
+
+    // Update Telemetry HUD
+    document.getElementById('lat-val').innerText = current.lat.toFixed(2);
+    document.getElementById('lng-val').innerText = current.lng.toFixed(2);
+    document.getElementById('alt-val').innerText = Math.round(current.rawHeight) + " KM";
+
+    requestAnimationFrame(updateFrame);
+  }
+
+  initGlobe();
+</script>
 
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <script>
