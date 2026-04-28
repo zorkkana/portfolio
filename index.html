@@ -959,7 +959,8 @@
         background: #fff;
         
         border-radius: 50%;
-        box-shadow: 0 0 0 4px rgba(255,255,255,0.1), 0 0 50px 30px rgba(255,255,255,0.1);
+        box-shadow: 0 0 5px #fff;
+        will-change: transform;
         animation: animate 10s linear infinite;
         z-index: 0;
         contain: layout;
@@ -1076,37 +1077,40 @@
         });
     </script>
     <script>
-    // Same logic, but apply style directly (no .active class needed)
-    document.addEventListener("DOMContentLoaded", () => {
-        const sections = document.querySelectorAll("section[id]");
-        const navLinks = document.querySelectorAll("nav ul li a");
+            document.addEventListener("DOMContentLoaded", () => {
+            const navLinks = document.querySelectorAll("nav ul li a");
+            const sections = document.querySelectorAll("section[id]");
 
-        function highlightCurrent() {
-            let currentId = "";
+            // 1. The Observer Configuration
+            const options = {
+                root: null, // use the viewport
+                rootMargin: "-20% 0px -70% 0px", // triggers when section is in the top-ish area
+                threshold: 0
+            };
 
-            sections.forEach(section => {
-                const rect = section.getBoundingClientRect();
-                // Section is "current" if its top is near or above the nav
-                if (rect.top <= 120 && rect.bottom >= 120) {   // 120 ≈ nav height + buffer
-                    currentId = section.getAttribute("id");
-                }
-            });
+            // 2. The Callback Function
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.getAttribute("id");
+                        
+                        // Update Nav Links
+                        navLinks.forEach(link => {
+                            if (link.getAttribute("href") === `#${id}`) {
+                                link.style.color = "#00ffcc";
+                                link.style.fontWeight = "600";
+                            } else {
+                                link.style.color = "#fff";
+                                link.style.fontWeight = "400";
+                            }
+                        });
+                    }
+                });
+            }, options);
 
-            navLinks.forEach(link => {
-                // Reset everyone first
-                link.style.color = "#fff";
-
-                if (link.getAttribute("href") === "#" + currentId) {
-                    link.style.color = "#00ffcc";
-                    link.style.fontWeight = "600";
-                }
-            });
-        }
-
-        // Run once + on scroll
-        highlightCurrent();
-        window.addEventListener("scroll", highlightCurrent);
-    });
+            // 3. Start Watching Sections
+            sections.forEach(section => observer.observe(section));
+        });
     </script>
 
     <div class="hero">
@@ -1416,7 +1420,21 @@
   const ISS_ID = 25544;
   const issMarker = { name: 'ISS', lat: 0, lng: 0, alt: 0 };
   let lastTrailUpdate = 0;
-  let isVisible = true; // Optimization: Track visibility
+  let isVisible = true; 
+
+  // --- OPTIMIZATIONS (Invisible to the eye) ---
+  const isMobileGlobe = window.innerWidth < 768;
+  
+  // Throttle FPS: 30 FPS on mobile, 60 FPS on desktop
+  const fpsInterval = isMobileGlobe ? 1000 / 30 : 1000 / 60; 
+  let lastFrameTime = 0;
+  
+  // Cache DOM Elements 
+  const latValEl = document.getElementById('lat-val');
+  const lngValEl = document.getElementById('lng-val');
+  const altValEl = document.getElementById('alt-val');
+  let lastDomUpdate = 0;
+  const DOM_UPDATE_INTERVAL = 250; 
 
   function getLatLngAlt(date) {
     const posVel = satellite.propagate(satrec, date);
@@ -1454,12 +1472,12 @@
 
     const globeEl = document.getElementById('hero-globe');
     world = Globe()(globeEl)
-      .backgroundColor('rgba(0,0,0,0)')
+      .backgroundColor('rgba(0,0,0,0)') // Keeps the background fully transparent
       .showGlobe(true)
-      .showAtmosphere(true)
+      .showAtmosphere(true) // RESTORED: Beautiful atmosphere for both PC & Mobile
       .atmosphereColor('#00ffcc')
       .atmosphereAltitude(0.25)
-      .showGraticules(true)
+      .showGraticules(true) // RESTORED: Grid lines for both PC & Mobile
       .polygonsData(landData.features)
       .polygonCapColor(() => 'rgba(0, 255, 204, 0.1)')
       .polygonStrokeColor(() => '#00ffcc')
@@ -1486,17 +1504,14 @@
         return el;
       });
 
-    // 1. Optimization: Cap Pixel Ratio for Mobile
-    // High-end phones try to render at 3x or 4x resolution, which kills performance.
-    // Capping at 2x keeps it sharp but much faster.
+    // Cap Pixel Ratio to prevent high-res mobile screens from melting
     world.renderer().setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
     world.controls().enableRotate = false;
     world.controls().enableZoom = false;
     world.controls().enablePan = false;
 
-    // 2. Optimization: Intersection Observer
-    // This stops the globe from rendering when you scroll away from it.
+    // Intersection Observer stops rendering entirely if globe is scrolled out of view
     const observer = new IntersectionObserver(([entry]) => {
       isVisible = entry.isIntersecting;
     }, { threshold: 0.1 });
@@ -1506,17 +1521,22 @@
     style.innerHTML = `@keyframes pulse { 0% { transform: scale(0.8); opacity: 0.6; } 50% { transform: scale(1.3); opacity: 1; } 100% { transform: scale(0.8); opacity: 0.6; } }`;
     document.head.appendChild(style);
 
-    updateFrame();
+    requestAnimationFrame(updateFrame);
   }
 
-  function updateFrame() {
-    // 3. Optimization: Skip calculations if globe is not visible
-    if (!isVisible) {
-      requestAnimationFrame(updateFrame);
-      return;
-    }
+  function updateFrame(timestamp) {
+    requestAnimationFrame(updateFrame);
 
-    if (!satrec) return;
+    if (!isVisible || !satrec) return;
+
+    // Calculate time elapsed to enforce FPS throttle
+    const nowTime = timestamp || performance.now();
+    const elapsed = nowTime - lastFrameTime;
+
+    if (elapsed < fpsInterval) return; 
+    
+    lastFrameTime = nowTime - (elapsed % fpsInterval);
+
     const now = new Date();
     const current = getLatLngAlt(now);
 
@@ -1524,6 +1544,7 @@
     issMarker.lng = current.lng;
     issMarker.alt = current.alt; 
 
+    // Update trail every 60 seconds
     if (now.getTime() - lastTrailUpdate > 60000) {
         const trailCoords = generateOrbitTrail(now);
         world.pathsData([{ coords: trailCoords }]);
@@ -1533,12 +1554,13 @@
     world.pointOfView({ lat: current.lat - 20, lng: current.lng, altitude: 1.8 }, 0);
     world.htmlElementsData([issMarker]);
 
-    // Update Telemetry HUD
-    document.getElementById('lat-val').innerText = current.lat.toFixed(2);
-    document.getElementById('lng-val').innerText = current.lng.toFixed(2);
-    document.getElementById('alt-val').innerText = Math.round(current.rawHeight) + " KM";
-
-    requestAnimationFrame(updateFrame);
+    // Throttled DOM updates for the HUD
+    if (latValEl && lngValEl && altValEl && (nowTime - lastDomUpdate > DOM_UPDATE_INTERVAL)) {
+        latValEl.innerText = current.lat.toFixed(2);
+        lngValEl.innerText = current.lng.toFixed(2);
+        altValEl.innerText = Math.round(current.rawHeight) + " KM";
+        lastDomUpdate = nowTime;
+    }
   }
 
   initGlobe();
