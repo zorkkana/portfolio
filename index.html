@@ -403,6 +403,10 @@
             gap: 2rem;
             margin-bottom: 2rem;
         }
+        .contact-info-grid{
+            gap: 4rem;
+            margin-bottom: 0rem;
+        }
        
         .project-card {
             background: rgba(255, 255, 255, 0.05);
@@ -415,6 +419,7 @@
             transform: translateY(-10px);
             box-shadow: 0 0 30px rgba(0, 255, 204, 0.5);
             cursor: pointer;
+            
             
         }
         .project-card img {
@@ -679,7 +684,9 @@
                 order: 2; 
                 margin-top: 2rem;
             }
-
+            .contact-info-grid{
+                gap: 1rem;
+            }
             
             .terminal-header { justify-content: center; }
         }
@@ -733,6 +740,114 @@
             cursor: pointer;
         }
 
+        /* Contact Section */
+.contact-section {
+    padding: 80px 10%;
+    background: #0a0a23;
+}
+
+.contact-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Reusing the Terminal style from Company section */
+.contact-form-window {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(0, 255, 204, 0.2);
+    border-radius: 15px;
+    overflow: hidden;
+    max-width: 700px;
+  
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+.contact_grid{
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 3rem;
+    align-items: center;
+    margin-bottom: 3rem;
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Input Groups */
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: left;
+}
+
+.input-group label {
+    color: #00ffcc;
+    font-family: monospace;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* Inputs and Textarea */
+.contact-form input, 
+.contact-form textarea {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 12px 15px;
+    color: #fff;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+/* Focus Effect: This is the "Cyber" touch */
+.contact-form input:focus, 
+.contact-form textarea:focus {
+    border-color: #00ffcc;
+    background: rgba(0, 255, 204, 0.05);
+    box-shadow: 0 0 10px rgba(0, 255, 204, 0.2);
+}
+
+/* Placeholder styling */
+::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 0.9rem;
+}
+
+/* Submit Button Customization */
+.submit-btn {
+    align-self: flex-start;
+    padding: 12px 30px;
+    cursor: pointer;
+    background: transparent;
+    font-family: monospace;
+    transition: 0.3s;
+    margin-top: 1rem;
+    border: 1px solid #fd7a33; /* Using your orange accent */
+    color: #fd7a33;
+}
+
+.submit-btn:hover {
+    background: #fd7a33;
+    color: #fff;
+    box-shadow: 0 0 20px rgba(253, 122, 51, 0.4);
+}
+
+/* Responsive adjustment */
+@media (max-width: 768px) {
+    .submit-btn {
+        width: 100%;
+        text-align: center;
+    }
+    .contact_grid{
+        grid-template-columns: 1fr;
+    }
+}
         /* Footer */
         footer {
             background: #0a0a23;
@@ -1144,6 +1259,34 @@
         animation-delay: 1.2s;
         animation-duration: 1.75s;
     }
+
+
+    /* Modal Overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(10, 10, 35, 0.9); /* Dark background with blur */
+    backdrop-filter: blur(8px);
+    display: none; /* Hidden by default */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    transition: 0.3s;
+}
+
+/* Show class for JS */
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal-content {
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+}
     </style>
 </head>
 <body>
@@ -1520,29 +1663,119 @@
    
         <div class="container">
             <h2 class="auto-type">Get in Touch</h2>
-            <div class="project-grid">
-                <div class="project-card contacnt-card">
-                    <h3 class="center">Email: </h3>
-                    <h3 class="center">oskari.kaile@portawebia.com</h3>
+            <div class="contact_grid">
+            
+             
+           
+              <div class="terminal-window contact-form-window">
+                <div class="terminal-header">
+                    <span class="dot red"></span>
+                    <span class="dot yellow"></span>
+                    <span class="dot green"></span>
+                    <span class="terminal-title">send_message.exe</span>
                 </div>
-                <div class="project-card contacnt-card">
-                    <h3 class="center">Phone: </h3>
-                    <h3 class="center">+358 40 1340637 </h3>
-                </div>
-                <div class="project-card contacnt-card">
-                    <h3 class="center">location: </h3>
-                    <h3 class="center">Finland tampere</h3>
+                
+                <div class="terminal-body">
+                    <form action="https://formspree.io/f/mrernzgy" method="POST" class="contact-form">
+    
+                        <div class="input-group">
+                            <label for="name">Name</label>
+                            <input type="text" name="name" id="name" placeholder="Your Name" required>
+                        </div>
 
+                        <div class="input-group">
+                            <label for="subject">Subject</label>
+                            <input type="text" name="subject" id="subject" placeholder="What is this about?" required>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="message">Message</label>
+                            <textarea name="message" id="message" rows="5" placeholder="Write your message here..." required></textarea>
+                        </div>
+
+                        <button type="submit" class="btn-hollow submit-btn">Transmit Message</button>
+                    </form>
                 </div>
             </div>
-           
+               <div class="project-grid contact-info-grid">
+                    <div class="project-card contacnt-card">
+                        <h3 class="center">oskari.kaile@portawebia.com</h3>
+                         <svg xmlns="http://www.w3.org/2000/svg" 
+                                viewBox="0 0 512 512" 
+                                style="width: 30px; height: 30px; margin: auto;"> <path fill="#00ffcc" d="M502.3 190.8c3.9-3.1 9.7-.2 9.7 4.7V400c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V195.6c0-5 5.7-7.8 9.7-4.7 22.4 17.4 52.1 39.5 154.1 113.6 21.1 15.4 56.7 47.8 92.2 47.6 35.7.3 72-32.8 92.3-47.6 102-74.1 131.6-96.3 154-113.7zM256 320c23.2.4 56.6-29.2 73.4-41.4 132.7-96.3 142.8-104.7 173.4-128.7 5.8-4.5 9.2-11.5 9.2-18.9v-19c0-26.5-21.5-48-48-48H48C21.5 64 0 85.5 0 112v19c0 7.4 3.4 14.3 9.2 18.9 30.6 23.9 40.7 32.4 173.4 128.7 16.8 12.2 50.2 41.8 73.4 41.4z"/>
+                            </svg>      
+                    </div>
+                    <div class="project-card contacnt-card">
+                        <h3 class="center">+358 40 1340637 </h3>
+                        <svg xmlns="http://www.w3.org/2000/svg" 
+                                viewBox="0 0 512 512" 
+                                style="width: 30px; height: 30px; margin: auto;"> <path fill="#00ffcc" d="M400 32H48A48 48 0 0 0 0 80v352a48 48 0 0 0 48 48h352a48 48 0 0 0 48-48V80a48 48 0 0 0-48-48zm-16.39 307.37l-15 65A15 15 0 0 1 354 416C194 416 64 286.29 64 126a15.7 15.7 0 0 1 11.63-14.61l65-15A18.23 18.23 0 0 1 144 96a16.27 16.27 0 0 1 13.79 9.09l30 70A17.9 17.9 0 0 1 189 181a17 17 0 0 1-5.5 11.61l-37.89 31a231.91 231.91 0 0 0 110.78 110.78l31-37.89A17 17 0 0 1 299 291a17.85 17.85 0 0 1 5.91 1.21l70 30A16.25 16.25 0 0 1 384 336a17.41 17.41 0 0 1-.39 3.37z"/>
+                            </svg>    
+                    </div>
+                    <div class="project-card contacnt-card">
+                        <h3 class="center">Finland tampere</h3>
+                        <svg xmlns="http://www.w3.org/2000/svg" 
+                                viewBox="0 0 512 512" 
+                                style="width: 30px; height: 30px; margin: auto;"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free v5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="#00ffcc" d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0z"/></svg>
+                            </svg>    
+
+                    </div>
+                </div>
+        </div>
         </div>
     </section>
+    
 
     <footer>
         <p>© 2025 Oskari. Built from Scratch.</p>
     </footer>
+    <div id="thankYouModal" class="modal-overlay">
+        <div class="modal-content terminal-window">
+            <div class="terminal-header">
+                <span class="dot red"></span>
+                <span class="dot yellow"></span>
+                <span class="dot green"></span>
+                <span class="terminal-title">system_notification.exe</span>
+            </div>
+            <div class="terminal-body">
+                <h3 style="color: #00ffcc; margin-bottom: 1rem;">Transmission Received!</h3>
+                <p style="color: #ccc; margin-bottom: 2rem;">Your message has been successfully beamed to Oskari. I'll get back to you soon.</p>
+                <button onclick="closeModal()" class="btn-hollow">Close Terminal</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        const form = document.querySelector('.contact-form');
+        const modal = document.getElementById('thankYouModal');
 
+        form.onsubmit = async (e) => {
+            e.preventDefault(); // Stop the page from refreshing
+
+            const formData = new FormData(form);
+            
+            // Send data to Formspree via AJAX
+            const response = await fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                // Show the popup
+                modal.classList.add('active');
+                // Clear the form
+                form.reset();
+            } else {
+                alert("Oops! There was a problem sending your message.");
+            }
+        };
+
+        function closeModal() {
+            modal.classList.remove('active');
+        }
+    </script>
     <script>
   let world, satrec;
   const ISS_ID = 25544;
