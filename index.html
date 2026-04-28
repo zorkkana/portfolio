@@ -1546,23 +1546,61 @@
 
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <script>
+        // 1. Check if we are on a mobile device
+        const isMobile = window.innerWidth < 768;
+
         particlesJS('particles-js', {
             particles: {
-                number: { value: 80, density: { enable: true, value_area: 800 } },
+                // 2. Optimization: Half the particles on mobile
+                number: { 
+                    value: isMobile ? 40 : 80, 
+                    density: { enable: true, value_area: 800 } 
+                },
                 color: { value: '#ffffff' },
                 shape: { type: 'circle' },
                 opacity: { value: 0.5, random: true },
                 size: { value: 3, random: true },
-                line_linked: { enable: true, distance: 150, color: '#00ffcc', opacity: 0.4, width: 1 },
-                move: { enable: true, speed: 2, direction: 'none', random: false, straight: false, out_mode: 'out' }
+                line_linked: { 
+                    enable: true, 
+                    distance: 150, 
+                    color: '#00ffcc', 
+                    opacity: 0.4, 
+                    width: 1 
+                },
+                move: { 
+                    enable: true, 
+                    speed: isMobile ? 1 : 2, // Slow down speed on mobile to save CPU
+                    direction: 'none', 
+                    random: false, 
+                    straight: false, 
+                    out_mode: 'out' 
+                }
             },
             interactivity: {
                 detect_on: 'canvas',
-                events: { onhover: { enable: true, mode: 'repulse' }, onclick: { enable: true, mode: 'push' }, resize: true },
+                events: { 
+                    onhover: { enable: !isMobile, mode: 'repulse' }, // Disable hover on touch screens (no mouse)
+                    onclick: { enable: true, mode: 'push' }, 
+                    resize: true 
+                },
                 modes: { repulse: { distance: 100, duration: 0.4 }, push: { particles_nb: 4 } }
             },
-            retina_detect: true
+            // 3. Optimization: Turn off retina_detect
+            // This stops the canvas from rendering at 3x resolution which kills mobile GPUs
+            retina_detect: false 
         });
+
+        // 4. Optimization: Kill the animation when user scrolls away
+        const particlesContainer = document.getElementById('particles-js');
+        const pObserver = new IntersectionObserver(([entry]) => {
+            const canvas = particlesContainer.querySelector('canvas');
+            if (canvas) {
+                // This is a trick: pausing the display stops the browser's paint cycles
+                canvas.style.display = entry.isIntersecting ? 'block' : 'none';
+            }
+        }, { threshold: 0.1 });
+
+        if (particlesContainer) pObserver.observe(particlesContainer);
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
