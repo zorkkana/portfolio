@@ -176,7 +176,12 @@
             margin: 10px;
             box-shadow: 0 0 15px #fd7a33;
             transition: transform 0.3s, box-shadow 0.3s;
+            animation: fadeInUp ease-out 1s forwards;
+
         }
+       
+        
+     
         .btn:hover {
             box-shadow: 0 0 25px #fd7a33;
             cursor: pointer;
@@ -190,6 +195,7 @@
             margin: 10px;
             font-weight: 700;
             border: 2px solid #fd7a33;
+            animation: fadeInUp ease-out 1s forwards;
             box-shadow: 0 0 15px rgba(253, 122, 51, 0.4);   /* softer glow */
             transition: 
                 transform 0.3s,
@@ -1011,6 +1017,7 @@
         /* Project cards slide-in effect */
         .project-card {
             opacity: 0;
+            backdrop-filter: blur(2px);
             transform: translateY(20px);
             transition: opacity 0.5s ease, transform 0.5s ease;
         }
@@ -1256,7 +1263,7 @@
                 overflow: hidden;
                 min-height: 100px;
                 line-height: 0;
-                background: #0a0a23;
+                background: #0a0a2300;
                 z-index: 1;
                 position: relative;
             }
@@ -1283,7 +1290,7 @@
                 width: 100%;
                 overflow: hidden;
                 min-height: 100px;
-                background: #0a0a23;
+                background: #0a0a2300;
                 line-height: 0;
                 transform: rotate(180deg);
             }
@@ -1348,11 +1355,11 @@
         }
     }
     .shotingstarspan:nth-child(1) {
-        top: -100px;
-        right: -10px;
+        top: 250px;
+        right: 0px;
         left: initial;
         animation-delay: 0s;
-        animation-duration: 1s;
+        animation-duration: 5s;
     }
     .shotingstarspan:nth-child(2) {
         top: -100px;
@@ -1371,9 +1378,9 @@
     .shotingstarspan:nth-child(4) {
         top: -100px;
         right: 180px;
-        left: initial;
+        
         animation-delay: 0.6s;
-        animation-duration: 1.5s;
+        animation-duration: 3.5s;
     }
     .shotingstarspan:nth-child(5) {
         top: -100px;
@@ -1426,13 +1433,29 @@
 }
 
 
+/* Ensure the parent container (like your About section) has 'position: relative' */
 
-
+#dust-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Pushes it behind all your text and cards */
+    pointer-events: none; /* CRITICAL: Stops the canvas from blocking clicks/hovers */
+}
+.Background{
+    background-color: #0a0a23;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+}
     </style>
 </head>
 <body>
     <nav>
         <div class="container">
+            
             <a href="#" class="logo">Oskari Kaile</a>
             <div class="hamburger">
                 <span></span>
@@ -1499,6 +1522,7 @@
             sections.forEach(section => observer.observe(section));
         });
     </script>
+    <div class="Background"></div>
 
     <div class="hero">
         <div id="hero-globe"></div>
@@ -1536,6 +1560,8 @@
 </div><div>
 
     <section id="about" class="about">
+        <canvas id="dust-canvas"></canvas>
+
         <div class="iss-hud">
             <div class="live-dot"></div>
             <div class="hud-title">ISS_LIVE_TELEMETRY</div>
@@ -1544,12 +1570,14 @@
             <div class="hud-row"><span>LNG:</span> <span class="hud-val" id="lng-val">0.00</span></div>
             <div class="hud-row"><span>ALT:</span> <span class="hud-val" id="alt-val">0 KM</span></div>
         </div>
+        
         <div class="container">
             <h2 class="fade-in auto-type">About Me</h2>
             
           
             <div class="about-content">
                 <div class="project-card avatar-card">
+                    
                     <div class="avatar-container">
                         <img src="omaa2.png" alt="Oskari" class="avatar">
                         <span class="status-dot"></span>
@@ -1722,6 +1750,7 @@
     </svg>
 </div>
     <section id="experience" class="experience">
+        
         <div class="container">
             <h2 class="auto-type">Work and Internships</h2>
             <div class="experience-list">
@@ -1778,6 +1807,7 @@
         </div>
     </section>
     <div class="shootingstars-container">
+        
 <div class="custom-shape-divider-top-1777286135">
     <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
         <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25" class="shape-fill"></path>
@@ -1786,11 +1816,15 @@
     </svg>
 </div>
     <section id="company" class="company">
+   
+        <span class="shotingstarspan"></span>
+        <span class="shotingstarspan"></span>
+        <span class="shotingstarspan"></span>
+        <span class="shotingstarspan"></span>
+        <span class="shotingstarspan"></span>
+        <span class="shotingstarspan"></span>
         <div class="container">
-            <span class="shotingstarspan"></span>
-            <span class="shotingstarspan"></span>
-            <span class="shotingstarspan"></span>
-            <span class="shotingstarspan"></span>
+     
 
     <div class="company-container">
         
@@ -1835,14 +1869,15 @@
 
         </div>
     </section>
-    </div>
-<div class="custom-shape-divider-bottom-1777286268">
+           <div class="custom-shape-divider-bottom-1777286268">
     <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
         <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25" class="shape-fill"></path>
         <path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5" class="shape-fill"></path>
         <path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" class="shape-fill"></path>
     </svg>
 </div>
+    </div>
+
     <section id="contact" class="contact">
    
         <div class="container">
@@ -1982,6 +2017,80 @@
         modal.classList.remove('active');
     }
     </script>
+    <script>
+    const canvas = document.getElementById('dust-canvas');
+    const ctx = canvas.getContext('2d');
+
+    // Set canvas to the size of its parent
+    function resizeCanvas() {
+        canvas.width = canvas.parentElement.offsetWidth;
+        canvas.height = canvas.parentElement.offsetHeight;
+    }
+    
+    // Call it initially and on window resize
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    let particlesArray = [];
+
+    // Particle Object
+    class Particle {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 1.5 + 0.2; // Tiny dust size (0.2px to 1.7px)
+            this.speedX = Math.random() * 0.4 - 0.2; // Slow horizontal drift
+            this.speedY = Math.random() * 0.4 - 0.2; // Slow vertical drift
+            
+            // Neon cyan color with random transparency to look like dust
+            this.color = `rgba(0, 255, 204, ${Math.random() * 0.6 + 0.1})`;
+        }
+
+        update() {
+            this.x += this.speedX;
+            this.y += this.speedY;
+
+            // If dust floats off screen, teleport it back to the other side
+            if (this.x < 0) this.x = canvas.width;
+            if (this.x > canvas.width) this.x = 0;
+            if (this.y < 0) this.y = canvas.height;
+            if (this.y > canvas.height) this.y = 0;
+        }
+
+        draw() {
+            ctx.fillStyle = this.color;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+
+    // Populate the dust field
+    function init() {
+        particlesArray = [];
+        // Change '150' to add more or less dust
+        for (let i = 0; i < 100; i++) { 
+            particlesArray.push(new Particle());
+        }
+    }
+
+    // Animation Loop
+    function animate() {
+        // Clears the canvas every frame to draw the next step
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        for (let i = 0; i < particlesArray.length; i++) {
+            particlesArray[i].update();
+            particlesArray[i].draw();
+        }
+        requestAnimationFrame(animate); // Loops at 60 FPS
+    }
+
+    init();
+    animate();
+</script>
+
+
     <script>
   let world, satrec;
   const ISS_ID = 25544;
@@ -2221,7 +2330,7 @@ window.addEventListener('scroll', () => {
             }, { threshold: 0.1 });
 
             // 1. Target your standard elements + the new skill spans
-            const selectors = 'h2, .avatar, .bio p, .project-card, .experience-card,.languages, .company-logo, .logo-cluster-container, .terminal-window, .contact form, .skills span';
+            const selectors = 'h2,.btn, .avatar, .bio p, .project-card, .experience-card,.languages, .company-logo, .logo-cluster-container, .terminal-window, .contact form, .skills span';
             
             document.querySelectorAll(selectors).forEach(element => {
                 observer.observe(element);
