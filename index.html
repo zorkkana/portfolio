@@ -230,6 +230,12 @@
             text-align: center;
             text-shadow: 0 0 10px #00ffcc;
         }
+        .mobile-only-text-space-10 {
+            min-height: auto;
+        }
+        .mobile-only-text-space-6 {
+            min-height: auto;
+        }
 
         /* About Section */
         .about {
@@ -463,7 +469,12 @@
             margin-bottom: 2px;
         }
         @media (max-width: 768px) {
-           
+            .mobile-only-text-space-10 {
+                min-height: 10rem !important;
+            }
+            .mobile-only-text-space-6{
+                min-height: 6.4rem !important;
+            }
             .languages li{
                     flex-direction: column;
                     align-items: flex-start;
@@ -1715,7 +1726,7 @@
 </div>
     <section id="education" class="projects">
         <div class="container">
-            <h2 class="auto-type">School Projects and Education</h2>
+            <h2 class="auto-type mobile-only-text-space-10">School Projects and Education</h2>
             <div class="project-grid">
                 <div class="project-card">
                     <img src="fanikauppa.png" alt="SwordShop">
@@ -1752,7 +1763,7 @@
     <section id="experience" class="experience">
         
         <div class="container">
-            <h2 class="auto-type">Work and Internships</h2>
+            <h2 class="auto-type mobile-only-text-space-6">Work and Internships</h2>
             <div class="experience-list">
               
                 <div class="experience-item">
@@ -1836,7 +1847,7 @@
                 <span class="terminal-title">portawebia.json</span>
             </div>
             <div class="terminal-body">
-                <h2 class="auto-type">My Company</h2>
+                <h2 class="auto-type mobile-only-text-space-6">My Company</h2>
                 <p>
                     <span class="code-key">"description"</span>: "Meet Portawebia, mine and my brother venture started in August 2023, born from a passion for tech and innovation.",
                     <br><br>
