@@ -99,8 +99,6 @@
         nav ul li a:active {
             color: #00ffcc;
         }
-
-        /* Hero Section with Particles */
         .hero {
             height: 100vh;
             background: linear-gradient(135deg, #1e1e3f, #3a3a6b);
@@ -109,24 +107,36 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            overflow: hidden; /* Important to cut the globe */
+            overflow: hidden;
         }
-
+        /* Hero Section with Particles */
         /* ISS GLOBE CONTAINER */
         #hero-globe {
             position: absolute;
-            bottom: -50%; /* Pushed further down for flatter horizon at the bottom */
+            bottom: -50%;
             left: 0;
             width: 100%;
             height: 100vh;
             z-index: 0;
             pointer-events: none;
+            
+            /* NEW: Pre-load hidden state */
+            opacity: 0;
+            transform: translateY(500px) scale(0.95);
+            /* Super smooth, cinematic ease-out */
+            transition: opacity 1s ease-out, transform 1s ease-out;
         }
-        /* This class will be added via JavaScript */
+
+        /* NEW: The state triggered by JS when fully loaded */
+        #hero-globe.globe-ready {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* Scroll class */
         #hero-globe.is-fixed {
             position: fixed;
             z-index: -1;
-          
         }
           @media (max-height: 1000px) {
             #hero-globe {
@@ -2149,6 +2159,8 @@
     return trail;
   }
 
+    let isTrackingISS = false; // NEW: Controls when the camera locks onto the ISS
+
   async function initGlobe() {
     const landData = await fetch('https://raw.githubusercontent.com/vasturiano/globe.gl/master/example/datasets/ne_110m_admin_0_countries.geojson').then(res => res.json());
 
@@ -2160,13 +2172,15 @@
     }
 
     const globeEl = document.getElementById('hero-globe');
+    
+    // Initial camera position (zoomed out) to make the entrance look dramatic
     world = Globe()(globeEl)
-      .backgroundColor('rgba(0,0,0,0)') // Keeps the background fully transparent
+      .backgroundColor('rgba(0,0,0,0)') 
       .showGlobe(true)
-      .showAtmosphere(true) // RESTORED: Beautiful atmosphere for both PC & Mobile
+      .showAtmosphere(true) 
       .atmosphereColor('#00ffcc')
       .atmosphereAltitude(0.2)
-      .showGraticules(true) // RESTORED: Grid lines for both PC & Mobile
+      .showGraticules(true) 
       .polygonsData(landData.features)
       .polygonCapColor(() => 'rgba(0, 255, 204, 0.1)')
       .polygonStrokeColor(() => '#00ffcc')
@@ -2193,14 +2207,38 @@
         return el;
       });
 
-    // Cap Pixel Ratio to prevent high-res mobile screens from melting
+    // --- NEW: THE ENTRANCE ANIMATION ---
+    // --- THE DELAYED ENTRANCE ANIMATION ---
+    world.onGlobeReady(() => {
+      // Wait 1000ms (1 second) after the globe is technically "ready" before showing it
+      setTimeout(() => {
+        // 1. Unhide the globe (triggers the CSS fade-in and scale-up)
+        globeEl.classList.add('globe-ready');
+        
+        const now = new Date();
+        const current = getLatLngAlt(now);
+
+        // 2. Start the cinematic flight to the ISS (3.5 seconds long)
+        world.pointOfView({ 
+          lat: current.lat - 20, 
+          lng: current.lng, 
+          altitude: 1.8 
+        }, 3500);
+
+        // 3. Enable real-time tracking once the flight arrives
+        setTimeout(() => {
+          isTrackingISS = true;
+        }, 3500); 
+
+      }, 500); // This is your 1-second "extra peace" delay
+    });
+
     world.renderer().setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
     world.controls().enableRotate = false;
     world.controls().enableZoom = false;
     world.controls().enablePan = false;
 
-    // Intersection Observer stops rendering entirely if globe is scrolled out of view
     const observer = new IntersectionObserver(([entry]) => {
       isVisible = entry.isIntersecting;
     }, { threshold: 0.1 });
@@ -2214,12 +2252,10 @@
   }
 
   function updateFrame(timestamp) {
-    
     requestAnimationFrame(updateFrame);
 
     if (!isVisible || !satrec) return;
 
-    // Calculate time elapsed to enforce FPS throttle
     const nowTime = timestamp || performance.now();
     const elapsed = nowTime - lastFrameTime;
 
@@ -2234,17 +2270,19 @@
     issMarker.lng = current.lng;
     issMarker.alt = current.alt; 
 
-    // Update trail every 60 seconds
     if (now.getTime() - lastTrailUpdate > 60000) {
         const trailCoords = generateOrbitTrail(now);
         world.pathsData([{ coords: trailCoords }]);
         lastTrailUpdate = now.getTime();
     }
 
-    world.pointOfView({ lat: current.lat - 20, lng: current.lng, altitude: 1.8 }, 0);
     world.htmlElementsData([issMarker]);
 
-    // Throttled DOM updates for the HUD
+    // NEW: Only override the camera position if the entrance animation is finished
+    if (isTrackingISS) {
+        world.pointOfView({ lat: current.lat - 20, lng: current.lng, altitude: 1.8 }, 0);
+    }
+
     if (latValEl && lngValEl && altValEl && (nowTime - lastDomUpdate > DOM_UPDATE_INTERVAL)) {
         latValEl.innerText = current.lat.toFixed(2);
         lngValEl.innerText = current.lng.toFixed(2);
