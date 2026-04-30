@@ -328,6 +328,7 @@
 
         /* Bottom Stats Row */
         .profile-stats {
+            margin-top: 1rem;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -399,13 +400,74 @@
             background: rgba(0, 255, 204, 0.2);
             cursor: pointer;
         }
-        .bio .languages {
+        .languages {
             margin-top: 1rem;
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: all 0.5s ease;
         }
-        .bio .languages h3 {
+        .languages.animate {
+            opacity: 1;
+            transform: translateX(0);
+            
+        }
+        .languages h3 {
             font-size: 1.2rem;
             color: #00ffcc;
             margin-bottom: 0.5rem;
+        }
+        .languages ul {
+            list-style: none;
+            display: flex;
+            gap: 3rem;
+            padding: 0;
+        }
+
+        .languages li {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .flag-wrapper {
+            width: 50px; /* Controls flag size */
+            height: 33px;
+            display: flex;
+            align-items: center;
+        }
+
+        .flag-svg {
+            width: 100%;
+            height: 100%;
+            border-radius: 5px; /* Slight rounding for a cleaner look */
+            object-fit: cover;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* On hover: Bring the flag to life */
+        .languages li:hover .flag-svg {
+            filter: grayscale(0) opacity(1) brightness(1);
+            transform: scale(1.15);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+
+        .languages b {
+            color: #00ffcc;
+            display: block;
+            margin-bottom: 2px;
+        }
+        @media (max-width: 768px) {
+           
+            .languages li{
+                    flex-direction: column;
+                    align-items: flex-start;
+                    
+            }
+            .languages ul {
+                flex-direction: row;
+                justify-content: flex-start;
+                gap: 2rem;
+            }
         }
 
         /* Projects Section */
@@ -1001,7 +1063,7 @@
                 font-size: 2.5rem;
             }
             .bio-typed-container{
-                min-height: 500px;
+                min-height: 550px;
             }
             .about-content {
                 grid-template-columns: 1fr;
@@ -1025,19 +1087,7 @@
             }
         }
 
-        .languages ul {
-            list-style: none;
-            display: flex;
-            gap: 2rem;
-            padding: 0;
-        }
-
-        @media (max-width: 480px) {
-            .languages ul {
-                flex-direction: column;
-                gap: 0.5rem;
-            }
-        }
+       
         /* Hamburger icon styling */
         .hamburger {
             display: none; /* Hidden on big screens */
@@ -1509,17 +1559,7 @@
                         <h3 class="profile-name">Oskari <span class="last-name">Kaile</span></h3>
                         <p class="profile-title">Founder & Full-Stack Developer</p>
                         
-                        <div class="profile-stats">
-                            <div class="stat-item">
-                                <span class="stat-label">AGE</span>
-                                <span class="stat-value">20</span>
-                            </div>
-                            <div class="stat-divider"></div>
-                            <div class="stat-item">
-                                <span class="stat-label">EXP</span>
-                                <span class="stat-value">1,5+ YRS</span>
-                            </div>
-                        </div>
+                        
                         <div class="social-links-container_avatar">
                             <!-- GitHub -->
                             <a href="https://github.com/OskariKaile" target="_blank" class="social-icon" aria-label="GitHub">
@@ -1537,6 +1577,17 @@
                                 </svg>
                             </a>
                         </div>
+                        <div class="profile-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">AGE</span>
+                                <span class="stat-value">20</span>
+                            </div>
+                            <div class="stat-divider"></div>
+                            <div class="stat-item">
+                                <span class="stat-label">EXP</span>
+                                <span class="stat-value">1,5+ YRS</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="bio">
@@ -1553,7 +1604,7 @@
                             if (entry.isIntersecting) {
                                 new Typed('#biotyped', {
                                 strings: ['I am Oskari, a 20 year programmer who is really into building things that actually work. I am in charge of Portawebia Oy, where I spend my days and most of my nights working on web development and software engineering. My life has not been straightforward. I have been over the place from internships in Germany to starting my own company always trying to solve real problems with code. When I am not staring at the screen I like to look up at the sky. I am really interested, in space and how things work. My big goal is to bring these two things using my programming skills to help people get to the stars. '],
-                                typeSpeed: 0.1,
+                                typeSpeed: 0,
                                 showCursor: true,
                                 cursorChar: '|',
                                 });
@@ -1567,12 +1618,37 @@
                         observer.observe(target);
                         </script>
                     <div class="languages">
-                        <h3>Languages</h3>
-                        <ul>
-                            <li><b>Finnish:</b> Mother Language</li>
-                            <li><b>English:</b> Excellent</li>
-                        </ul>
-                    </div>
+                    <h3>Languages</h3>
+                    <ul>
+                        <li>
+                            <div class="flag-wrapper">
+                                <!-- Finnish SVG -->
+                                <svg class="flag-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 1100">
+                                    <rect width="1800" height="1100" fill="#fff"/>
+                                    <rect width="1800" height="300" y="400" fill="#003580"/>
+                                    <rect width="300" height="1100" x="500" fill="#003580"/>
+                                </svg>
+                            </div>
+                            <div><b>Finnish:</b> Mother Language</div>
+                        </li>
+                    <li>
+                        <div class="flag-wrapper">
+                            <!-- UK SVG -->
+                            <!-- Example for the UK Flag -->
+                            <svg class="flag-svg" viewBox="0 0 60 30" preserveAspectRatio="xMidYMid slice">
+
+                                <clipPath id="s"><path d="M0,0 v30 h60 v-30 z"/></clipPath>
+                                <path d="M0,0 v30 h60 v-30 z" fill="#012169"/>
+                                <path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/>
+                                <path d="M0,0 L60,30 M60,0 L0,30" stroke="#C8102E" stroke-width="4"/>
+                                <path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/>
+                                <path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/>
+                            </svg>
+                        </div>
+                        <div><b>English:</b> Excellent</div>
+                    </li>
+    </ul>
+</div>
                     
                    
                 </div>
@@ -2145,7 +2221,7 @@ window.addEventListener('scroll', () => {
             }, { threshold: 0.1 });
 
             // 1. Target your standard elements + the new skill spans
-            const selectors = 'h2, .avatar, .bio p, .project-card, .experience-card, .company-logo, .logo-cluster-container, .terminal-window, .contact form, .skills span';
+            const selectors = 'h2, .avatar, .bio p, .project-card, .experience-card,.languages, .company-logo, .logo-cluster-container, .terminal-window, .contact form, .skills span';
             
             document.querySelectorAll(selectors).forEach(element => {
                 observer.observe(element);
