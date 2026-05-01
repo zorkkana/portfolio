@@ -1741,8 +1741,23 @@
         padding: 8px 12px;
         border: 1px solid rgba(0, 255, 204, 0.2);
         border-radius: 4px;
-        transition: all 0.3s ease;
+        transition: opacity 0.5s ease, max-width 0.5s ease, margin 0.5s ease;
+        animation: dropUP 0.8s ease-out forwards;
+
     }
+        
+
+        /* Define the Animation */
+        @keyframes dropUP {
+            from {
+                opacity: 0;
+                transform: translateY(100px);
+            }
+            to {
+                opacity: 1;
+                transform:  translateY(0);
+            }
+        }
 
     .audio-control:hover {
         background: rgba(0, 255, 204, 0.15);
@@ -1755,6 +1770,8 @@
         align-items: flex-end;
         gap: 2px;
         height: 12px;
+        position: relative;
+        left: 5px;
     }
 
     .bar {
