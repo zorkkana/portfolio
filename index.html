@@ -120,7 +120,12 @@
             transform: translate(-50%, -50%);
             border-radius: 50%;
             z-index: 9999;
-            transition: transform 0.3s ease, opacity 0.3s ease, border-color 0.3s ease;
+            transition: 
+                transform 0.15s ease-out, 
+                opacity 0.3s ease, 
+                border-radius 0.3s ease, 
+                background-color 0.3s ease,
+                border-color 0.3s ease;
         }
 
         .cursor-dot {
@@ -152,6 +157,17 @@
             .cursor-outline {
                 display: none; /* Hide custom cursor on mobile */
             }
+        }
+        /* Update your .cursor-active classes to ensure they override the base state */
+        body.cursor-active .cursor-dot {
+            transform: translate(-50%, -50%); /* Dot shrinks */
+            background-color: #fff; /* Dot turns white for contrast */
+        }
+
+        body.cursor-active .cursor-outline {
+            transform: translate(-50%, -50%) scale(1.1); /* Kept the scale for that 'zoom' effect */
+            border-color: #00ffcc;
+            border-radius: 25%; /* Smoothly moves from 50% to 25% */
         }
 
         .center {
@@ -708,7 +724,6 @@
         .project-card:hover {
             transform: translateY(-10px);
             box-shadow: 0 0 30px rgba(0, 255, 204, 0.5);
-            cursor: pointer;
             
             
         }
@@ -1922,17 +1937,31 @@
                 outline.style.borderColor = 'rgba(0, 255, 204, 0.5)'; // Back to Cyan
             });
 
-            // IMPROVED: Automated Hover Detection
-            // This finds every link, button, and input automatically
-            // Handle Hover States (Automated)
-            const handleHover = () => {
-                const targets = document.querySelectorAll('a, button, .lang-item, .social-mini-link');
-                targets.forEach(el => {
-                    el.addEventListener('mouseenter', () => document.body.classList.add('cursor-active'));
-                    el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-active'));
-                });
-            };
-            handleHover();
+            // --- THE GLOBAL HOVER DETECTOR ---
+            // Instead of a loop, we listen to the whole window.
+            window.addEventListener('mouseover', (e) => {
+                // Check if the element being hovered (or its parent) is a link, button, or magnetic element
+                const isInteractive = e.target.closest('a, button, .magnetic, input, textarea');
+                
+                if (isInteractive) {
+                    document.body.classList.add('cursor-active');
+                } else {
+                    document.body.classList.remove('cursor-active');
+                }
+            });
+
+            // NEW: Handle Click Scaling (Refined)
+            // We use 'active' class to prevent transform conflicts with the hover scale
+            window.addEventListener('mousedown', () => {
+                dot.style.transform = 'translate(-50%, -50%) scale(0.7)';
+                outline.style.transform = 'translate(-50%, -50%) scale(0.8)';
+            });
+
+            window.addEventListener('mouseup', () => {
+                // We clear the manual transform so the CSS classes can take over again
+                dot.style.transform = '';
+                outline.style.transform = '';
+            });
     </script>
 
 
