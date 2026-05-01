@@ -50,6 +50,17 @@
             padding: 0;
             box-sizing: border-box;
         }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0a1a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #00ffcc;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #00ffcc;
+        }
         body {
             font-family: 'Roboto', sans-serif;
             color: #fff;
@@ -1941,31 +1952,52 @@
         const music = document.getElementById('bg-music');
         const wave = document.getElementById('wave-container');
         const statusText = document.getElementById('audio-status');
-        let statusTimeout; // Variable to store our timer
-        
-        music.volume = 0.1;
+        let statusTimeout;
+        let fadeInterval;
+
+        music.volume = 0; // Start at 0 for the first fade-in
 
         function toggleMusic() {
-            // Toggle the music
+            const fadeDuration = 1000; // 1 second fade
+            const targetMaxVolume = 0.1; // Your preferred max volume
+            const step = 0.01; // How much the volume changes per interval
+            const intervalTime = fadeDuration / (targetMaxVolume / step);
+
+            clearInterval(fadeInterval); // Stop any current fading
+
             if (music.paused) {
+                // --- FADE IN ---
                 music.play();
                 wave.classList.add('playing');
                 statusText.innerText = "SOUND: ON";
+                
+                fadeInterval = setInterval(() => {
+                    if (music.volume < targetMaxVolume) {
+                        music.volume = Math.min(targetMaxVolume, music.volume + step);
+                    } else {
+                        clearInterval(fadeInterval);
+                    }
+                }, intervalTime);
+
             } else {
-                music.pause();
-                wave.classList.remove('playing');
+                // --- FADE OUT ---
                 statusText.innerText = "SOUND: OFF";
+                
+                fadeInterval = setInterval(() => {
+                    if (music.volume > 0.01) {
+                        music.volume = Math.max(0, music.volume - step);
+                    } else {
+                        music.pause();
+                        wave.classList.remove('playing');
+                        clearInterval(fadeInterval);
+                    }
+                }, intervalTime);
             }
 
             // --- Mobile Visibility Logic ---
             if (window.innerWidth <= 768) {
-                // Clear any existing timer so they don't overlap
                 clearTimeout(statusTimeout);
-                
-                // Show the text
                 statusText.classList.add('mobile-visible');
-
-                // Hide it again after 3 seconds
                 statusTimeout = setTimeout(() => {
                     statusText.classList.remove('mobile-visible');
                 }, 3000);
