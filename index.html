@@ -17,7 +17,7 @@
     <script src="https://unpkg.com/globe.gl"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/satellite.js/4.1.3/satellite.min.js"></script>
     <link rel="icon" type="image/x-icon" href="O.png">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Lenis Smooth Scroll -->
     <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
     <script>
@@ -152,6 +152,7 @@
             position: fixed;
             top: 20px;
             left: 50%;
+         
             /* Keep the horizontal centering while adding the vertical offset */
             transform: translateX(-50%) translateY(-100px); 
             width: 80%;
@@ -208,6 +209,29 @@
         }
         nav ul li a:active {
             color: #00ffcc;
+        }
+        .progress-container {
+            position: absolute;
+            top: 0px;
+            left: 25px;
+            right: 25px;
+            width: calc(100% - 50px);
+            height: 2px;
+            overflow: hidden;
+            background: transparent;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        #scroll-line {
+            height: 100%;
+            width: 0%; 
+            background: #00ffcc;
+            /* Massive glow effect to make it look like raw energy */
+            box-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc; 
+            transition: width 0.1s ease-out;
+            will-change: width;
+            border-radius: 5px; /* Gives the head of the line a soft tip */
         }
         .hero {
             height: 100vh;
@@ -513,7 +537,9 @@
         }
 
         .skills span {
-            display: inline-block;
+            display: inline-flex;      /* Changed to flex for icon alignment */
+            align-items: center;       /* Vertically centers the icon and text */
+            gap: 8px;                  /* Adds perfect spacing between icon and text */
             opacity: 0;
             transform: translateY(20px);
             background: rgba(0, 255, 204, 0.1);
@@ -521,8 +547,15 @@
             border-radius: 20px;
             font-size: 0.9rem;
             color: #00ffcc;
-            /* transition for both entrance and hover */
             transition: opacity 0.5s ease, transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+            
+            /* Ensure the magnetic JS doesn't lag during flex calculation */
+            will-change: transform, opacity; 
+        }
+
+        /* Optional: Make the icon slightly larger than the text for visual balance */
+        .skills span i {
+            font-size: 1.1rem; 
         }
 
         .skills span.animate {
@@ -535,6 +568,28 @@
             transform: scale(1.05);
             background: rgba(0, 255, 204, 0.2);
             cursor: pointer;
+        }
+        @media (max-width: 768px) {
+            /* Force exactly 2 columns */
+            .skills {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr); 
+                gap: 0.5rem;
+            }
+
+            /* Transform the pills into "App Buttons" */
+            .skills span {
+                justify-content: center;
+                text-align: center;
+                padding: 0.8rem 0.4rem;
+                font-size: 0.75rem; /* Shrink the text slightly */
+                gap: 6px; 
+            }
+
+            /* Make the icon slightly bigger so it acts as the centerpiece */
+            .skills span i {
+                font-size: 1.4rem; 
+            }
         }
         .languages {
             margin-top: 1rem;
@@ -812,6 +867,10 @@
             transform: translateX(-60px);
             transition: all 0.6s ease;
         }
+        .terminal-window:hover {
+           box-shadow: 0 30px 60px rgb(0 255 204 / 5%);
+            border-color: #00ffcc;
+        }
         .terminal-window.animate {
             opacity: 1;
             transform: translateX(0);
@@ -993,6 +1052,7 @@
   
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
 }
+
 .contact_grid{
     display: grid;
     grid-template-columns: 3fr 2fr;
@@ -1686,7 +1746,12 @@
         left: 0;
         margin-left: 10px;
     }
-}
+    }
+    .magnetic {
+        transition: transform 0.2s cubic-bezier(0.33, 1, 0.68, 1);
+        will-change: transform; /* Optimization for the GPU */
+    }
+   
 
     </style>
 </head>
@@ -1790,7 +1855,7 @@
         const statusText = document.getElementById('audio-status');
         let statusTimeout; // Variable to store our timer
         
-        music.volume = 0.15;
+        music.volume = 0.1;
 
         function toggleMusic() {
             // Toggle the music
@@ -1821,8 +1886,11 @@
     </script>
     
     <nav>
+          <div class="progress-container">
+                <div id="scroll-line"></div>
+            </div>
         <div class="container">
-            
+             
             <a href="#" class="logo">Oskari Kaile</a>
             <div class="hamburger">
                 <span></span>
@@ -1837,6 +1905,8 @@
                 <li><a href="#contact">Contact</a></li>
             </ul>
         </div>
+       
+            
     </nav>
     <script>
         const hamburger = document.querySelector('.hamburger');
@@ -1929,6 +1999,7 @@
 
     <section id="about" class="about">
         <canvas id="dust-canvas"></canvas>
+      
 
         <div class="iss-hud">
             <div class="live-dot"></div>
@@ -1958,7 +2029,7 @@
                         
                         <div class="social-links-container_avatar">
                             <!-- GitHub -->
-                            <a href="https://github.com/OskariKaile" target="_blank" class="social-icon" aria-label="GitHub">
+                            <a href="https://github.com/OskariKaile" target="_blank" class="social-icon magnetic" aria-label="GitHub">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512">
                                     <!-- Font Awesome Free 5.15.4 -->
                                     <path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/>
@@ -1966,7 +2037,7 @@
                             </a>
                             
                             <!-- LinkedIn -->
-                            <a href="https://www.linkedin.com/in/oskari-kaile/" target="_blank" class="social-icon" aria-label="LinkedIn">
+                            <a href="https://www.linkedin.com/in/oskari-kaile/" target="_blank" class="social-icon magnetic" aria-label="LinkedIn">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                                     <!-- Font Awesome Free 5.15.4 -->
                                     <path d="M100.28 448H7.4V148.9h92.88zM53.79 108.1C24.09 108.1 0 83.5 0 53.8a53.79 53.79 0 0 1 107.58 0c0 29.7-24.1 54.3-53.79 54.3zM447.9 448h-92.68V302.4c0-34.7-.7-79.2-48.29-79.2-48.29 0-55.69 37.7-55.69 76.7V448h-92.78V148.9h89.08v40.8h1.3c12.4-23.5 42.69-48.3 87.88-48.3 94 0 111.28 61.9 111.28 142.3V448z"/>
@@ -2050,28 +2121,28 @@
                 </div>
             </div>
             <div class="skills stagger-animation">
-                        <span>Python: Advanced</span>
-                        <span>Html: Advanced</span>
-                        <span>Css: Advanced</span>
-                        <span>Sass: Advanced</span>
-                        <span>React: Excellent</span>
-                        <span>GitHub: Excellent</span>
-                        <span>Unity: Excellent</span>
-                        <span>A/B testing: Excellent</span>
-                        <span>SEO: Excellent</span>
-                        <span>WordPress: Excellent</span>
-                        <span>AWS: Excellent</span>
-                        <span>Visual Basic: Very Great</span>
-                        <span>C#: Very Great</span>
-                        <span>cPanel: Great</span>
-                        <span>JavaScript: Great</span>
-                        <span>Php: Great</span>
-                        <span>SQL: Great</span>
-                        <span>NoSQL: Great</span>
-                        <span>Docker: Great</span>
-                        <span>Cyber Security: Great</span>
-                        <span>Many more...</span>
-                    </div>
+                <span class="magnetic"><i class="fa-brands fa-python"></i> Python: Advanced</span>
+                <span class="magnetic"><i class="fa-brands fa-html5"></i> Html: Advanced</span>
+                <span class="magnetic"><i class="fa-brands fa-css3-alt"></i> Css: Advanced</span>
+                <span class="magnetic"><i class="fa-brands fa-sass"></i> Sass: Advanced</span>
+                <span class="magnetic"><i class="fa-brands fa-react"></i> React: Excellent</span>
+                <span class="magnetic"><i class="fa-brands fa-github"></i> GitHub: Excellent</span>
+                <span class="magnetic"><i class="fa-brands fa-unity"></i> Unity: Excellent</span>
+                <span class="magnetic"><i class="fa-solid fa-vial"></i> A/B testing: Excellent</span>
+                <span class="magnetic"><i class="fa-solid fa-magnifying-glass-chart"></i> SEO: Excellent</span>
+                <span class="magnetic"><i class="fa-brands fa-wordpress"></i> WordPress: Excellent</span>
+                <span class="magnetic"><i class="fa-brands fa-aws"></i> AWS: Excellent</span>
+                <span class="magnetic"><i class="fa-brands fa-windows"></i> Visual Basic: Very Great</span>
+                <span class="magnetic"><i class="fa-solid fa-code"></i> C#: Very Great</span>
+                <span class="magnetic"><i class="fa-brands fa-cpanel"></i> cPanel: Great</span>
+                <span class="magnetic"><i class="fa-brands fa-js"></i> JavaScript: Great</span>
+                <span class="magnetic"><i class="fa-brands fa-php"></i> Php: Great</span>
+                <span class="magnetic"><i class="fa-solid fa-database"></i> SQL: Great</span>
+                <span class="magnetic"><i class="fa-solid fa-server"></i> NoSQL: Great</span>
+                <span class="magnetic"><i class="fa-brands fa-docker"></i> Docker: Great</span>
+                <span class="magnetic"><i class="fa-solid fa-shield-halved"></i> Cyber Security: Great</span>
+                <span class="magnetic"><i class="fa-solid fa-ellipsis"></i> Many more...</span>
+            </div>
         </div>
     </section>
 <div class="custom-shape-divider-top-1777286135">
@@ -2217,15 +2288,15 @@
         </div>
 
         <div class="logo-cluster-container">
-            <img src="Portawebia.png" loading="lazy" decoding="async" alt="Portawebia Logo" class="company-logo main-logo">
+            <div class="magnetic"><img src="Portawebia.png" loading="lazy" decoding="async" alt="Portawebia Logo" class="company-logo main-logo"></div>
             
             <div class="tech-stack-float">
-                <div class="floating-icon icon-1"><img src="WordPress_blue_logo.svg.png" alt="WordPress" loading="lazy" decoding="async"></div>
-                <div class="floating-icon icon-2"><img src="2945149.webp" alt="Shopify" loading="lazy" decoding="async"></div>
-                <div class="floating-icon icon-3"><img src="5968753.png" alt="Wix" loading="lazy" decoding="async"></div>
-                <div class="floating-icon icon-4"><img src="aws.png" alt="aws" loading="lazy" decoding="async"></div>
-                <div class="floating-icon icon-5"><img src="Google__G__logo.svg.png" alt="Google" loading="lazy" decoding="async"></div>
-                <div class="floating-icon icon-6"><img src="Meta_Platforms_Inc._logo_(cropped).svg.png" alt="Meta" loading="lazy" decoding="async"></div>
+                <div class="magnetic"><div class="floating-icon icon-1"><img src="WordPress_blue_logo.svg.png" alt="WordPress" loading="lazy" decoding="async"></div></div>
+                <div class="magnetic"><div class="floating-icon icon-2"><img src="2945149.webp" alt="Shopify" loading="lazy" decoding="async"></div></div>
+                <div class="magnetic"><div class="floating-icon icon-3"><img src="5968753.png" alt="Wix" loading="lazy" decoding="async"></div></div>
+                <div class="magnetic"><div class="floating-icon icon-4"><img src="aws.png" alt="aws" loading="lazy" decoding="async"></div></div>
+                <div class="magnetic"><div class="floating-icon icon-5"><img src="Google__G__logo.svg.png" alt="Google" loading="lazy" decoding="async"></div></div>
+                <div class="magnetic"><div class="floating-icon icon-6"><img src="Meta_Platforms_Inc._logo_(cropped).svg.png" alt="Meta" loading="lazy" decoding="async"></div></div>
 
 
             </div>
@@ -2287,7 +2358,7 @@
                             <button type="submit" class="btn-hollow submit-btn">Transmit Message</button>
                             <div class="social-links-container">
                                         <!-- GitHub -->
-                                        <a href="https://github.com/OskariKaile" target="_blank" class="social-icon" aria-label="GitHub">
+                                        <a href="https://github.com/OskariKaile" target="_blank" class="social-icon magnetic" aria-label="GitHub">
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512">
                                                 <!-- Font Awesome Free 5.15.4 -->
                                                 <path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/>
@@ -2295,7 +2366,7 @@
                                         </a>
                                         
                                         <!-- LinkedIn -->
-                                        <a href="https://www.linkedin.com/in/oskari-kaile/" target="_blank" class="social-icon" aria-label="LinkedIn">
+                                        <a href="https://www.linkedin.com/in/oskari-kaile/" target="_blank" class="social-icon magnetic" aria-label="LinkedIn">
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                                                 <!-- Font Awesome Free 5.15.4 -->
                                                 <path d="M100.28 448H7.4V148.9h92.88zM53.79 108.1C24.09 108.1 0 83.5 0 53.8a53.79 53.79 0 0 1 107.58 0c0 29.7-24.1 54.3-53.79 54.3zM447.9 448h-92.68V302.4c0-34.7-.7-79.2-48.29-79.2-48.29 0-55.69 37.7-55.69 76.7V448h-92.78V148.9h89.08v40.8h1.3c12.4-23.5 42.69-48.3 87.88-48.3 94 0 111.28 61.9 111.28 142.3V448z"/>
@@ -2333,13 +2404,7 @@
         </div>
       
     </section>
-    <div class="custom-shape-divider-top-1777286135">
-    <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-        <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25" class="shape-fill"></path>
-        <path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5" class="shape-fill"></path>
-        <path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" class="shape-fill"></path>
-    </svg>
-</div>
+
 
     <footer>
         <p>© 2026 Oskari. Built from Scratch.</p>
@@ -2796,6 +2861,72 @@ window.addEventListener('scroll', () => {
 
         // Initialize
         document.addEventListener('DOMContentLoaded', initTypewriter);
+    </script>
+
+    <script>
+        const magneticElements = document.querySelectorAll('.magnetic');
+        
+        const activationDistance = 80; 
+        const pullStrength = 0.4; 
+
+        window.addEventListener('mousemove', (e) => {
+            // ONLY run if the screen is wider than 768px
+            if (window.innerWidth > 768) {
+                magneticElements.forEach((el) => {
+                    const rect = el.getBoundingClientRect();
+                    
+                    const centerX = rect.left + rect.width / 2;
+                    const centerY = rect.top + rect.height / 2;
+
+                    const distanceX = e.clientX - centerX;
+                    const distanceY = e.clientY - centerY;
+                    
+                    const distance = Math.hypot(distanceX, distanceY);
+
+                    if (distance < activationDistance) {
+                        const power = (activationDistance - distance) / activationDistance;
+                        
+                        const x = distanceX * power * pullStrength;
+                        const y = distanceY * power * pullStrength;
+
+                        el.style.transform = `translate(${x}px, ${y}px) scale(1.1)`;
+                    } else {
+                        el.style.transform = `translate(0px, 0px) scale(1)`;
+                    }
+                });
+            } else {
+                // Force reset on mobile just in case of screen rotation
+                magneticElements.forEach(el => {
+                    el.style.transform = 'translate(0px, 0px) scale(1)';
+                });
+            }
+        });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
+    <script>
+        // 3D tilt effect for project cards
+        VanillaTilt.init(document.querySelectorAll(".project-card"), {
+            max: 5,      // Max tilt angle
+            speed: 2000,   // Speed of transition
+            glare: true,  // Adds a "shine" effect
+            "max-glare": 0.2,
+            gyroscope: false,
+            easing: "cubic-bezier(.03,.98,.52,.99)",
+        });
+    </script>
+    <script>
+        window.addEventListener('scroll', () => {
+            const h = document.documentElement;
+            const b = document.body;
+            const st = 'scrollTop';
+            const sh = 'scrollHeight';
+            
+            // Calculate the scroll percentage
+            const percent = (h[st] || b[st]) / ((h[sh] || b[sh]) - h.clientHeight) * 100;
+            
+            // Apply it to the width
+            document.getElementById('scroll-line').style.width = percent + '%';
+        });
     </script>
   
 </body>
