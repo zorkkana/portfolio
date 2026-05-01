@@ -1795,7 +1795,7 @@
     }
 
     #audio-status {
-        position: absolute; /* Takes it out of the layout flow */
+        position: relative; /* Takes it out of the layout flow */
         left: 45px;        /* Spacing from the icon */
         opacity: 0;
         transform: translateX(-10px); /* Small slide effect */
@@ -1815,6 +1815,7 @@
         position: relative; 
         left: 0;
         margin-left: 10px;
+        transition: all 0.5s ease;
     }
     }
     .magnetic {
