@@ -1430,14 +1430,25 @@
             to { opacity: 1; }
         }
         .bio-typed-container {
-
-        min-height: 250px; width: 100%; max-width: 800px;
+            min-height: 250px; 
+            width: 100%; 
+            max-width: 800px;
         }
-        .bio{
+
+        .bio {
             justify-content: space-around;
             display: flex;
             flex-direction: column;
             height: 100%;
+        }
+
+        /* New classes for the effect */
+        .scroll-word {
+            opacity: 0.1; /* Starting state for unrevealed words */
+            filter: blur(10px); 
+            display: inline-block;
+            transition: opacity 0.1s ease-out, filter 0.1s ease-out;
+            will-change: opacity, filter; /* Optimizes performance during scroll */
         }
         
         @media (max-width: 768px) {
@@ -2417,31 +2428,74 @@
                     </div>
                 </div>
                 <div class="bio">
-                    <div id="typed-container" class="bio-typed-container" ">
-                        <p class="fade-in"><span id="biotyped"></span></p>
+                        <div id="typed-container" class="bio-typed-container">
+                            <p class="fade-in" id="biotyped"></p>
                         </div>
 
                         <script>
-                        const target = document.querySelector('#typed-container');
+                        const container = document.querySelector('#typed-container');
+                        const textElement = document.querySelector('#biotyped');
 
-                        const observer = new IntersectionObserver((entries) => {
-                            entries.forEach(entry => {
-                            // If the element is visible in the viewport
-                            if (entry.isIntersecting) {
-                                new Typed('#biotyped', {
-                                strings: ['I am Oskari, a 20 year programmer who is really into building things that actually work. I am in charge of Portawebia Oy, where I spend my days and most of my nights working on web development and software engineering. My life has not been straightforward. I have been over the place from internships in Germany to starting my own company always trying to solve real problems with code. When I am not staring at the screen I like to look up at the sky. I am really interested, in space and how things work. My big goal is to bring these two things using my programming skills to help people get to the stars. '],
-                                typeSpeed: 0,
-                                showCursor: true,
-                                cursorChar: '|',
-                                });
-                                
-                                // Stop observing once the animation has started
-                                observer.unobserve(entry.target);
-                            }
+                        // Your bio text
+                        const text = "I am Oskari, a 20 year programmer who is really into building things that actually work. I am in charge of Portawebia Oy, where I spend my days and most of my nights working on web development and software engineering. My life has not been straightforward. I have been over the place from internships in Germany to starting my own company always trying to solve real problems with code. When I am not staring at the screen I like to look up at the sky. I am really interested in space and how things work. My big goal is to bring these two things using my programming skills to help people get to the stars.";
+
+                        // 1. Break text into words and wrap them in spans
+                        const wordsArray = text.split(' ');
+                        textElement.innerHTML = wordsArray.map(word => `<span class="scroll-word">${word}</span>`).join(' ');
+
+                        // Get all the newly created spans
+                        const wordElements = document.querySelectorAll('.scroll-word');
+
+                        // 2. The function that calculates the scroll effect
+                        function handleScrollReveal() {
+                            const rect = container.getBoundingClientRect();
+                            const windowHeight = window.innerHeight;
+
+                            // Defines the trigger zones. 
+                            // Start revealing when the container is 80% down the screen
+                            const start = windowHeight * 0.8;
+                            // Finish revealing when the container is 20% down the screen
+                            const end = windowHeight * 0.2;
+
+                            // Calculate how far along the scroll track we are (0 to 1)
+                            const totalDistance = start - end;
+                            let progress = (start - rect.top) / totalDistance;
+
+                            // Lock progress between 0 and 1 so it doesn't break when scrolling past
+                            progress = Math.max(0, Math.min(1, progress));
+
+                            // Calculate which word should be the "current" clear word based on progress
+                            const currentWordIndex = progress * wordsArray.length;
+
+                            // Loop through all words and apply styles based on their distance from the current word
+                            wordElements.forEach((word, index) => {
+                                // Distance from the active scroll point
+                                const distance = index - currentWordIndex;
+
+                                if (distance < 0) {
+                                    // Word is behind the scroll point (fully revealed)
+                                    word.style.opacity = 1;
+                                    word.style.filter = 'blur(0px)';
+                                } else if (distance < 6) {
+                                    // The "Blur Zone" for the next ~6 words ahead of the scroll point
+                                    const blurAmount = distance * 1.5; // Starts small, maxes out around 9px
+                                    const opacityAmount = 1 - (distance * 0.15); // Gradually fades out
+                                    
+                                    word.style.opacity = opacityAmount;
+                                    word.style.filter = `blur(${blurAmount}px)`;
+                                } else {
+                                    // Words further down that haven't been reached yet
+                                    word.style.opacity = 0;
+                                    word.style.filter = 'blur(10px)';
+                                }
                             });
-                        }, { threshold: 0.5 }); // 0.5 means it starts when 50% of the box is visible
+                        }
 
-                        observer.observe(target);
+                        // 3. Attach the function to the scroll event
+                        window.addEventListener('scroll', handleScrollReveal);
+
+                        // 4. Run it once immediately on load in case the user refreshes halfway down the page
+                        handleScrollReveal();
                         </script>
                     <div class="languages">
                     <h3>Languages</h3>
@@ -3247,47 +3301,54 @@ window.addEventListener('scroll', () => {
     });
 </script>
 
-        <script defer >
+       <script defer>
         const initTypewriter = () => {
             const elements = document.querySelectorAll('.auto-type');
 
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
+                    const el = entry.target;
+                    const text = el.getAttribute('data-text');
+
                     if (entry.isIntersecting) {
-                        const el = entry.target;
-                        
-                        // 1. Get the text and then clear the element
-                        const text = el.getAttribute('data-text') || el.innerText; 
-                        el.innerText = ''; 
-                        el.style.visibility = 'visible';
-                        el.style.opacity = '1';
+                        // Trigger typing if it's not already running
+                        if (!el.typedInstance) {
+                            el.innerText = ''; 
+                            el.style.visibility = 'visible';
+                            el.style.opacity = '1';
 
-                        // 2. Initialize Typed
-                        new Typed(el, {
-                            strings: [text],
-                            typeSpeed: 50,
-                            showCursor: false,
-                           
-                        });
-
-                        // 3. Stop watching this element
-                        observer.unobserve(el);
+                            el.typedInstance = new Typed(el, {
+                                strings: [text],
+                                typeSpeed: 50,
+                                showCursor: false,
+                            });
+                        }
+                    } else {
+                        // ONLY reset if the element is ABOVE the viewport
+                        // entry.boundingClientRect.top > 0 means it went off the top
+                        if (entry.boundingClientRect.top > 0) {
+                            if (el.typedInstance) {
+                                el.typedInstance.destroy();
+                                el.typedInstance = null;
+                            }
+                            el.innerText = '';
+                            el.style.visibility = 'hidden';
+                        }
                     }
                 });
             }, { 
-                threshold: 0.2, // Trigger earlier so the user doesn't see a blank space
-                rootMargin: '0px 0px -50px 0px' // Starts typing slightly before it hits the viewport
+                threshold: 0, // Using 0 ensures it triggers exactly when it leaves
+                rootMargin: '0px' 
             });
 
             elements.forEach(el => {
-                // Store the text in a data-attribute so we don't lose it when we clear el.innerText
                 el.setAttribute('data-text', el.innerText);
+                el.innerText = ''; 
                 el.style.visibility = 'hidden'; 
                 observer.observe(el);
             });
         };
 
-        // Initialize
         document.addEventListener('DOMContentLoaded', initTypewriter);
     </script>
 
