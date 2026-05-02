@@ -1452,7 +1452,66 @@
             display: flex;
             gap: 2rem; /* Space between links */
         }
+        .nav-links li a {
+            perspective: 1000px;
+            text-decoration: none;
+            color: #fff;
+            display: flex;
+            overflow: hidden;
+            line-height: 1;
+        }
 
+        /* The container for each individual letter */
+        .letter-wrap {
+            position: relative;
+            display: inline-block;
+            /* Sync both transform and opacity with the same stagger */
+            transition: transform 0.5s cubic-bezier(0.6, 0, 0.4, 1), 
+                        opacity 0.5s cubic-bezier(0.6, 0, 0.4, 1);
+            transition-delay: calc(var(--index) * 0.035s);
+        }
+
+        /* The letter currently visible */
+        .letter-top {
+            display: block;
+            opacity: 1;
+            transition: opacity 0.4s ease;
+        }
+
+        /* The letter waiting below */
+        .letter-bottom {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            color: #00ffcc;
+            opacity: 0; /* Start invisible */
+            transition: opacity 0.4s ease;
+        }
+
+        /* --- THE MAGIC MOMENT --- */
+
+        .nav-links li a:hover .letter-wrap {
+            transform: translateY(-100%);
+        }
+
+        /* Fade out the top letter as it moves up */
+        .nav-links li a:hover .letter-top {
+            opacity: 0;
+        }
+
+        /* Fade in the bottom letter as it moves into place */
+        .nav-links li a:hover .letter-bottom {
+            opacity: 1;
+        }
+        .active-link {
+            color: #00ffcc !important;
+            font-weight: 600;
+        }
+
+        /* Ensure the hover effect still works on the active link */
+        .active-link::before {
+            color: #fff; /* Flip the color or keep it consistent */
+        }
         /* Mobile styles */
         @media (max-width: 768px) {
             .hamburger {
@@ -1481,6 +1540,22 @@
                     max-height 0.5s ease, 
                     opacity 0s ease 0.4s, /* 0s duration, but 0.5s DELAY */
                     border 0s ease 0.4s; /* Remove border after closing animation */
+            }
+            .nav-links li a {
+                display: block;
+            }
+             .nav-links li a:hover .letter-wrap {
+                transform: translateY(0);
+            }
+
+            /* Fade out the top letter as it moves up */
+            .nav-links li a:hover .letter-top {
+                opacity: 1;
+            }
+
+            /* Fade in the bottom letter as it moves into place */
+            .nav-links li a:hover .letter-bottom {
+                opacity: 1;
             }
 
             .nav-links.active {
@@ -2123,6 +2198,28 @@
             
     </nav>
     <script>
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            const text = link.innerText;
+            link.innerHTML = ''; // Clear the text
+
+            // Split text into individual letters
+            [...text].forEach((letter, i) => {
+                const span = document.createElement('span');
+                span.className = 'letter-wrap';
+                // Set the CSS variable for the stagger delay
+                span.style.setProperty('--index', i);
+
+                // Create the two layers of text
+                span.innerHTML = `
+                    <span class="letter-top">${letter === ' ' ? '&nbsp;' : letter}</span>
+                    <span class="letter-bottom">${letter === ' ' ? '&nbsp;' : letter}</span>
+                `;
+                
+                link.appendChild(span);
+            });
+        });
+    </script>
+    <script>
         const hamburger = document.querySelector('.hamburger');
         const navLinks = document.querySelector('.nav-links');
         const links = document.querySelectorAll('.nav-links li a');
@@ -2154,15 +2251,11 @@
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         const id = entry.target.getAttribute("id");
-                        
-                        // Update Nav Links
                         navLinks.forEach(link => {
                             if (link.getAttribute("href") === `#${id}`) {
-                                link.style.color = "#00ffcc";
-                                link.style.fontWeight = "600";
+                                link.classList.add("active-link");
                             } else {
-                                link.style.color = "#fff";
-                                link.style.fontWeight = "400";
+                                link.classList.remove("active-link");
                             }
                         });
                     }
