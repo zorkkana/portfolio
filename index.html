@@ -3032,11 +3032,25 @@ window.addEventListener('scroll', () => {
             card.style.transitionDelay = `${index * 0.1}s`;
         });
 
+        // Staggered effect for SKILLS
         document.querySelectorAll('.skills span').forEach((skill, index) => {
-            skill.style.transitionDelay = `${index * 0.05}s`; 
-        });
+
+                skill.style.transitionDelay = `${index * 0.05}s`;
+
+               
+
+                // NEW: Remove the delay after the entrance animation finishes
+
+                skill.addEventListener('transitionend', () => {
+
+                    skill.style.transitionDelay = '0s';
+
+                }, { once: true }); // 'once: true' ensures this only runs once
+
+            });
     });
 </script>
+
         <script defer >
         const initTypewriter = () => {
             const elements = document.querySelectorAll('.auto-type');
