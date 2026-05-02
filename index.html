@@ -833,6 +833,7 @@
             border: 1px solid #00ffcc;
             position: relative;
             opacity: 0;
+            backdrop-filter: blur(2px);
             transform: translateX(-20px);
             transition: opacity 0.6s ease, transform 0.6s ease, background 0.3s ease; /* Smooth move */
         }
@@ -1077,7 +1078,7 @@
 /* Reusing the Terminal style from Company section */
 .contact-form-window {
     background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(15px);
+    backdrop-filter: blur(4px);
     border: 1px solid rgba(0, 255, 204, 0.2);
     border-radius: 15px;
     overflow: hidden;
@@ -1739,13 +1740,13 @@
 
     /* Ensure the parent container (like your About section) has 'position: relative' */
 
-    #dust-canvas {
+    .dust-canvas {
         position: absolute;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        z-index: -1; /* Pushes it behind all your text and cards */
+        z-index: 0; /* Pushes it behind all your text and cards */
         pointer-events: none; /* CRITICAL: Stops the canvas from blocking clicks/hovers */
     }
     .Background{
@@ -2155,7 +2156,7 @@
 </div><div>
 
     <section id="about" class="about">
-        <canvas id="dust-canvas"></canvas>
+        <canvas class="dust-canvas"></canvas>
       
 
         <div class="iss-hud">
@@ -2346,7 +2347,7 @@
     </svg>
 </div>
     <section id="experience" class="experience">
-        
+        <canvas class="dust-canvas"></canvas>
         <div class="container">
             <h2 class="auto-type mobile-only-text-space-6">Work and Internships</h2>
             <div class="experience-list">
@@ -2475,7 +2476,7 @@
     </div>
 
     <section id="contact" class="contact">
-   
+        <canvas class="dust-canvas"></canvas>
         <div class="container">
             <h2 class="auto-type">Get in Touch</h2>
             <div class="contact_grid">
@@ -2643,77 +2644,80 @@
     }
     </script>
     <script>
-    const canvas = document.getElementById('dust-canvas');
-    const ctx = canvas.getContext('2d');
+        // Grab ALL canvas elements with the class 'dust-canvas'
+        const canvases = document.querySelectorAll('.dust-canvas');
 
-    // Set canvas to the size of its parent
-    function resizeCanvas() {
-        canvas.width = canvas.parentElement.offsetWidth;
-        canvas.height = canvas.parentElement.offsetHeight;
-    }
-    
-    // Call it initially and on window resize
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
+        // Loop through each canvas and set up its own particle system
+        canvases.forEach(canvas => {
+            const ctx = canvas.getContext('2d');
+            let particlesArray = [];
 
-    let particlesArray = [];
-
-    // Particle Object
-    class Particle {
-        constructor() {
-            this.x = Math.random() * canvas.width;
-            this.y = Math.random() * canvas.height;
-            this.size = Math.random() * 1.5 + 0.2; // Tiny dust size (0.2px to 1.7px)
-            this.speedX = Math.random() * 0.4 - 0.2; // Slow horizontal drift
-            this.speedY = Math.random() * 0.4 - 0.2; // Slow vertical drift
+            // Set canvas to the size of its parent
+            function resizeCanvas() {
+                canvas.width = canvas.parentElement.offsetWidth;
+                canvas.height = canvas.parentElement.offsetHeight;
+            }
             
-            // Neon cyan color with random transparency to look like dust
-            this.color = `rgba(0, 255, 204, ${Math.random() * 0.6 + 0.1})`;
-        }
+            // Call it initially and on window resize
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
 
-        update() {
-            this.x += this.speedX;
-            this.y += this.speedY;
+            // Particle Object (scoped to this specific canvas)
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.size = Math.random() * 1.5 + 0.2; // Tiny dust size (0.2px to 1.7px)
+                    this.speedX = Math.random() * 0.4 - 0.2; // Slow horizontal drift
+                    this.speedY = Math.random() * 0.4 - 0.2; // Slow vertical drift
+                    
+                    // Neon cyan color with random transparency to look like dust
+                    this.color = `rgba(0, 255, 204, ${Math.random() * 0.6 + 0.1})`;
+                }
 
-            // If dust floats off screen, teleport it back to the other side
-            if (this.x < 0) this.x = canvas.width;
-            if (this.x > canvas.width) this.x = 0;
-            if (this.y < 0) this.y = canvas.height;
-            if (this.y > canvas.height) this.y = 0;
-        }
+                update() {
+                    this.x += this.speedX;
+                    this.y += this.speedY;
 
-        draw() {
-            ctx.fillStyle = this.color;
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-            ctx.fill();
-        }
-    }
+                    // If dust floats off screen, teleport it back to the other side
+                    if (this.x < 0) this.x = canvas.width;
+                    if (this.x > canvas.width) this.x = 0;
+                    if (this.y < 0) this.y = canvas.height;
+                    if (this.y > canvas.height) this.y = 0;
+                }
 
-    // Populate the dust field
-    function init() {
-        particlesArray = [];
-        // Change '150' to add more or less dust
-        for (let i = 0; i < 100; i++) { 
-            particlesArray.push(new Particle());
-        }
-    }
+                draw() {
+                    ctx.fillStyle = this.color;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
 
-    // Animation Loop
-    function animate() {
-        // Clears the canvas every frame to draw the next step
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
-        for (let i = 0; i < particlesArray.length; i++) {
-            particlesArray[i].update();
-            particlesArray[i].draw();
-        }
-        requestAnimationFrame(animate); // Loops at 60 FPS
-    }
+            // Populate the dust field for this specific canvas
+            function init() {
+                particlesArray = [];
+                // Change '100' to add more or less dust per container
+                for (let i = 0; i < 100; i++) { 
+                    particlesArray.push(new Particle());
+                }
+            }
 
-    init();
-    animate();
-</script>
+            // Animation Loop for this specific canvas
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                for (let i = 0; i < particlesArray.length; i++) {
+                    particlesArray[i].update();
+                    particlesArray[i].draw();
+                }
+                requestAnimationFrame(animate); 
+            }
+
+            init();
+            animate();
+        });
+    </script>
 
 
     <script>
