@@ -345,54 +345,82 @@
             animation: fadeInUp 1s ease-out 0.5s forwards;
             opacity: 0;
         }
+        /* Shared Sci-Fi Structure & Animation */
+        .btn, .btn-hollow {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            margin: 10px;
+            font-weight: 700;
+            font-size: 1rem;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-radius: 50px;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 1s forwards;
+            
+            /* Snappy, physical transition for hover and click states */
+            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        /* -------------------------------------- */
+        /* PRIMARY BUTTON: High Priority / Solid  */
+        /* -------------------------------------- */
         .btn {
             background: #fd7a33;
-            color: #fff;
-            padding: 1rem 2rem;
-            text-decoration: none;
-            border-radius: 50px;
+            /* Dark text on a bright background makes the neon look "lit" */
+            color: #ffff; 
             border: 2px solid #fd7a33;
-            font-weight: 700;
-            margin: 10px;
-            box-shadow: 0 0 15px #fd7a33;
-            text-shadow: 0px 0px 2px black;
-            transition: transform 0.3s, box-shadow 0.3s;
-            opacity: 0;
-            animation: fadeInUp 1s ease-out 1s forwards;
-
+            
+            /* Strong outward glow + a slight inner white highlight for a glass tube effect */
+            box-shadow: 0 0 15px rgba(253, 122, 51, 0.6),
+                        0 0 30px rgba(253, 122, 51, 0.3),
+                        inset 0 0 5px rgba(255, 255, 255, 0.4);
         }
-       
-        
-     
+
         .btn:hover {
-            box-shadow: 0 0 25px #fd7a33;
+            /* Maximum brightness and expands toward the user */
+            box-shadow: 0 0 20px #fd7a33,
+                        0 0 40px #fd7a33;
+            transform: translateY(-3px) scale(1.02);
             cursor: pointer;
         }
+
+        .btn:active {
+            /* The "click" physics - pushes down and dims slightly */
+            transform: translateY(1px) scale(0.98);
+            box-shadow: 0 0 10px #fd7a33;
+        }
+
+        /* ---------------------------------------- */
+        /* SECONDARY BUTTON: Low Priority / Hollow  */
+        /* ---------------------------------------- */
         .btn-hollow {
             background: transparent;
-            text-shadow: 0px 0px 2px black;
             color: #fd7a33;
-            padding: 1rem 2rem;
-            text-decoration: none;
-            border-radius: 50px;
-            margin: 10px;
-            font-weight: 700;
             border: 2px solid #fd7a33;
-            opacity: 0;
-            animation: fadeInUp 1s ease-out 1s forwards;
-            box-shadow: 0 0 15px rgba(253, 122, 51, 0.4);   /* softer glow */
-            transition: 
-                transform 0.3s,
-                box-shadow 0.3s,
-                background 0.3s,
-                color 0.3s;
+            
+            /* Very subtle resting glow so it doesn't compete with the primary button */
+            box-shadow: 0 0 10px rgba(253, 122, 51, 0.2),
+                        inset 0 0 10px rgba(253, 122, 51, 0.1);
+            text-shadow: 0 0 5px rgba(253, 122, 51, 0.5);
         }
 
         .btn-hollow:hover {
-            background: #fd7a33;
+            /* Instead of turning fully solid, it fills with a glowing gas effect */
+            background: rgba(253, 122, 51, 0.15); 
             color: #fff;
-            box-shadow: 0 0 25px #fd7a33;
+            box-shadow: 0 0 15px rgba(253, 122, 51, 0.6),
+                        inset 0 0 15px rgba(253, 122, 51, 0.4);
+            transform: translateY(-3px) scale(1.02);
+            text-shadow: 0 0 8px #fd7a33;
             cursor: pointer;
+        }
+
+        .btn-hollow:active {
+            /* The "click" physics */
+            transform: translateY(1px) scale(0.98);
+            box-shadow: 0 0 5px rgba(253, 122, 51, 0.4);
         }
 
         /* Sections */
@@ -688,7 +716,7 @@
                 padding: 1rem 5rem;
             }
             .btn-hollow {
-                padding: 1rem 5rem;
+                padding: 1rem 2rem;
             }
             .mobile-only-text-space-10 {
                 min-height: 10rem !important;
