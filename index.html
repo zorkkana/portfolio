@@ -355,6 +355,7 @@
             font-weight: 700;
             margin: 10px;
             box-shadow: 0 0 15px #fd7a33;
+            text-shadow: 0px 0px 2px black;
             transition: transform 0.3s, box-shadow 0.3s;
             opacity: 0;
             animation: fadeInUp 1s ease-out 1s forwards;
@@ -369,6 +370,7 @@
         }
         .btn-hollow {
             background: transparent;
+            text-shadow: 0px 0px 2px black;
             color: #fd7a33;
             padding: 1rem 2rem;
             text-decoration: none;
@@ -1490,18 +1492,27 @@
 
         /* --- THE MAGIC MOMENT --- */
 
-        .nav-links li a:hover .letter-wrap {
+        /* Slide the wrap up */
+        .nav-links li a:hover .letter-wrap,
+        .nav-links li a.active-link .letter-wrap {
             transform: translateY(-100%);
         }
 
-        /* Fade out the top letter as it moves up */
-        .nav-links li a:hover .letter-top {
+        /* Fade out the top letter */
+        .nav-links li a:hover .letter-top,
+        .nav-links li a.active-link .letter-top {
             opacity: 0;
         }
 
-        /* Fade in the bottom letter as it moves into place */
-        .nav-links li a:hover .letter-bottom {
+        /* Fade in the bottom letter (this one is already your accent color!) */
+        .nav-links li a:hover .letter-bottom,
+        .nav-links li a.active-link .letter-bottom {
             opacity: 1;
+        }
+
+        /* Make sure the active link has the heavier font weight */
+        .nav-links li a.active-link .letter-bottom {
+            font-weight: 600;
         }
         .active-link {
             color: #00ffcc !important;
@@ -1557,6 +1568,7 @@
             .nav-links li a:hover .letter-bottom {
                 opacity: 1;
             }
+            
 
             .nav-links.active {
                 /* OPEN STATE */
@@ -1944,6 +1956,7 @@
         width: 2px;
         background: #00ffcc;
         height: 100%;
+        transition: all 0.3s ease;
     }
 
     .playing .bar {
@@ -2235,37 +2248,40 @@
         });
     </script>
     <script>
-            document.addEventListener("DOMContentLoaded", () => {
-            const navLinks = document.querySelectorAll("nav ul li a");
-            const sections = document.querySelectorAll("section[id]");
+    document.addEventListener("DOMContentLoaded", () => {
+        const navLinks = document.querySelectorAll(".nav-links li a");
+        const sections = document.querySelectorAll("section[id]");
 
-            // 1. The Observer Configuration
-            const options = {
-                root: null, // use the viewport
-                rootMargin: "-20% 0px -70% 0px", // triggers when section is in the top-ish area
-                threshold: 0
-            };
+        // 1. The Observer Configuration
+        const options = {
+            root: null,
+            rootMargin: "-20% 0px -70% 0px", 
+            threshold: 0
+        };
 
-            // 2. The Callback Function
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const id = entry.target.getAttribute("id");
-                        navLinks.forEach(link => {
-                            if (link.getAttribute("href") === `#${id}`) {
-                                link.classList.add("active-link");
-                            } else {
-                                link.classList.remove("active-link");
-                            }
-                        });
+        // 2. The Callback Function
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                const id = entry.target.getAttribute("id");
+                const currentLink = document.querySelector(`.nav-links li a[href="#${id}"]`);
+
+                if (entry.isIntersecting) {
+                    // When a section enters, remove active from all and add to this one
+                    navLinks.forEach(link => link.classList.remove("active-link"));
+                    if (currentLink) currentLink.classList.add("active-link");
+                } else {
+                    // When a section leaves, if it was the active one, remove the class
+                    if (currentLink && currentLink.classList.contains("active-link")) {
+                        currentLink.classList.remove("active-link");
                     }
-                });
-            }, options);
+                }
+            });
+        }, options);
 
-            // 3. Start Watching Sections
-            sections.forEach(section => observer.observe(section));
-        });
-    </script>
+        // 3. Start Watching Sections
+        sections.forEach(section => observer.observe(section));
+    });
+</script>
     <div class="Background"></div>
 
     <div class="hero">
