@@ -2545,8 +2545,8 @@
                 <span class="magnetic"><i class="fa-solid fa-magnifying-glass-chart"></i> SEO: Excellent</span>
                 <span class="magnetic"><i class="fa-brands fa-wordpress"></i> WordPress: Excellent</span>
                 <span class="magnetic"><i class="fa-brands fa-aws"></i> AWS: Excellent</span>
-                <span class="magnetic"><i class="fa-brands fa-windows"></i> Visual Basic: Very Great</span>
-                <span class="magnetic"><i class="fa-solid fa-code"></i> C#: Very Great</span>
+                <span class="magnetic"><i class="fa-brands fa-windows"></i> Visual Basic: Strong</span>
+                <span class="magnetic"><i class="fa-solid fa-code"></i> C#: Strong</span>
                 <span class="magnetic"><i class="fa-brands fa-cpanel"></i> cPanel: Great</span>
                 <span class="magnetic"><i class="fa-brands fa-js"></i> JavaScript: Great</span>
                 <span class="magnetic"><i class="fa-brands fa-php"></i> Php: Great</span>
@@ -3255,51 +3255,51 @@ window.addEventListener('scroll', () => {
         if (particlesContainer) pObserver.observe(particlesContainer);
     </script>
     <script defer>
-    document.addEventListener('DOMContentLoaded', () => {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    // Always add the animation when it comes into view
-                    entry.target.classList.add('animate');
-                } else {
-                    // Only remove the class if the element is BELOW the viewport
-                    // (This happens when you scroll back UP)
-                    if (entry.boundingClientRect.top > 0) {
-                        entry.target.classList.remove('animate');
+        document.addEventListener('DOMContentLoaded', () => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // Always add the animation when it comes into view
+                        entry.target.classList.add('animate');
+                    } else {
+                        // Only remove the class if the element is BELOW the viewport
+                        // (This happens when you scroll back UP)
+                        if (entry.boundingClientRect.top > 0) {
+                            entry.target.classList.remove('animate');
+                        }
                     }
-                }
+                });
+            }, { threshold: 0.1 });
+
+            const selectors = 'h2, .btn, .avatar, .bio p, .project-card, .experience-card, .languages, .company-logo, .logo-cluster-container, .terminal-window, .contact form, .skills span';
+            
+            document.querySelectorAll(selectors).forEach(element => {
+                observer.observe(element);
             });
-        }, { threshold: 0.1 });
 
-        const selectors = 'h2, .btn, .avatar, .bio p, .project-card, .experience-card, .languages, .company-logo, .logo-cluster-container, .terminal-window, .contact form, .skills span';
-        
-        document.querySelectorAll(selectors).forEach(element => {
-            observer.observe(element);
-        });
-
-        // Keeping your stagger logic
-        document.querySelectorAll('.project-card').forEach((card, index) => {
-            card.style.transitionDelay = `${index * 0.1}s`;
-        });
-
-        // Staggered effect for SKILLS
-        document.querySelectorAll('.skills span').forEach((skill, index) => {
-
-                skill.style.transitionDelay = `${index * 0.05}s`;
-
-               
-
-                // NEW: Remove the delay after the entrance animation finishes
-
-                skill.addEventListener('transitionend', () => {
-
-                    skill.style.transitionDelay = '0s';
-
-                }, { once: true }); // 'once: true' ensures this only runs once
-
+            // Keeping your stagger logic
+            document.querySelectorAll('.project-card').forEach((card, index) => {
+                card.style.transitionDelay = `${index * 0.1}s`;
             });
-    });
-</script>
+
+            // Staggered effect for SKILLS
+            document.querySelectorAll('.skills span').forEach((skill, index) => {
+
+                    skill.style.transitionDelay = `${index * 0.05}s`;
+
+                
+
+                    // NEW: Remove the delay after the entrance animation finishes
+
+                    skill.addEventListener('transitionend', () => {
+
+                        skill.style.transitionDelay = '0s';
+
+                    }, { once: true }); // 'once: true' ensures this only runs once
+
+                });
+        });
+    </script>
 
        <script defer>
         const initTypewriter = () => {
