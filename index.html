@@ -1746,6 +1746,7 @@
         left: 0;
         width: 100%;
         height: 100%;
+        filter: blur(1px);
         z-index: 0; /* Pushes it behind all your text and cards */
         pointer-events: none; /* CRITICAL: Stops the canvas from blocking clicks/hovers */
     }
@@ -2647,39 +2648,37 @@
         // Grab ALL canvas elements with the class 'dust-canvas'
         const canvases = document.querySelectorAll('.dust-canvas');
 
-        // Loop through each canvas and set up its own particle system
         canvases.forEach(canvas => {
             const ctx = canvas.getContext('2d');
             let particlesArray = [];
 
-            // Set canvas to the size of its parent
             function resizeCanvas() {
                 canvas.width = canvas.parentElement.offsetWidth;
                 canvas.height = canvas.parentElement.offsetHeight;
             }
             
-            // Call it initially and on window resize
             resizeCanvas();
             window.addEventListener('resize', resizeCanvas);
 
-            // Particle Object (scoped to this specific canvas)
+            // Particle Object
             class Particle {
                 constructor() {
                     this.x = Math.random() * canvas.width;
                     this.y = Math.random() * canvas.height;
-                    this.size = Math.random() * 1.5 + 0.2; // Tiny dust size (0.2px to 1.7px)
-                    this.speedX = Math.random() * 0.4 - 0.2; // Slow horizontal drift
-                    this.speedY = Math.random() * 0.4 - 0.2; // Slow vertical drift
-                    
-                    // Neon cyan color with random transparency to look like dust
+                    this.size = Math.random() * 1.5 + 0.2; 
+                    this.speedX = Math.random() * 0.4 - 0.2; 
+                    this.speedY = Math.random() * 0.4 - 0.2; 
                     this.color = `rgba(0, 255, 204, ${Math.random() * 0.6 + 0.1})`;
+
+                    // NEW: Give each particle its own scroll speed (0.1 to 0.6)
+                    // This creates a 3D effect where some dust looks further in the background
+                    this.parallaxSpeed = Math.random() * 0.5 + 0.1; 
                 }
 
                 update() {
                     this.x += this.speedX;
                     this.y += this.speedY;
 
-                    // If dust floats off screen, teleport it back to the other side
                     if (this.x < 0) this.x = canvas.width;
                     if (this.x > canvas.width) this.x = 0;
                     if (this.y < 0) this.y = canvas.height;
@@ -2689,21 +2688,27 @@
                 draw() {
                     ctx.fillStyle = this.color;
                     ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+
+                    // NEW: Shift the visual Y position based on scroll amount and the particle's depth
+                    let parallaxY = (this.y + (window.scrollY * this.parallaxSpeed)) % canvas.height;
+                    
+                    // Failsafe for Apple/mobile "bounce" scrolling so it doesn't glitch at the top of the page
+                    if (parallaxY < 0) {
+                        parallaxY += canvas.height;
+                    }
+
+                    ctx.arc(this.x, parallaxY, this.size, 0, Math.PI * 2);
                     ctx.fill();
                 }
             }
 
-            // Populate the dust field for this specific canvas
             function init() {
                 particlesArray = [];
-                // Change '100' to add more or less dust per container
                 for (let i = 0; i < 100; i++) { 
                     particlesArray.push(new Particle());
                 }
             }
 
-            // Animation Loop for this specific canvas
             function animate() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 
