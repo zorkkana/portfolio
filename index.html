@@ -716,19 +716,54 @@
             padding: 100px 0;
             overflow: hidden;
         }
-        /* The Background Effect */
-        .edu-bg-grid {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            /* This creates a seamless hexagon pattern */
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100' viewBox='0 0 56 100'%3E%3Cpath d='M28 66L0 50L0 16L28 0L56 16L56 50L28 66L28 100' fill='none' stroke='rgba(0, 255, 204, 0.1)' stroke-width='1'/%3E%3C/svg%3E");
-            background-size: 56px 100px;
-            z-index: 0;
-            opacity: 0.5;
-        }
+    .edu-bg-grid {
+        position: absolute;
+        top: -10%;
+        left: -10%;
+        width: 120%;
+        height: 120%;
+        
+        /* Increased stroke to 0.4 so the 'dim' version is actually visible */
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100' viewBox='0 0 56 100'%3E%3Cpath d='M28 66L0 50L0 16L28 0L56 16L56 50L28 66L28 100' fill='none' stroke='rgba(0, 255, 204, 0.4)' stroke-width='1'/%3E%3C/svg%3E");
+        background-size: 56px 100px;
+        z-index: 0;
+        
+        animation: drift 20s linear infinite;
+        
+        /* The mask now fades to 15% visibility instead of 0% */
+        -webkit-mask-image: radial-gradient(
+            circle 500px at var(--mouse-x, 50%) var(--mouse-y, 50%), 
+            black 0%, 
+            rgba(0, 0, 0, 0.4) 40%, 
+            rgba(0, 0, 0, 0.15) 100%
+        );
+        mask-image: radial-gradient(
+            circle 500px at var(--mouse-x, 50%) var(--mouse-y, 50%), 
+            black 0%, 
+            rgba(0, 0, 0, 0.4) 40%, 
+            rgba(0, 0, 0, 0.15) 100%
+        );
+        
+        transition: opacity 0.5s ease;
+    }
+
+    @keyframes drift {
+        from { transform: translate(0, 0); }
+        to { transform: translate(56px, 100px); }
+    }
+
+    .edu-bg-grid::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: inherit;
+        animation: pulse2 4s ease-in-out infinite alternate;
+    }
+
+    @keyframes pulse2 {
+        from { opacity: 0.1; }
+        to { opacity: 0.5; }
+}
         
         .project-grid {
             display: grid;
@@ -2326,6 +2361,22 @@
     </section>
     <div class="edu">
         <div class="edu-bg-grid "></div>
+        <script>
+         document.addEventListener('mousemove', (e) => {
+            const grid = document.querySelector('.edu-bg-grid');
+            if (!grid) return;
+
+            const rect = grid.getBoundingClientRect();
+
+            // Calculate position relative to the grid element itself
+            // Math: Mouse position - Grid's starting edge = Corrected Coordinate
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            grid.style.setProperty('--mouse-x', `${x}px`);
+            grid.style.setProperty('--mouse-y', `${y}px`);
+        });
+        </script>
 
         <div class="custom-shape-divider-top-1777286135">
             <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
