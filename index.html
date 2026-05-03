@@ -2028,6 +2028,7 @@
         height: 12px;
         position: relative;
         left: 5px;
+        --wave-scale: 1; /* NEW: Sets a default variable */
     }
 
     .bar {
@@ -2048,8 +2049,9 @@
     .playing .bar:nth-child(3) { animation-delay: 0.4s; }
 
     @keyframes wave {
-        0%, 100% { transform: scaleY(0.33); } /* Matches the resting state */
-        50% { transform: scaleY(1); } /* Scales up to full 12px height */
+        0%, 100% { transform: scaleY(0.33); }
+        /* NEW: Uses the variable for the peak of the bounce */
+        50% { transform: scaleY(var(--wave-scale)); } 
     }
     /* Default PC behavior */
     #audio-status {
@@ -2218,15 +2220,15 @@
         let statusTimeout;
         let fadeInterval;
 
-        music.volume = 0; // Start at 0 for the first fade-in
+        music.volume = 0;
 
         function toggleMusic() {
-            const fadeDuration = 1000; // 1 second fade
-            const targetMaxVolume = 0.1; // Your preferred max volume
-            const step = 0.01; // How much the volume changes per interval
+            const fadeDuration = 1000; 
+            const targetMaxVolume = 0.1; 
+            const step = 0.01; 
             const intervalTime = fadeDuration / (targetMaxVolume / step);
 
-            clearInterval(fadeInterval); // Stop any current fading
+            clearInterval(fadeInterval); 
 
             if (music.paused) {
                 // --- FADE IN ---
@@ -2237,6 +2239,10 @@
                 fadeInterval = setInterval(() => {
                     if (music.volume < targetMaxVolume) {
                         music.volume = Math.min(targetMaxVolume, music.volume + step);
+                        
+                        // NEW: Smoothly increase wave bounce as volume goes up
+                        let progress = music.volume / targetMaxVolume;
+                        wave.style.setProperty('--wave-scale', 0.33 + (progress * 0.67));
                     } else {
                         clearInterval(fadeInterval);
                     }
@@ -2249,9 +2255,14 @@
                 fadeInterval = setInterval(() => {
                     if (music.volume > 0.01) {
                         music.volume = Math.max(0, music.volume - step);
+                        
+                        // NEW: Smoothly decrease wave bounce as volume goes down
+                        let progress = music.volume / targetMaxVolume;
+                        wave.style.setProperty('--wave-scale', 0.33 + (progress * 0.67));
                     } else {
                         music.pause();
                         wave.classList.remove('playing');
+                        wave.style.setProperty('--wave-scale', 1); // Reset for the next play
                         clearInterval(fadeInterval);
                     }
                 }, intervalTime);
