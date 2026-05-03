@@ -2937,6 +2937,21 @@
             </div>
         </div>
     </div>
+      <div id="whatareudoung" class="modal-overlay">
+        <div class="modal-content terminal-window">
+            <div class="terminal-header">
+                <span class="dot red"></span>
+                <span class="dot yellow"></span>
+                <span class="dot green"></span>
+                <span class="terminal-title">system_notification.exe</span>
+            </div>
+            <div class="terminal-body">
+                <h3 style="color: #00ffcc; margin-bottom: 1rem;">What Are You Doing?</h3>
+                <p style="color: #ccc; margin-bottom: 2rem;">Are you trying to crash my system?</p>
+                <button onclick="closeModal2()" class="btn-hollow">Close Terminal</button>
+            </div>
+        </div>
+    </div>
     <script>
         const form = document.querySelector('.contact-form');
     const modal = document.getElementById('thankYouModal');
@@ -3251,6 +3266,8 @@ window.addEventListener('scroll', () => {
     <script>
         // 1. Check if we are on a mobile device
         const isMobile = window.innerWidth < 768;
+        const modal2 = document.getElementById('whatareudoung'); // Select your modal
+        let clickCount = 0; // The counter
 
         particlesJS('particles-js', {
             particles: {
@@ -3292,9 +3309,24 @@ window.addEventListener('scroll', () => {
             // This stops the canvas from rendering at 3x resolution which kills mobile GPUs
             retina_detect: false 
         });
+        const particlesContainer = document.getElementById('particles-js');
+
+        // 1. Listen for clicks on the particles container
+        particlesContainer.addEventListener('click', () => {
+            clickCount++;
+            
+            if (clickCount === 10) {
+                modal2.classList.add('active');
+                    clickCount = 0; 
+            }
+        });
+
+        // 2. Function to close the modal (referenced in your HTML button)
+        window.closeModal2 = function() {
+            modal2.classList.remove('active');
+        };
 
         // 4. Optimization: Kill the animation when user scrolls away
-        const particlesContainer = document.getElementById('particles-js');
         const pObserver = new IntersectionObserver(([entry]) => {
             const canvas = particlesContainer.querySelector('canvas');
             if (canvas) {
@@ -3305,6 +3337,7 @@ window.addEventListener('scroll', () => {
 
         if (particlesContainer) pObserver.observe(particlesContainer);
     </script>
+
     <script defer>
     document.addEventListener('DOMContentLoaded', () => {
         const observer = new IntersectionObserver((entries) => {
