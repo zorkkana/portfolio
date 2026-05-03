@@ -2206,7 +2206,7 @@
     </script>
 
 
-    <div class="audio-control" onclick="toggleMusic()">
+    <div class="audio-control sfx-click sfx-hover" onclick="toggleMusic()">
         <div class="sound-wave" id="wave-container">
             <span class="bar"></span>
             <span class="bar"></span>
@@ -2229,7 +2229,7 @@
 
         function toggleMusic() {
             const fadeDuration = 1000; 
-            const targetMaxVolume = 0.1; 
+            const targetMaxVolume = 0.05; 
             const step = 0.01; 
             const intervalTime = fadeDuration / (targetMaxVolume / step);
 
@@ -2282,6 +2282,42 @@
                 }, 3000);
             }
         }
+
+        // --- SFX DEFINITIONS ---
+        const sfxHover = new Audio('255764__andreasmustola__mouse-hover.mp3'); 
+        const sfxClick = new Audio('702168__foxfire__click-tick-menu-navigation.wav');
+        
+        // Set volumes extremely low (subtlety is key!)
+        sfxHover.volume = 1; 
+        sfxClick.volume = 1;
+
+        // Helper to play sound ONLY if master audio is ON
+        function playSFX(audio) {
+            if (!music.paused) {
+                audio.currentTime = 0; // Reset to start for rapid clicks
+                audio.play().catch(() => {}); // Catch errors if browser blocks audio
+            }
+        }
+        // --- GLOBAL SFX LISTENER ---
+        window.addEventListener('mouseover', (e) => {
+            // 1. Find the target element with the class
+            const target = e.target.closest('.sfx-hover');
+            
+            // 2. Find where the mouse just came from
+            const from = e.relatedTarget ? e.relatedTarget.closest('.sfx-hover') : null;
+
+            // 3. ONLY play if we are entering a NEW .sfx-hover element
+            // This prevents the sound from restarting when moving over text inside a button
+            if (target && target !== from) {
+                playSFX(sfxHover);
+            }
+        });
+
+        window.addEventListener('click', (e) => {
+            if (e.target.closest('.sfx-click')) {
+                playSFX(sfxClick);
+            }
+        });
     </script>
     
     <nav>
@@ -2290,18 +2326,18 @@
             </div>
         <div class="container">
              
-            <a href="#" class="logo">Oskari Kaile</a>
+            <a href="#" class="logo sfx-click sfx-hover">Oskari Kaile</a>
             <div class="hamburger">
                 <span></span>
                 <span></span>
                 <span></span>
             </div>
             <ul class="nav-links">
-                <li><a href="#about">About</a></li>
-                <li><a href="#education">Education</a></li>
-                <li><a href="#experience">Experience</a></li>
-                <li><a href="#company">Company</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a class="sfx-click sfx-hover" href="#about">About</a></li>
+                <li><a class="sfx-click sfx-hover" href="#education">Education</a></li>
+                <li><a class="sfx-click sfx-hover" href="#experience">Experience</a></li>
+                <li><a class="sfx-click sfx-hover" href="#company">Company</a></li>
+                <li><a class="sfx-click sfx-hover" href="#contact">Contact</a></li>
             </ul>
         </div>
        
@@ -2403,8 +2439,8 @@
                     backSpeed: 30,
                 });
             </script>
-            <a href="#experience" class="btn">View My Work</a>
-            <a href="#contact" class="btn-hollow">Connect With Me</a>
+            <a href="#experience" class="btn sfx-click sfx-hover">View My Work</a>
+            <a href="#contact" class="btn-hollow sfx-click sfx-hover">Connect With Me</a>
         </div>
     </div>
 
@@ -2449,7 +2485,7 @@
                         
                         <div class="social-links-container_avatar">
                             <!-- GitHub -->
-                            <a href="https://github.com/OskariKaile" target="_blank" class="social-icon magnetic" aria-label="GitHub">
+                            <a href="https://github.com/OskariKaile" target="_blank" class="social-icon magnetic sfx-click sfx-hover" aria-label="GitHub">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512">
                                     <!-- Font Awesome Free 5.15.4 -->
                                     <path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/>
@@ -2457,7 +2493,7 @@
                             </a>
                             
                             <!-- LinkedIn -->
-                            <a href="https://www.linkedin.com/in/oskari-kaile/" target="_blank" class="social-icon magnetic" aria-label="LinkedIn">
+                            <a href="https://www.linkedin.com/in/oskari-kaile/" target="_blank" class="social-icon magnetic sfx-click sfx-hover" aria-label="LinkedIn">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                                     <!-- Font Awesome Free 5.15.4 -->
                                     <path d="M100.28 448H7.4V148.9h92.88zM53.79 108.1C24.09 108.1 0 83.5 0 53.8a53.79 53.79 0 0 1 107.58 0c0 29.7-24.1 54.3-53.79 54.3zM447.9 448h-92.68V302.4c0-34.7-.7-79.2-48.29-79.2-48.29 0-55.69 37.7-55.69 76.7V448h-92.78V148.9h89.08v40.8h1.3c12.4-23.5 42.69-48.3 87.88-48.3 94 0 111.28 61.9 111.28 142.3V448z"/>
@@ -2551,7 +2587,7 @@
                     <h3>Languages</h3>
                     <ul>
                         <li>
-                            <div class="flag-wrapper">
+                            <div class="flag-wrapper sfx-hover">
                                 <!-- Finnish SVG -->
                                 <svg class="flag-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 1100">
                                     <rect width="1800" height="1100" fill="#fff"/>
@@ -2562,7 +2598,7 @@
                             <div><b>Finnish:</b> Mother Language</div>
                         </li>
                     <li>
-                        <div class="flag-wrapper">
+                        <div class="flag-wrapper sfx-hover">
                             <!-- UK SVG -->
                             <!-- Example for the UK Flag -->
                             <svg class="flag-svg" viewBox="0 0 60 30" preserveAspectRatio="xMidYMid slice">
@@ -2584,27 +2620,27 @@
                 </div>
             </div>
             <div class="skills stagger-animation">
-                <span class="magnetic"><i class="fa-brands fa-python"></i> Python: Advanced</span>
-                <span class="magnetic"><i class="fa-brands fa-html5"></i> Html: Advanced</span>
-                <span class="magnetic"><i class="fa-brands fa-css3-alt"></i> Css: Advanced</span>
-                <span class="magnetic"><i class="fa-brands fa-sass"></i> Sass: Advanced</span>
-                <span class="magnetic"><i class="fa-brands fa-react"></i> React: Excellent</span>
-                <span class="magnetic"><i class="fa-brands fa-github"></i> GitHub: Excellent</span>
-                <span class="magnetic"><i class="fa-brands fa-unity"></i> Unity: Excellent</span>
-                <span class="magnetic"><i class="fa-solid fa-vial"></i> A/B testing: Excellent</span>
-                <span class="magnetic"><i class="fa-solid fa-magnifying-glass-chart"></i> SEO: Excellent</span>
-                <span class="magnetic"><i class="fa-brands fa-wordpress"></i> WordPress: Excellent</span>
-                <span class="magnetic"><i class="fa-brands fa-aws"></i> AWS: Excellent</span>
-                <span class="magnetic"><i class="fa-brands fa-windows"></i> Visual Basic: Strong</span>
-                <span class="magnetic"><i class="fa-solid fa-code"></i> C#: Strong</span>
-                <span class="magnetic"><i class="fa-brands fa-cpanel"></i> cPanel: Great</span>
-                <span class="magnetic"><i class="fa-brands fa-js"></i> JavaScript: Great</span>
-                <span class="magnetic"><i class="fa-brands fa-php"></i> Php: Great</span>
-                <span class="magnetic"><i class="fa-solid fa-database"></i> SQL: Great</span>
-                <span class="magnetic"><i class="fa-solid fa-server"></i> NoSQL: Great</span>
-                <span class="magnetic"><i class="fa-brands fa-docker"></i> Docker: Great</span>
-                <span class="magnetic"><i class="fa-solid fa-shield-halved"></i> Cyber Security: Great</span>
-                <span class="magnetic"><i class="fa-solid fa-ellipsis"></i> Many more...</span>
+                <span class="magnetic sfx-hover"><i class="fa-brands fa-python"></i> Python: Advanced</span>
+                <span class="magnetic sfx-hover"><i class="fa-brands fa-html5"></i> Html: Advanced</span>
+                <span class="magnetic sfx-hover"><i class="fa-brands fa-css3-alt"></i> Css: Advanced</span>
+                <span class="magnetic sfx-hover"><i class="fa-brands fa-sass"></i> Sass: Advanced</span>
+                <span class="magnetic sfx-hover"><i class="fa-brands fa-react"></i> React: Excellent</span>
+                <span class="magnetic sfx-hover"><i class="fa-brands fa-github"></i> GitHub: Excellent</span>
+                <span class="magnetic sfx-hover"><i class="fa-brands fa-unity"></i> Unity: Excellent</span>
+                <span class="magnetic sfx-hover"><i class="fa-solid fa-vial"></i> A/B testing: Excellent</span>
+                <span class="magnetic sfx-hover"><i class="fa-solid fa-magnifying-glass-chart"></i> SEO: Excellent</span>
+                <span class="magnetic sfx-hover"><i class="fa-brands fa-wordpress"></i> WordPress: Excellent</span>
+                <span class="magnetic sfx-hover"><i class="fa-brands fa-aws"></i> AWS: Excellent</span>
+                <span class="magnetic sfx-hover"><i class="fa-brands fa-windows"></i> Visual Basic: Strong</span>
+                <span class="magnetic sfx-hover"><i class="fa-solid fa-code"></i> C#: Strong</span>
+                <span class="magnetic sfx-hover"><i class="fa-brands fa-cpanel"></i> cPanel: Great</span>
+                <span class="magnetic sfx-hover"><i class="fa-brands fa-js"></i> JavaScript: Great</span>
+                <span class="magnetic sfx-hover"><i class="fa-brands fa-php"></i> Php: Great</span>
+                <span class="magnetic sfx-hover"><i class="fa-solid fa-database"></i> SQL: Great</span>
+                <span class="magnetic sfx-hover"><i class="fa-solid fa-server"></i> NoSQL: Great</span>
+                <span class="magnetic sfx-hover"><i class="fa-brands fa-docker"></i> Docker: Great</span>
+                <span class="magnetic sfx-hover"><i class="fa-solid fa-shield-halved"></i> Cyber Security: Great</span>
+                <span class="magnetic sfx-hover"><i class="fa-solid fa-ellipsis"></i> Many more...</span>
             </div>
         </div>
     </section>
@@ -2643,9 +2679,9 @@
                         <h3>School Project: SwordShop</h3>
                         <p>Developed a web application for purchasing Minecraft swords, featuring a responsive design and an SQL database for inventory management. Built using React for the frontend.</p>
                         <div class="skills stagger-animation">
-                            <span class="magnetic"><i class="fa-brands fa-react"></i> React</span>
-                            <span class="magnetic"><i class="fa-solid fa-database"></i> SQL</span>
-                            <span class="magnetic"><i class="fa-brands fa-sass"></i> Sass</span>
+                            <span class="magnetic sfx-hover"><i class="fa-brands fa-react"></i> React</span>
+                            <span class="magnetic sfx-hover"><i class="fa-solid fa-database"></i> SQL</span>
+                            <span class="magnetic sfx-hover"><i class="fa-brands fa-sass"></i> Sass</span>
 
                         </div>
                     </div>
@@ -2654,9 +2690,9 @@
                         <h3>School Project: Spotity</h3>
                         <p>Created a gig information platform with a NoSQL database and React frontend. Its media responsive design ensures a great user experience across devices. it provides updates on music events.</p>
                         <div class="skills stagger-animation">
-                            <span class="magnetic"><i class="fa-brands fa-react"></i> React</span>
-                            <span class="magnetic"><i class="fa-solid fa-server"></i> NoSQL</span>
-                            <span class="magnetic"><i class="fa-brands fa-sass"></i> Sass</span>
+                            <span class="magnetic sfx-hover"><i class="fa-brands fa-react"></i> React</span>
+                            <span class="magnetic sfx-hover"><i class="fa-solid fa-server"></i> NoSQL</span>
+                            <span class="magnetic sfx-hover"><i class="fa-brands fa-sass"></i> Sass</span>
 
                         </div>
                     </div>
@@ -2665,11 +2701,11 @@
                         <h3>School Project: Yes Man's Sky</h3>
                         <p>A downloadable space action-adventure game built in Unity with C#. Explore the galaxy, complete missions, and experience the thrill of interstellar space travel.</p>
                         <div class="skills stagger-animation">
-                            <span class="magnetic"><i class="fa-brands fa-github"></i> GitHub</span>
-                            <span class="magnetic"><i class="fa-brands fa-unity"></i> Unity</span>
-                            <span class="magnetic"><i class="fa-solid fa-code"></i> C#</span>
+                            <span class="magnetic sfx-hover"><i class="fa-brands fa-github"></i> GitHub</span>
+                            <span class="magnetic sfx-hover"><i class="fa-brands fa-unity"></i> Unity</span>
+                            <span class="magnetic sfx-hover"><i class="fa-solid fa-code"></i> C#</span>
                         </div>
-                        <a href="https://zorkkana.itch.io/yes-mans-sky" target="_blank">Check It Out</a>
+                        <a class="sfx-hover sfx-click" href="https://zorkkana.itch.io/yes-mans-sky" target="_blank">Check It Out</a>
                     </div>
                 </div>
                 <div class="experience-card">
@@ -2783,20 +2819,20 @@
                     <br><br>
                     <span class="code-key">"mission"</span>: "From concept to launch, I’ve poured my skills into building tools that make a difference."
                 </p>
-                <a href="https://www.portawebia.com/" class="btn-hollow">Visit Portawebia</a>
+                <a href="https://www.portawebia.com/" target="_blank" aria-label="Portawebia" class="btn-hollow sfx-click sfx-hover">Visit Portawebia</a>
             </div>
         </div>
 
         <div class="logo-cluster-container">
-            <div class="magnetic"><img src="Portawebia.png" loading="lazy" decoding="async" alt="Portawebia Logo" class="company-logo main-logo"></div>
+            <div class="magnetic"><img src="Portawebia.png" loading="lazy" decoding="async" alt="Portawebia Logo" class="company-logo main-logo sfx-hover"></div>
             
             <div class="tech-stack-float">
-                <div class="magnetic"><div class="floating-icon icon-1"><img src="WordPress_blue_logo.svg.png" alt="WordPress" loading="lazy" decoding="async"></div></div>
-                <div class="magnetic"><div class="floating-icon icon-2"><img src="2945149.webp" alt="Shopify" loading="lazy" decoding="async"></div></div>
-                <div class="magnetic"><div class="floating-icon icon-3"><img src="5968753.png" alt="Wix" loading="lazy" decoding="async"></div></div>
-                <div class="magnetic"><div class="floating-icon icon-4"><img src="aws.png" alt="aws" loading="lazy" decoding="async"></div></div>
-                <div class="magnetic"><div class="floating-icon icon-5"><img src="Google__G__logo.svg.png" alt="Google" loading="lazy" decoding="async"></div></div>
-                <div class="magnetic"><div class="floating-icon icon-6"><img src="Meta_Platforms_Inc._logo_(cropped).svg.png" alt="Meta" loading="lazy" decoding="async"></div></div>
+                <div class="magnetic"><div class="floating-icon icon-1 sfx-hover"><img src="WordPress_blue_logo.svg.png" alt="WordPress" loading="lazy" decoding="async"></div></div>
+                <div class="magnetic"><div class="floating-icon icon-2 sfx-hover"><img src="2945149.webp" alt="Shopify" loading="lazy" decoding="async"></div></div>
+                <div class="magnetic"><div class="floating-icon icon-3 sfx-hover"><img src="5968753.png" alt="Wix" loading="lazy" decoding="async"></div></div>
+                <div class="magnetic"><div class="floating-icon icon-4 sfx-hover"><img src="aws.png" alt="aws" loading="lazy" decoding="async"></div></div>
+                <div class="magnetic"><div class="floating-icon icon-5 sfx-hover"><img src="Google__G__logo.svg.png" alt="Google" loading="lazy" decoding="async"></div></div>
+                <div class="magnetic"><div class="floating-icon icon-6 sfx-hover"><img src="Meta_Platforms_Inc._logo_(cropped).svg.png" alt="Meta" loading="lazy" decoding="async"></div></div>
 
 
             </div>
@@ -2855,10 +2891,10 @@
                             <textarea name="message" id="message" rows="5" placeholder="Write your message here..." required></textarea>
                         </div>
                         <div class="form-footer">
-                            <button type="submit" class="btn-hollow submit-btn">Transmit Message</button>
+                            <button type="submit" class="btn-hollow submit-btn sfx-click sfx-hover">Transmit Message</button>
                             <div class="social-links-container">
                                         <!-- GitHub -->
-                                        <a href="https://github.com/OskariKaile" target="_blank" class="social-icon magnetic" aria-label="GitHub">
+                                        <a href="https://github.com/OskariKaile" target="_blank" class="social-icon magnetic sfx-click sfx-hover" aria-label="GitHub">
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512">
                                                 <!-- Font Awesome Free 5.15.4 -->
                                                 <path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/>
@@ -2866,7 +2902,7 @@
                                         </a>
                                         
                                         <!-- LinkedIn -->
-                                        <a href="https://www.linkedin.com/in/oskari-kaile/" target="_blank" class="social-icon magnetic" aria-label="LinkedIn">
+                                        <a href="https://www.linkedin.com/in/oskari-kaile/" target="_blank" class="social-icon magnetic sfx-click sfx-hover" aria-label="LinkedIn">
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                                                 <!-- Font Awesome Free 5.15.4 -->
                                                 <path d="M100.28 448H7.4V148.9h92.88zM53.79 108.1C24.09 108.1 0 83.5 0 53.8a53.79 53.79 0 0 1 107.58 0c0 29.7-24.1 54.3-53.79 54.3zM447.9 448h-92.68V302.4c0-34.7-.7-79.2-48.29-79.2-48.29 0-55.69 37.7-55.69 76.7V448h-92.78V148.9h89.08v40.8h1.3c12.4-23.5 42.69-48.3 87.88-48.3 94 0 111.28 61.9 111.28 142.3V448z"/>
@@ -2917,7 +2953,7 @@
         <div class="footer-content">
                   <div class="social-links-container">
                                         <!-- GitHub -->
-                                        <a href="https://github.com/OskariKaile" target="_blank" class="social-icon magnetic" aria-label="GitHub">
+                                        <a href="https://github.com/OskariKaile" target="_blank" class="social-icon magnetic sfx-click sfx-hover" aria-label="GitHub">
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512">
                                                 <!-- Font Awesome Free 5.15.4 -->
                                                 <path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/>
@@ -2925,7 +2961,7 @@
                                         </a>
                                         
                                         <!-- LinkedIn -->
-                                        <a href="https://www.linkedin.com/in/oskari-kaile/" target="_blank" class="social-icon magnetic" aria-label="LinkedIn">
+                                        <a href="https://www.linkedin.com/in/oskari-kaile/" target="_blank" class="social-icon magnetic sfx-click sfx-hover" aria-label="LinkedIn">
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                                                 <!-- Font Awesome Free 5.15.4 -->
                                                 <path d="M100.28 448H7.4V148.9h92.88zM53.79 108.1C24.09 108.1 0 83.5 0 53.8a53.79 53.79 0 0 1 107.58 0c0 29.7-24.1 54.3-53.79 54.3zM447.9 448h-92.68V302.4c0-34.7-.7-79.2-48.29-79.2-48.29 0-55.69 37.7-55.69 76.7V448h-92.78V148.9h89.08v40.8h1.3c12.4-23.5 42.69-48.3 87.88-48.3 94 0 111.28 61.9 111.28 142.3V448z"/>
@@ -2949,7 +2985,7 @@
             <div class="terminal-body">
                 <h3 style="color: #00ffcc; margin-bottom: 1rem;">Transmission Received!</h3>
                 <p style="color: #ccc; margin-bottom: 2rem;">Your message has been successfully beamed to Oskari. I'll get back to you soon.</p>
-                <button onclick="closeModal()" class="btn-hollow">Close Terminal</button>
+                <button onclick="closeModal()" class="btn-hollow sfx-click sfx-hover">Close Terminal</button>
             </div>
         </div>
     </div>
@@ -2964,7 +3000,7 @@
             <div class="terminal-body">
                 <h3 style="color: #00ffcc; margin-bottom: 1rem;">What Are You Doing?</h3>
                 <p style="color: #ccc; margin-bottom: 2rem;">Are you trying to crash my system?</p>
-                <button onclick="closeModal2()" class="btn-hollow">Close Terminal</button>
+                <button onclick="closeModal2()" class="btn-hollow sfx-click sfx-hover">Close Terminal</button>
             </div>
         </div>
     </div>
