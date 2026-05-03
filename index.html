@@ -829,13 +829,25 @@
             padding: 2rem;
             border-radius: 15px;
             border: 1px solid #00ffcc;
-            transition: transform 0.3s, box-shadow 0.3s;
+            
+            /* Reveal starting point */
+            opacity: 0;
+            transform: translateY(30px);
+            
+            /* Default transition for when you scroll up and it fades OUT */
+            transition: opacity 0.3s ease, transform 0.3s ease;
         }
-        .project-card:hover {
+        .project-card.animate:hover {
             transform: translateY(-10px);
             box-shadow: 0 0 30px rgba(0, 255, 204, 0.5);
             
-            
+            /* 
+            Force the hover transition to happen immediately (0s delay).
+            Because we are targeting .animate:hover, it easily overrides the entrance delay.
+            */
+            transition: 
+                transform 0.3s ease 0s, 
+                box-shadow 0.3s ease 0s;
         }
         .project-card img {
             width: 100%;
@@ -1407,9 +1419,18 @@
             transition: opacity 0.5s ease, transform 0.5s ease;
         }
 
+        /* 2. Entrance Animation (When JS adds the .animate class) */
         .project-card.animate {
             opacity: 1;
             transform: translateY(0);
+            
+            /* 
+            We apply the transition + the CSS variable here! 
+            If the variable isn't found, it defaults to 0s. 
+            */
+            transition: 
+                opacity 0.6s ease var(--stagger-delay, 0s), 
+                transform 0.6s ease var(--stagger-delay, 0s);
         }
 
         
@@ -3282,51 +3303,35 @@ window.addEventListener('scroll', () => {
         if (particlesContainer) pObserver.observe(particlesContainer);
     </script>
     <script defer>
-        document.addEventListener('DOMContentLoaded', () => {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        // Always add the animation when it comes into view
-                        entry.target.classList.add('animate');
-                    } else {
-                        // Only remove the class if the element is BELOW the viewport
-                        // (This happens when you scroll back UP)
-                        if (entry.boundingClientRect.top > 0) {
-                            entry.target.classList.remove('animate');
-                        }
+    document.addEventListener('DOMContentLoaded', () => {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate');
+                } else {
+                    if (entry.boundingClientRect.top > 0) {
+                        entry.target.classList.remove('animate');
                     }
-                });
-            }, { threshold: 0.1 });
-
-            const selectors = 'h2, .btn, .avatar, .bio p, .project-card, .experience-card, .languages, .company-logo, .logo-cluster-container, .terminal-window, .contact form, .skills span';
-            
-            document.querySelectorAll(selectors).forEach(element => {
-                observer.observe(element);
+                }
             });
+        }, { threshold: 0.1 });
 
-            // Keeping your stagger logic
-            document.querySelectorAll('.project-card').forEach((card, index) => {
-                card.style.transitionDelay = `${index * 0.1}s`;
-            });
-
-            // Staggered effect for SKILLS
-            document.querySelectorAll('.skills span').forEach((skill, index) => {
-
-                    skill.style.transitionDelay = `${index * 0.05}s`;
-
-                
-
-                    // NEW: Remove the delay after the entrance animation finishes
-
-                    skill.addEventListener('transitionend', () => {
-
-                        skill.style.transitionDelay = '0s';
-
-                    }, { once: true }); // 'once: true' ensures this only runs once
-
-                });
+        const selectors = 'h2, .btn, .avatar, .bio p, .project-card, .experience-card, .languages, .company-logo, .logo-cluster-container, .terminal-window, .contact form, .skills span';
+        
+        document.querySelectorAll(selectors).forEach(element => {
+            observer.observe(element);
         });
-    </script>
+
+        // INSTEAD of transitionDelay, we inject a CSS Variable (--stagger-delay)
+        document.querySelectorAll('.project-card').forEach((card, index) => {
+            card.style.setProperty('--stagger-delay', `${index * 0.1}s`);
+        });
+
+        document.querySelectorAll('.skills span').forEach((skill, index) => {
+            skill.style.setProperty('--stagger-delay', `${index * 0.05}s`);
+        });
+    });
+</script>
 
        <script defer>
         const initTypewriter = () => {
