@@ -2033,8 +2033,11 @@
     .bar {
         width: 2px;
         background: #00ffcc;
-        height: 100%;
-        transition: all 0.3s ease;
+        height: 12px; /* Set to the maximum height */
+        transform-origin: bottom; /* Ensures it scales from the bottom up */
+        transform: scaleY(0.33); /* Rests at about 4px (33% of 12px) */
+        transition: transform 0.3s ease; /* Smoothly glides back to resting state when paused */
+        border-radius: 2px; /* Optional: rounds the tips for a slightly cleaner look */
     }
 
     .playing .bar {
@@ -2045,8 +2048,8 @@
     .playing .bar:nth-child(3) { animation-delay: 0.4s; }
 
     @keyframes wave {
-        0%, 100% { height: 4px; }
-        50% { height: 12px; }
+        0%, 100% { transform: scaleY(0.33); } /* Matches the resting state */
+        50% { transform: scaleY(1); } /* Scales up to full 12px height */
     }
     /* Default PC behavior */
     #audio-status {
