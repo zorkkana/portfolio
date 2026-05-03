@@ -866,9 +866,14 @@
             margin-bottom: 1rem;
         }
         .project-card a {
-            color: #fd7a33;
+            color: #00ffcc;
             text-decoration: none;
             font-weight: 700;
+            transition: all 0.3s ease;
+        }
+        .project-card a:hover {
+            color: #fd7a33;
+            transition: all 0.3s ease;
         }
          .contacnt-card{
             padding: 2rem 0 ;
@@ -3076,7 +3081,7 @@
     </script>
 
 
-    <script>
+   <script>
   let world, satrec;
   const ISS_ID = 25544;
   const issMarker = { name: 'ISS', lat: 0, lng: 0, alt: 0 };
@@ -3096,6 +3101,28 @@
   const altValEl = document.getElementById('alt-val');
   let lastDomUpdate = 0;
   const DOM_UPDATE_INTERVAL = 250; 
+
+  // --- NEW: Parallax mouse offsets ---
+  let targetLatOffset = 0;
+  let targetLngOffset = 0;
+  let currentLatOffset = 0;
+  let currentLngOffset = 0;
+    
+  window.addEventListener('mousemove', (e) => {
+    if (window.innerWidth > 768) {
+        // Normalize mouse position to range between -1 and 1
+        const mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+        const mouseY = (e.clientY / window.innerHeight) * 2 - 1;
+        
+        // Map to a maximum of 5 degrees rotation
+        targetLngOffset = mouseX * -3; 
+        targetLatOffset = mouseY * 3; // Inverted so dragging mouse down tilts camera down
+    } else {
+        targetLatOffset = 0;
+        targetLngOffset = 0;
+    }
+  });
+  // -----------------------------------
 
   function getLatLngAlt(date) {
     const posVel = satellite.propagate(satrec, date);
@@ -3121,7 +3148,7 @@
     return trail;
   }
 
-    let isTrackingISS = false; // NEW: Controls when the camera locks onto the ISS
+  let isTrackingISS = false; // Controls when the camera locks onto the ISS
 
   async function initGlobe() {
     const landData = await fetch('https://raw.githubusercontent.com/vasturiano/globe.gl/master/example/datasets/ne_110m_admin_0_countries.geojson').then(res => res.json());
@@ -3169,7 +3196,6 @@
         return el;
       });
 
-    // --- NEW: THE ENTRANCE ANIMATION ---
     // --- THE DELAYED ENTRANCE ANIMATION ---
     world.onGlobeReady(() => {
       // Wait 1000ms (1 second) after the globe is technically "ready" before showing it
@@ -3240,9 +3266,18 @@
 
     world.htmlElementsData([issMarker]);
 
-    // NEW: Only override the camera position if the entrance animation is finished
+    // Only override the camera position if the entrance animation is finished
     if (isTrackingISS) {
-        world.pointOfView({ lat: current.lat - 20, lng: current.lng, altitude: 1.8 }, 0);
+        // NEW: Smoothly interpolate the current offset towards the target offset
+        // The 0.05 multiplier controls the "smoothness" speed
+        currentLatOffset += (targetLatOffset - currentLatOffset) * 0.05;
+        currentLngOffset += (targetLngOffset - currentLngOffset) * 0.05;
+
+        world.pointOfView({ 
+            lat: current.lat - 20 + currentLatOffset, 
+            lng: current.lng + currentLngOffset, 
+            altitude: 1.8 
+        }, 0);
     }
 
     if (latValEl && lngValEl && altValEl && (nowTime - lastDomUpdate > DOM_UPDATE_INTERVAL)) {
