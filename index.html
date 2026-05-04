@@ -470,6 +470,65 @@
             transform: translateY(1px) scale(0.98);
             box-shadow: 0 0 5px rgba(253, 122, 51, 0.4);
         }
+     /* --- BUTTON STAGGER EFFECT --- */
+
+        /* Helper class dynamically added by JS */
+        .stagger-btn {
+            display: inline-flex; 
+            justify-content: center;
+            align-items: center;
+            overflow: hidden; /* Crucial: hides the incoming text below the button */
+        }
+
+        /* The container for each individual button letter */
+        .btn-letter-wrap {
+            position: relative;
+            display: inline-block;
+            /* Snappy transition to match the sci-fi button feel */
+            transition: transform 0.4s cubic-bezier(0.6, 0, 0.4, 1), 
+                        opacity 0.4s cubic-bezier(0.6, 0, 0.4, 1);
+            transition-delay: calc(var(--index) * 0.02s); 
+        }
+
+        /* The visible letter */
+        .btn-letter-top {
+            display: block;
+            opacity: 1;
+              transition: opacity 0.2s ease;
+            transition-delay: calc(var(--index) * 0.02s + 0.12s);
+        }
+
+        /* The hidden letter waiting below */
+        .btn-letter-bottom {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            opacity: 0;
+            /* No transition here — opacity only animates on hover */
+            transition: none;
+        }
+
+        /* --- THE HOVER EXECUTION --- */
+
+        /* Slide the text up */
+        .btn:hover .btn-letter-wrap,
+        .btn-hollow:hover .btn-letter-wrap {
+            transform: translateY(-100%);
+        }
+
+        /* Fade out top layer */
+        .btn:hover .btn-letter-top,
+        .btn-hollow:hover .btn-letter-top {
+            opacity: 0;
+        }
+
+        /* Fade in bottom layer */
+        .btn:hover .btn-letter-bottom,
+        .btn-hollow:hover .btn-letter-bottom {
+            opacity: 1;
+            transition: opacity 0.2s ease;
+            transition-delay: calc(var(--index) * 0.02s + 0.12s);
+        }
 
         /* Sections */
         section {
@@ -2695,6 +2754,8 @@
         sections.forEach(section => observer.observe(section));
     });
 </script>
+
+
     <div class="Background"></div>
 
     <div class="hero">
@@ -4055,6 +4116,33 @@ window.addEventListener('scroll', () => {
             document.getElementById('scroll-line').style.width = percent + '%';
         });
     </script>
+<script>
+    // Target both primary and hollow buttons
+    document.querySelectorAll('.btn, .btn-hollow').forEach(button => {
+        const text = button.innerText;
+        button.innerHTML = ''; // Clear the original text
+
+        // Add a helper class to manage flex and overflow safely without breaking your CSS
+        button.classList.add('stagger-btn');
+
+        // Split text into individual letters
+        [...text].forEach((letter, i) => {
+            const span = document.createElement('span');
+            span.className = 'btn-letter-wrap';
+            
+            // Note: I sped the stagger up slightly (0.02s vs 0.035s) 
+            // so the button feels snappier to click, but you can adjust this!
+            span.style.setProperty('--index', i);
+
+            span.innerHTML = `
+                <span class="btn-letter-top">${letter === ' ' ? '&nbsp;' : letter}</span>
+                <span class="btn-letter-bottom">${letter === ' ' ? '&nbsp;' : letter}</span>
+            `;
+            
+            button.appendChild(span);
+        });
+    });
+</script>
   
 </body>
 </html>
