@@ -214,7 +214,7 @@
             z-index: 100;
             border-radius: 100px;
             border: #00ffcc 1px solid;
-
+            transition: all 0.3s ease-out;
             /* Animation Trigger */
             animation: dropDown 0.8s ease-out forwards;
         }
@@ -230,6 +230,35 @@
                 transform: translateX(-50%) translateY(0);
             }
         }
+        nav:hover {
+                /* Instead of turning fully solid, it fills with a glowing gas effect */
+            background: rgb(4 69 56 / 11%); 
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.6),
+                        inset 0 0 15px rgba(0, 255, 204, 0.4);
+            cursor: pointer;
+            transition: all 0.3s ease-out;
+        }
+        nav:hover .nav-links.active  {
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.6),
+                        inset 0 0 15px rgba(0, 255, 204, 0.4);
+            
+            cursor: pointer;
+            transition: all 0.3s ease-out;
+        }
+        @media (max-width: 768px) {
+            nav:hover {
+                    /* Instead of turning fully solid, it fills with a glowing gas effect */
+                box-shadow: none;
+        
+            }
+            nav:hover .nav-links.active  {
+                box-shadow: none;
+
+            
+            }
+        }
+                
+
         nav .container {
             display: flex;
             justify-content: space-between;
