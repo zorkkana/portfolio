@@ -38,6 +38,8 @@
         }
     }
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://unpkg.com/globe.gl"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/satellite.js/4.1.3/satellite.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -2110,6 +2112,251 @@
         transition: transform 0.2s cubic-bezier(0.33, 1, 0.68, 1);
         will-change: transform; /* Optimization for the GPU */
     }
+
+    /* ============================================================
+   BASE SCENE
+   ============================================================ */
+    .space-divider {
+    position: relative;
+    width: 100%;
+    height: 620px;
+    background: linear-gradient(180deg, #0a0a2300 0%, #1e1e3f 100%);
+    overflow: hidden;
+    }
+    
+    /* ---- MAIN PLANET ---- */
+    .layer-planet {
+    position: absolute;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    top: 45%;
+    left: 60%;
+    z-index: 8;
+    background: radial-gradient(circle at 38% 38%,
+        #5ef6cf 0%, #1a7aaa 30%, #0a2e6e 65%, #030b1c 100%);
+    box-shadow:
+        0 0 60px 10px rgba(60,200,255,0.18),
+        0 0 120px 30px rgba(20,80,200,0.10),
+        inset -30px -20px 40px rgba(0,0,0,0.7);
+    animation: planetDrift 22s linear infinite;
+    }
+    .layer-planet::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background:
+        repeating-linear-gradient(
+        12deg,
+        rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 2px,
+        transparent 2px, transparent 18px),
+        radial-gradient(circle at 60% 70%, rgba(0,60,120,0.5) 20%, transparent 60%),
+        radial-gradient(circle at 25% 55%, rgba(0,180,120,0.2) 15%, transparent 40%);
+    }
+    .layer-planet::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 32%,
+        rgba(180,255,230,0.18) 10%, transparent 55%);
+    pointer-events: none;
+    }
+    .planet-atmo {
+    position: absolute;
+    inset: -14px;
+    border-radius: 50%;
+    background: radial-gradient(ellipse at 50% 50%,
+        transparent 48%,
+        rgba(60,200,255,0.13) 60%,
+        rgba(40,120,255,0.07) 72%,
+        transparent 80%);
+    }
+    .planet-craters { position: absolute; inset: 0; border-radius: 50%; overflow: hidden; }
+    .crater {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle,
+        rgba(0,0,0,0.38) 0%, rgba(0,0,0,0.12) 60%, transparent 100%);
+    border: 1px solid rgba(255,255,255,0.04);
+    }
+    
+
+    /* ---- SMALL PLANET ---- */
+    .layer-planet-small-1 {
+    position: absolute;
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    top: 44%;
+    left: 14%;
+    z-index: 6;
+    background: radial-gradient(circle at 40% 35%,
+        #6ffff9 0%, #1ba0a8 40%, #0a4a50 75%, #001f22 100%);
+    box-shadow:
+        0 0 30px 6px rgba(50,200,220,0.16),
+        inset -14px -12px 20px rgba(0,0,0,0.7);
+    animation: planetDrift 30s linear infinite reverse;
+    }
+    .layer-planet-small-1::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: repeating-linear-gradient(
+        168deg,
+        rgba(100,255,240,0.06) 0px, rgba(100,255,240,0.06) 3px,
+        transparent 3px, transparent 14px);
+    }
+    .sm-atmo {
+    position: absolute;
+    inset: -8px;
+    border-radius: 50%;
+    background: radial-gradient(ellipse, transparent 46%, rgba(50,200,220,0.11) 62%, transparent 78%);
+    }
+    .sm-craters { position: absolute; inset: 0; border-radius: 50%; overflow: hidden; }
+    
+    /* ---- DISTANT SMALL PLANET ---- */
+    .layer-planet-small-2 {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    top: 18%;
+    left: 22%;
+    z-index: 4;
+    opacity: 0.85;
+    background: radial-gradient(circle at 42% 36%,
+        #00FFFF 0%, #008B8B 50%, #000080 100%);
+    box-shadow:
+        0 0 14px 3px rgba(0,255,255,0.18),
+        inset -8px -6px 12px rgba(0,0,0,0.7);
+    }
+    
+    /* ---- NEBULA ---- */
+    .nebula {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(32px);
+    pointer-events: none;
+    }
+    .neb-1 { width: 360px; height: 230px; top: 5%;  left: 28%; background: radial-gradient(ellipse, rgba(80,40,180,0.14) 0%, transparent 70%); z-index: 2; }
+    .neb-2 { width: 280px; height: 180px; top: 55%; left: 4%;  background: radial-gradient(ellipse, rgba(0,150,120,0.11) 0%, transparent 70%); z-index: 2; }
+    .neb-3 { width: 200px; height: 150px; top: 8%;  left: 72%; background: radial-gradient(ellipse, rgba(0,80,200,0.10) 0%, transparent 70%); z-index: 2; }
+    
+    /* ---- STARFIELD ---- */
+    .layer-stars {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    }
+    
+    /* ---- DUST CANVAS — behind planets now ---- */
+    #sd-dust {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 3;
+    }
+    
+    /* ============================================================
+    SKILL ORBIT SYSTEM
+    ============================================================ */
+    .orbit-track {
+    position: absolute;
+    top: 50%; left: 50%;
+    border-radius: 50%;
+    border: 1px solid rgba(100,200,255,0.07);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    }
+    
+    /* Arm that rotates — holds the badge at a radius */
+    .orb-arm {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 0; height: 0;
+    transform-origin: 0 0;
+    animation: orbitSpin var(--dur) var(--start, 0s) linear infinite;
+    pointer-events: none;
+    }
+    
+    /* The visible badge */
+    .orb-badge {
+    position: absolute;
+    left: 0;
+    top: calc(-1 * var(--r));
+    transform: translateX(-50%);
+    animation: orbitCounter var(--dur) var(--start, 0s) linear infinite;
+    background: rgba(4, 10, 28, 0.85);
+    border: 1px solid rgba(80, 195, 255, 0.30);
+    color: rgba(160, 230, 255, 0.92);
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    padding: 3px 9px 3px 7px;
+    border-radius: 20px;
+    white-space: nowrap;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    }
+    
+    .orb-badge::before {
+    content: '';
+    display: block;
+    flex-shrink: 0;
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: rgba(80, 220, 255, 0.85);
+    }
+    
+    /* Small planet badges slightly smaller */
+    .orb-badge-sm {
+    font-size: 9px;
+    padding: 2px 7px 2px 6px;
+    }
+    .orb-badge-sm::before {
+    width: 4px; height: 4px;
+    background: rgba(60,240,210,0.85);
+    }
+    
+    @keyframes orbitSpin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+    }
+    @keyframes orbitCounter {
+    from { transform: translateX(-50%) rotate(0deg); }
+    to   { transform: translateX(-50%) rotate(-360deg); }
+    }
+    
+
+    
+    /* ---- ANIMATIONS ---- */
+    @keyframes planetDrift {
+    0%   { background-position: 0%   50%; }
+    100% { background-position: 100% 50%; }
+    }
+    @keyframes starTwinkle {
+    0%, 100% { opacity: 0.3; }
+    50%       { opacity: 1;   }
+    }
+    @media (max-width: 768px) {
+        .space-divider {
+            height: 800px;
+        }
+        .layer-planet {
+                top: 80%;
+            }
+    
+
+    }
    
 
     </style>
@@ -2794,14 +3041,10 @@
         <path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" class="shape-fill"></path>
     </svg>
 </div>
+      
     <section  class="company">
    
-        <span class="shotingstarspan"></span>
-        <span class="shotingstarspan"></span>
-        <span class="shotingstarspan"></span>
-        <span class="shotingstarspan"></span>
-        <span class="shotingstarspan"></span>
-        <span class="shotingstarspan"></span>
+
         <div class="container">
      
 
@@ -2848,13 +3091,91 @@
 
         </div>
     </section>
-           <div class="custom-shape-divider-bottom-1777286268">
-    <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-        <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25" class="shape-fill"></path>
-        <path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5" class="shape-fill"></path>
-        <path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" class="shape-fill"></path>
-    </svg>
-</div>
+      <span class="shotingstarspan"></span>
+        <span class="shotingstarspan"></span>
+        <span class="shotingstarspan"></span>
+        <span class="shotingstarspan"></span>
+        <span class="shotingstarspan"></span>
+
+ 
+    <div class="space-divider" id="spaceDivider">
+    
+    <!-- Dust particles (canvas) — z-index 3, behind planets -->
+    <canvas id="sd-dust"></canvas>
+    
+    <!-- Nebula glow patches -->
+    <div class="nebula neb-1" id="sdNeb1"></div>
+    <div class="nebula neb-2" id="sdNeb2"></div>
+    <div class="nebula neb-3" id="sdNeb3"></div>
+    
+    <!-- Stars -->
+    <div class="layer-stars" id="sdStars"></div>
+    
+    <!-- Distant planet (top left) -->
+    <div class="layer-planet-small-2" id="sdPxs"></div>
+    
+    <!-- Small cyan planet — orbits: WordPress, SQL, Shopify, Sass -->
+    <div class="layer-planet-small-1" id="sdPsm">
+        <div class="sm-atmo"></div>
+        <div class="sm-craters">
+        <div class="crater" style="width:22px;height:22px;top:30%;left:55%"></div>
+        <div class="crater" style="width:12px;height:12px;top:55%;left:25%"></div>
+        <div class="crater" style="width:16px;height:16px;top:18%;left:35%"></div>
+        </div>
+        <!-- Orbit tracks -->
+        <div class="orbit-track" style="width:200px;height:200px;"></div>
+        <div class="orbit-track" style="width:270px;height:270px;"></div>
+        <!-- Inner ring skills -->
+        <div class="orb-arm" style="--r:100px;--dur:8s;--start:0s">
+        <span class="orb-badge orb-badge-sm">WordPress</span>
+        </div>
+        <div class="orb-arm" style="--r:100px;--dur:8s;--start:-4s">
+        <span class="orb-badge orb-badge-sm">SQL</span>
+        </div>
+        <!-- Outer ring skills -->
+        <div class="orb-arm" style="--r:135px;--dur:12s;--start:-2s">
+        <span class="orb-badge orb-badge-sm">Shopify</span>
+        </div>
+        <div class="orb-arm" style="--r:135px;--dur:12s;--start:-8s">
+        <span class="orb-badge orb-badge-sm">Sass</span>
+        </div>
+    </div>
+    
+    <!-- Main teal planet — orbits: React, Python, C#, Unity, AWS, Docker -->
+    <div class="layer-planet" id="sdPmain">
+        <div class="planet-atmo"></div>
+        <div class="planet-craters">
+        <div class="crater" style="width:40px;height:40px;top:55%;left:60%"></div>
+        <div class="crater" style="width:22px;height:22px;top:20%;left:70%"></div>
+        <div class="crater" style="width:16px;height:16px;top:72%;left:30%"></div>
+        <div class="crater" style="width:28px;height:28px;top:40%;left:12%"></div>
+        </div>
+        <!-- Orbit tracks -->
+        <div class="orbit-track" style="width:340px;height:340px;"></div>
+        <div class="orbit-track" style="width:440px;height:440px;"></div>
+        <!-- Inner ring: core stack -->
+        <div class="orb-arm" style="--r:170px;--dur:10s;--start:0s">
+        <span class="orb-badge">React</span>
+        </div>
+        <div class="orb-arm" style="--r:170px;--dur:10s;--start:-3.33s">
+        <span class="orb-badge">Python</span>
+        </div>
+        <div class="orb-arm" style="--r:170px;--dur:10s;--start:-6.66s">
+        <span class="orb-badge">C#</span>
+        </div>
+        <!-- Outer ring: tools & platforms -->
+        <div class="orb-arm" style="--r:220px;--dur:16s;--start:0s">
+        <span class="orb-badge">Unity</span>
+        </div>
+        <div class="orb-arm" style="--r:220px;--dur:16s;--start:-5.33s">
+        <span class="orb-badge">AWS</span>
+        </div>
+        <div class="orb-arm" style="--r:220px;--dur:16s;--start:-10.66s">
+        <span class="orb-badge">Docker</span>
+        </div>
+    </div>
+    
+    </div>
     </section>
 
     <section id="contact" class="contact">
@@ -3544,6 +3865,140 @@ window.addEventListener('scroll', () => {
                 });
             }
         });
+    </script>
+    <script>
+    (function () {
+    'use strict';
+    
+    const wrap   = document.getElementById('spaceDivider');
+    const W      = wrap.offsetWidth;
+    const H      = wrap.offsetHeight;
+    
+    /* ---- Starfield ---- */
+    const starContainer = document.getElementById('sdStars');
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('width', '100%');
+    svg.setAttribute('height', '100%');
+    svg.style.cssText = 'position:absolute;inset:0';
+    
+    for (let i = 0; i < 240; i++) {
+        const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        const r  = Math.random() < 0.12 ? 1.4 : Math.random() < 0.4 ? 0.8 : 0.45;
+        const op = 0.25 + Math.random() * 0.75;
+        c.setAttribute('cx', (Math.random() * 100) + '%');
+        c.setAttribute('cy', (Math.random() * 100) + '%');
+        c.setAttribute('r', r);
+        c.setAttribute('fill', 'white');
+        c.setAttribute('opacity', op);
+        if (Math.random() < 0.28) {
+        const delay = (Math.random() * 5).toFixed(1);
+        const dur   = (2 + Math.random() * 4).toFixed(1);
+        c.style.animation = `starTwinkle ${dur}s ${delay}s ease-in-out infinite`;
+        }
+        svg.appendChild(c);
+    }
+    starContainer.appendChild(svg);
+    
+    /* ---- Dust particles ---- */
+    const canvas = document.getElementById('sd-dust');
+    canvas.width  = W;
+    canvas.height = H;
+    const ctx = canvas.getContext('2d');
+    
+    const dust = [];
+    for (let i = 0; i < 90; i++) {
+        dust.push({
+        x: Math.random() * W, y: Math.random() * H,
+        vx: (Math.random() - 0.5) * 0.12,
+        vy: -(0.08 + Math.random() * 0.18),
+        r: 0.4 + Math.random() * 1.2,
+        op: 0.06 + Math.random() * 0.18,
+        col: Math.random() < 0.5 ? '180,210,255' : '200,255,230',
+        layer: 0
+        });
+    }
+    for (let i = 0; i < 55; i++) {
+        dust.push({
+        x: Math.random() * W, y: Math.random() * H,
+        vx: (Math.random() - 0.5) * 0.35,
+        vy: -(0.35 + Math.random() * 0.55),
+        r: 0.5 + Math.random() * 0.9,
+        op: 0.08 + Math.random() * 0.22,
+        col: Math.random() < 0.4 ? '255,200,160' : '160,200,255',
+        layer: 1
+        });
+    }
+    
+    function animateDust() {
+        ctx.clearRect(0, 0, W, H);
+        dust.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.y < -4) { p.y = H + 4; p.x = Math.random() * W; }
+        if (p.x < -4) { p.x = W + 4; }
+        if (p.x > W + 4) { p.x = -4; }
+    
+        if (p.layer === 1) {
+            const trail = ctx.createLinearGradient(p.x, p.y + p.vy * 8, p.x, p.y);
+            trail.addColorStop(0, `rgba(${p.col},0)`);
+            trail.addColorStop(1, `rgba(${p.col},${p.op * 0.7})`);
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y + p.vy * 8);
+            ctx.lineTo(p.x, p.y);
+            ctx.strokeStyle = trail;
+            ctx.lineWidth = p.r;
+            ctx.stroke();
+        }
+    
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${p.col},${p.op})`;
+        ctx.fill();
+        });
+        requestAnimationFrame(animateDust);
+    }
+    animateDust();
+    
+    /* ---- Parallax on scroll ---- */
+    const els = {
+        stars: document.getElementById('sdStars'),
+        neb1:  document.getElementById('sdNeb1'),
+        neb2:  document.getElementById('sdNeb2'),
+        neb3:  document.getElementById('sdNeb3'),
+        pXs:   document.getElementById('sdPxs'),
+        pSm:   document.getElementById('sdPsm'),
+        pMain: document.getElementById('sdPmain'),
+        ring:  document.getElementById('sdRing'),
+    };
+    
+    const speeds = {
+        stars: 0.03,
+        neb1:  0.05,
+        neb2:  0.07,
+        neb3:  0.06,
+        pXs:  -0.12,
+        pSm:  -0.30,
+        pMain:-0.54,
+    };
+    
+    let ticking = false;
+    
+    function doParallax() {
+        ticking = false;
+        const rect = wrap.getBoundingClientRect();
+        if (rect.top > window.innerHeight || rect.bottom < 0) return;
+        const offset = window.innerHeight / 2 - rect.top;
+        Object.keys(els).forEach(key => {
+        if (els[key]) els[key].style.transform = `translateY(${offset * speeds[key]}px)`;
+        });
+    }
+    
+    window.addEventListener('scroll', () => {
+        if (!ticking) { requestAnimationFrame(doParallax); ticking = true; }
+    }, { passive: true });
+    
+    doParallax();
+    })();
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
     <script>
