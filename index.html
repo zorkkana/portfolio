@@ -2050,10 +2050,25 @@
         display: flex;
     }
 
+   /* Define the slide-up animation */
+    @keyframes slideUp {
+        from {
+            transform: translateY(50px); /* Starts 50px below its final position */
+            opacity: 0; /* Starts invisible */
+        }
+        to {
+            transform: translateY(0); /* Ends at its original position */
+            opacity: 1; /* Fully visible */
+        }
+    }
+
     .modal-content {
         max-width: 400px;
         width: 90%;
         text-align: center;
+        
+        /* Apply the animation */
+        animation: slideUp 0.4s ease-out forwards; 
     }
 
 
