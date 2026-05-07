@@ -236,6 +236,7 @@
             box-shadow: 0 0 15px rgba(0, 255, 204, 0.6),
                         inset 0 0 15px rgba(0, 255, 204, 0.4);
             cursor: pointer;
+        
             transition: all 0.3s ease-out;
         }
         nav:hover .nav-links.active  {
@@ -1634,15 +1635,36 @@
         .nav-links {
             list-style: none;
             display: flex;
-            gap: 2rem; /* Space between links */
+            gap: 0.5rem; /* Space between links */
         }
         .nav-links li a {
             perspective: 1000px;
             text-decoration: none;
             color: #fff;
+            padding: 0.5rem 1rem;
             display: flex;
             overflow: hidden;
             line-height: 1;
+            border-radius: 25px;
+            gap: 10px;
+            justify-content: center;
+            transition: all 0.3s ease;
+            
+        }
+        .nav-links li a:hover {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        .nav-links li a:active {
+            background: linear-gradient(135deg, rgb(255 255 255 / 5%), rgb(255 255 255 / 6%))   ;
+            transform: translateY(-2px);
+            box-shadow: inset 0 1px 0 rgb(0 255 204 / 20%), 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .nav-links li a.active-link {
+            background: linear-gradient(135deg, rgb(255 255 255 / 5%), rgb(255 255 255 / 6%));
+            transform: translateY(-2px);
+            box-shadow: inset 0 1px 0 rgb(0 255 204 / 20%), 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         /* The container for each individual letter */
@@ -1659,7 +1681,7 @@
         .letter-top {
             display: block;
             opacity: 1;
-            transition: opacity 0.4s ease;
+            transition-delay: calc(var(--index) * 0.02s + 0.12s);
         }
 
         /* The letter waiting below */
@@ -1734,9 +1756,7 @@
                     opacity 0s ease 0.4s, /* 0s duration, but 0.5s DELAY */
                     border 0s ease 0.4s; /* Remove border after closing animation */
             }
-            .nav-links li a {
-                display: block;
-            }
+           
              .nav-links li a:hover .letter-wrap {
                 transform: translateY(0);
             }
@@ -2692,20 +2712,20 @@
                 <span></span>
             </div>
             <ul class="nav-links">
-                <li><a class="sfx-click sfx-hover" href="#about">About</a></li>
-                <li><a class="sfx-click sfx-hover" href="#education">Education</a></li>
-                <li><a class="sfx-click sfx-hover" href="#experience">Experience</a></li>
-                <li><a class="sfx-click sfx-hover" href="#company">Company</a></li>
-                <li><a class="sfx-click sfx-hover" href="#contact">Contact</a></li>
+                <li><a class="sfx-click sfx-hover" href="#about"><i class="fas fa-user"></i><span class="nav-text">About</span></a></li>
+                <li><a class="sfx-click sfx-hover" href="#education"><i class="fas fa-graduation-cap"></i><span class="nav-text">Education</span></a></li>
+                <li><a class="sfx-click sfx-hover" href="#experience"><i class="fas fa-briefcase"></i><span class="nav-text">Experience</span></a></li>
+                <li><a class="sfx-click sfx-hover" href="#company"><i class="fas fa-building"></i><span class="nav-text">Company</span></a></li>
+                <li><a class="sfx-click sfx-hover" href="#contact"><i class="fas fa-envelope"></i><span class="nav-text">Contact</span></a></li>
             </ul>
         </div>
        
             
     </nav>
     <script>
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            const text = link.innerText;
-            link.innerHTML = ''; // Clear the text
+        document.querySelectorAll('.nav-links a .nav-text').forEach(textSpan => {
+            const text = textSpan.innerText;
+            textSpan.innerHTML = ''; // Clear the text
 
             // Split text into individual letters
             [...text].forEach((letter, i) => {
@@ -2720,7 +2740,7 @@
                     <span class="letter-bottom">${letter === ' ' ? '&nbsp;' : letter}</span>
                 `;
                 
-                link.appendChild(span);
+                textSpan.appendChild(span);
             });
         });
     </script>
