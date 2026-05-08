@@ -232,7 +232,7 @@
         }
         nav:hover {
                 /* Instead of turning fully solid, it fills with a glowing gas effect */
-            background: rgb(4 69 56 / 11%); 
+            background: rgb(1 35 28 / 30%); 
             box-shadow: 0 0 15px rgba(0, 255, 204, 0.6),
                         inset 0 0 15px rgba(0, 255, 204, 0.4);
             cursor: pointer;
@@ -272,7 +272,40 @@
             font-family: 'Orbitron', sans-serif;
             font-size: 1.8rem;
             color: #00ffcc;
+            text-decoration: none;
             text-shadow: 0 0 10px #00ffcc;
+               /* 1. Base neon color */
+            color: #00ffcc;
+            
+            /* 2. Create the "Moving Light" - A gradient with a bright white center */
+            background: linear-gradient(
+                to right, 
+                #00ffcc 0%, 
+                #00ffcc 45%, 
+                #fff 50%, 
+                #00ffcc 55%, 
+                #00ffcc 100%
+            );
+            
+            /* 3. Make the background move behind the text */
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent; /* This makes the gradient visible */
+            
+            /* 4. The static glow (so it always looks like neon) */
+            text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+
+            /* 5. Trigger the animation */
+            animation: neonSweep 6s linear infinite;
+        }
+
+        @keyframes neonSweep {
+            0% {
+                background-position: -100% 0;
+            }
+            100% {
+                background-position: 100% 0;
+            }
         }
         nav ul {
             list-style: none;
@@ -1623,12 +1656,38 @@
             cursor: pointer;
         }
 
-        .hamburger span {
+  
+        
+       .hamburger span {
             display: block;
             width: 25px;
             height: 3px;
-            background: #fff; /* White lines, adjust color as needed */
+            background: #00ffcb;
+            border-radius: 100px;
+            transition: all 0.4s cubic-bezier(0.68, -0.6, 0.32, 1.6); /* Adds a slight "bounce" */
+            position: relative;
+        }
+
+        /* Space the lines out using margins */
+        .hamburger span:nth-child(2) {
             margin: 5px 0;
+        }
+
+        /* The "X" Transformation */
+        .hamburger.active span:nth-child(1) {
+            /* Move down and rotate */
+            transform: translateY(8px) rotate(45deg);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            /* Shrink to nothing in the center */
+            opacity: 0;
+            transform: scale(0);
+        }
+
+        .hamburger.active span:nth-child(3) {
+            /* Move up and rotate */
+            transform: translateY(-8px) rotate(-45deg);
         }
 
         /* Default nav links styling for larger screens */
@@ -2784,11 +2843,13 @@
     
         hamburger.addEventListener('click', () => {
             navLinks.classList.toggle('active');
+            hamburger.classList.toggle('active');
         });
     
         links.forEach(link => {
             link.addEventListener('click', () => {
                 navLinks.classList.remove('active');
+                hamburger.classList.remove('active');
             });
         });
     </script>
