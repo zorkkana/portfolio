@@ -456,6 +456,7 @@
             z-index: 2; /* Sit above the globe */
             top: -5rem;
             position: relative;
+            pointer-events: none; /* Allows clicks to pass through to the globe */
         }
         .hero h1 {
             font-family: 'Orbitron', sans-serif;
@@ -483,6 +484,7 @@
             letter-spacing: 2px;
             border-radius: 50px;
             opacity: 0;
+            pointer-events: all; 
             animation: fadeInUp 1s ease-out 1s forwards;
             
             /* Snappy, physical transition for hover and click states */
@@ -3930,6 +3932,7 @@
   const issMarker = { name: 'ISS', lat: 0, lng: 0, alt: 0 };
   let lastTrailUpdate = 0;
   let isVisible = true; 
+    let issEl = null; 
 
   // --- OPTIMIZATIONS (Invisible to the eye) ---
   const isMobileGlobe = window.innerWidth < 768;
@@ -4004,7 +4007,7 @@
     }
 
     const globeEl = document.getElementById('hero-globe');
-    
+
     // Initial camera position (zoomed out) to make the entrance look dramatic
     world = Globe()(globeEl)
       .backgroundColor('rgba(0,0,0,0)') 
@@ -4025,18 +4028,21 @@
       .pathStroke(1.5)
       .htmlElementsData([issMarker])
       .htmlAltitude(p => p.alt)
-      .htmlElement(() => {
+
+        .htmlElement(() => {
         const el = document.createElement('div');
+        issEl = el; // <-- save it
         el.style.width = '0px';
         el.style.height = '0px';
         el.style.pointerEvents = 'none';
         el.innerHTML = `
-          <div style="position: absolute; top: -6px; left: -6px; display: flex; align-items: center;">
+            <div style="position: absolute; top: -6px; left: -6px; display: flex; align-items: center;">
             <div style="width:12px; height:12px; background:#fd7a33; border-radius:50%; box-shadow:0 0 15px #fd7a33; animation: pulse 1.5s infinite; flex-shrink: 0;"></div>
             <div style="color:#fd7a33; font-size:10px; margin-left:10px; font-weight:bold; font-family:Orbitron; text-shadow: 0 0 5px #000; white-space: nowrap;">ISS</div>
-          </div>
+            </div>
         `;
         return el;
+
       });
 
     // --- THE DELAYED ENTRANCE ANIMATION ---
@@ -4078,6 +4084,43 @@
     const style = document.createElement('style');
     style.innerHTML = `@keyframes pulse { 0% { transform: scale(0.8); opacity: 0.6; } 50% { transform: scale(1.3); opacity: 1; } 100% { transform: scale(0.8); opacity: 0.6; } }`;
     document.head.appendChild(style);
+
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden || !satrec) return;
+
+        lastFrameTime = 0;
+        lastTrailUpdate = 0;
+
+        const now = new Date();
+        const current = getLatLngAlt(now);
+
+        issMarker.lat = current.lat;
+        issMarker.lng = current.lng;
+        issMarker.alt = current.alt;
+
+        // Kill the transition on globe.gl's wrapper before updating
+        const wrapper = issEl?.parentElement;
+        if (wrapper) {
+            wrapper.style.transition = 'none';
+            wrapper.style.willChange = 'auto';
+        }
+
+        world.htmlElementsData([issMarker]);
+
+        if (isTrackingISS) {
+            world.pointOfView({
+            lat: current.lat - 20 + currentLatOffset,
+            lng: current.lng + currentLngOffset,
+            altitude: 1.8
+            }, 0);
+        }
+
+        // Re-enable transition after one frame so normal movement stays smooth
+        requestAnimationFrame(() => {
+            if (wrapper) wrapper.style.transition = '';
+        });
+    });
+        
 
     requestAnimationFrame(updateFrame);
   }
