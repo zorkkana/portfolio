@@ -90,6 +90,23 @@
             border-radius: 10px;
             box-shadow: 0 0 10px #00ffcc;
         }
+        /* Standard syntax */
+        ::selection {
+        background-color: #00ffcc2c; /* The highlight color */
+        color: #ffffff;            /* The text color when highlighted */
+        }
+
+        /* Chrome, Safari, and Opera */
+        ::-webkit-selection {
+        background-color: #00ffcc2c;
+        color: #ffffff;
+        }
+
+        /* Firefox */
+        ::-moz-selection {
+        background-color: #00ffcc2c;
+        color: #ffffff;
+        }
         body {
             font-family: 'Roboto', sans-serif;
             color: #fff;
@@ -2489,6 +2506,7 @@
         rgba(180,255,230,0.18) 10%, transparent 55%);
     pointer-events: none;
     }
+ 
     .planet-atmo {
     position: absolute;
     inset: -14px;
