@@ -186,6 +186,12 @@
             .cursor-outline {
                 display: none; /* Hide custom cursor on mobile */
             }
+              /* Universal cursor hide for desktop */
+            @media (pointer: fine) {
+                * {
+                    cursor: default !important;
+                }
+            }
         }
         /* Update your .cursor-active classes to ensure they override the base state */
         body.cursor-active .cursor-dot {
@@ -250,7 +256,7 @@
             cursor: pointer;
             transition: all 0.3s ease-out;
         }
-        @media (max-width: 768px) {
+        @media (max-width: 1050px) {
             nav:hover {
                     /* Instead of turning fully solid, it fills with a glowing gas effect */
                 box-shadow: none;
@@ -1742,9 +1748,10 @@
             gap: 10px;
             justify-content: center;
             transition: all 0.3s ease;
-            
+            border: 1px solid rgba(255, 255, 255, 0);
         }
         .nav-links li a:hover {
+            border: 1px solid rgba(255, 255, 255, 0.1);
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
@@ -1827,7 +1834,7 @@
             margin-top: 0;
         }
         /* Mobile styles */
-        @media (max-width: 768px) {
+        @media (max-width: 1050px) {
             .hamburger {
                 display: block; /* Show hamburger on small screens */
             }
@@ -1895,7 +1902,7 @@
 
             /* Fade in the bottom letter as it moves into place */
             .nav-links li a:hover .letter-bottom {
-                opacity: 1;
+                opacity: 0;
             }
             
 
