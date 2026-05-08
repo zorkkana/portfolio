@@ -1093,6 +1093,9 @@
             opacity: 1;
             text-shadow: 0 0 8px #00ffcc;
         }
+        .current{
+            opacity: 1;
+        }
 
         /* 1. THE LINE SEGMENTS (Static) */
         .experience-item::after {
@@ -1127,6 +1130,10 @@
             z-index: 2;
             transition: background 0.3s ease, box-shadow 0.3s ease;
         }
+         .current::before {
+            background: #00ffcc;
+            box-shadow: 0 0 12px #00ffcc;
+        }
 
         /* 3. THE CARD (The part that moves) */
         .experience-card {
@@ -1144,6 +1151,7 @@
             opacity: 1;
             transform: translateX(0);
         }
+    
 
         /* HOVER EFFECT: Only the card moves, the dot stays and lights up */
         .experience-card:hover {
@@ -1162,6 +1170,7 @@
         .experience-item {
         position: relative;
         }
+      
 
 
 
@@ -1170,6 +1179,7 @@
             font-size: 1.5rem;
             color: #fff;
             margin-bottom: 0.5rem;
+            padding-right: 80px; 
         }
 
         .experience-item p {
@@ -1180,6 +1190,17 @@
             overflow: hidden;
             padding: 0;
             margin: 0;
+        }
+       
+
+         @media (max-width: 768px) {
+            .experience-list {
+                padding-left: 20px; /* Reduced padding for smaller screens */
+            }
+            .experience-year {
+                left: -15px; /* Adjusted for smaller screens */
+                font-size: 0.75rem; /* Slightly smaller text */
+            }
         }
         /* Company Section */
         .company {
@@ -1519,6 +1540,28 @@
     fill: #00ffcc; /* Icon turns neon cyan */
 }
 
+.experience-company-logo{
+    width: 50px;
+    filter: grayscale(100%) brightness(200%);
+    opacity: 0.8;
+    transition: all 0.3s ease;
+
+}
+.social-icon:hover .experience-company-logo{
+    filter: grayscale(0%) brightness(100%); /* Returns to original color */
+    opacity: 1;
+
+}
+.own-company-logo{
+   
+    filter: grayscale(0%) brightness(100%);
+
+}
+.experience-company-logo_container{
+   position: absolute;
+    right: 20px;
+    top: 20px;
+}
 
 /* Responsive adjustment */
 @media (max-width: 768px) {
@@ -3279,6 +3322,12 @@
                 <div class="experience-item">
                     <span class="experience-year">2022</span>
                     <div class="experience-card">
+                        <div class="experience-company-logo_container">
+                            <!-- lemonsoft -->
+                            <a href="https://lemonsoft.fi/" target="_blank" class="social-icon magnetic sfx-click sfx-hover" aria-label="Lemonsoft">
+                                <img src="/images/lemonsoft.png" alt="Lemonsoft" class="experience-company-logo">
+                            </a>
+                        </div>
                         <h3>Summer Job @ Lemonsoft Oyj</h3>
                         <p>June 1, 2022 - June 30, 2022</p>
                         <p>Worked with SQL reports in Visual Studio, gaining practical experience in database management and report generation.</p>
@@ -3287,6 +3336,12 @@
                 <div class="experience-item">
                     <span class="experience-year">2022</span>
                     <div class="experience-card">
+                        <div class="experience-company-logo_container">
+                            <!-- lemonsoft -->
+                            <a href="https://lemonsoft.fi/" target="_blank" class="social-icon magnetic sfx-click sfx-hover" aria-label="Lemonsoft">
+                                <img src="/images/lemonsoft.png" alt="Lemonsoft" class="experience-company-logo">
+                            </a>
+                        </div>
                         <h3>Internship @ Lemonsoft Oyj</h3>
                         <p>October 24, 2022 - December 15, 2022</p>
                         <p>Focused on software development and managing upgrade load handling, enhancing skills in system maintenance and optimization.</p>
@@ -3295,6 +3350,12 @@
                 <div class="experience-item">
                     <span class="experience-year">2023</span>
                     <div class="experience-card">
+                        <div class="experience-company-logo_container">
+                            <!-- lemonsoft -->
+                            <a href="https://lemonsoft.fi/" target="_blank" class="social-icon magnetic sfx-click sfx-hover" aria-label="Lemonsoft">
+                                <img src="/images/lemonsoft.png" alt="Lemonsoft" class="experience-company-logo">
+                            </a>
+                        </div>
                         <h3>Summer Job @ Lemonsoft Oyj</h3>
                         <p>May 29, 2023 - July 21, 2023</p>
                         <p>Developed a billing tool/feature and contributed to various small tasks, improving proficiency in software engineering and teamwork.</p>
@@ -3303,6 +3364,12 @@
                 <div class="experience-item">
                     <span class="experience-year">2024</span>
                     <div class="experience-card">
+                        <div class="experience-company-logo_container">
+                            <!-- Pco GmbH & Co. KG -->
+                            <a href="https://www.pco-online.de/" target="_blank" class="social-icon magnetic sfx-click sfx-hover" aria-label="Pco GmbH & Co. KG">
+                                <img src="/images/pco-gmbh-co-kg.png" alt="Pco GmbH & Co. KG" class="experience-company-logo">
+                            </a>
+                        </div>
                         <h3>International Internship @ Pco GmbH & Co. KG</h3>
                         <p>January 14, 2024 - February 25, 2024</p>
                         <p>Focused on cybersecurity and automation, implementing solutions to enhance system security and operational efficiency.</p>
@@ -3311,14 +3378,26 @@
                 <div class="experience-item">
                     <span class="experience-year">2024</span>
                     <div class="experience-card">
+                        <div class="experience-company-logo_container">
+                            <!-- ArtXperience Oy -->
+                            <a href="https://artxperience.net/" target="_blank" class="social-icon magnetic sfx-click sfx-hover" aria-label="ArtXperience Oy">
+                                <img src="/images/ArtX-Logo-500px.png" alt="ArtXperience Oy" class="experience-company-logo">
+                            </a>
+                        </div>
                         <h3>Internship @ Lingonperry (ArtXperience Oy)</h3>
                         <p>March 15, 2024 - May 15, 2024</p>
                         <p>Developed features for a music streaming platform, utilizing web development technologies to improve user experience.</p>
                     </div>
                 </div>
-                <div class="experience-item">
-                    <span class="experience-year">Now</span>
+                <div class="experience-item current">
+                    <span class="experience-year current">Now</span>
                     <div class="experience-card">
+                        <div class="experience-company-logo_container">
+                            <!-- Portawebia Oy -->
+                            <a href="https://www.portawebia.com" target="_blank" class="social-icon magnetic sfx-click sfx-hover" aria-label="Portawebia Oy">
+                                <img src="/images/portawebia.png" alt="Portawebia Oy" class="experience-company-logo own-company-logo">
+                            </a>
+                        </div>
                         <h3>Own company @  Portawebia Oy</h3>
                         <p>August 26, 2023 - Present Day</p>
                         <p>Web development and software development, utilizing WordPress, Shopify, Portawebia and other web development technologies to make business websites</p>
@@ -3536,12 +3615,12 @@
                <div class="project-grid contact-info-grid">
                     <div class="project-card contacnt-card">
                         <div class="social-links-container">
-                            <a href="" target="_blank" class="social-icon magnetic sfx-click sfx-hover" aria-label="LinkedIn">
+                            <div href="" target="_blank" class="social-icon magnetic sfx-click sfx-hover" aria-label="Email">
                                 <svg xmlns="http://www.w3.org/2000/svg" 
                                 viewBox="0 0 512 512" 
                                 style="width: 30px; height: 30px; margin: auto;"> <path fill="#00ffcc" d="M502.3 190.8c3.9-3.1 9.7-.2 9.7 4.7V400c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V195.6c0-5 5.7-7.8 9.7-4.7 22.4 17.4 52.1 39.5 154.1 113.6 21.1 15.4 56.7 47.8 92.2 47.6 35.7.3 72-32.8 92.3-47.6 102-74.1 131.6-96.3 154-113.7zM256 320c23.2.4 56.6-29.2 73.4-41.4 132.7-96.3 142.8-104.7 173.4-128.7 5.8-4.5 9.2-11.5 9.2-18.9v-19c0-26.5-21.5-48-48-48H48C21.5 64 0 85.5 0 112v19c0 7.4 3.4 14.3 9.2 18.9 30.6 23.9 40.7 32.4 173.4 128.7 16.8 12.2 50.2 41.8 73.4 41.4z"/>
                             </svg>     
-                            </a>
+                            </div>
                         </div>
                         <div class="contact-info">
                             <p>Email</p>
@@ -3550,11 +3629,11 @@
                     </div>
                     <div class="project-card contacnt-card">
                         <div class="social-links-container">
-                            <a href="" target="_blank" class="social-icon magnetic sfx-click sfx-hover" aria-label="LinkedIn">
+                            <div  target="_blank" class="social-icon magnetic sfx-click sfx-hover" aria-label="Phone">
                                <svg viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
                                     <path fill="#00ffcc" d="M400 32H48A48 48 0 0 0 0 80v352a48 48 0 0 0 48 48h352a48 48 0 0 0 48-48V80a48 48 0 0 0-48-48zm-16.39 307.37l-15 65A15 15 0 0 1 354 416C194 416 64 286.29 64 126a15.7 15.7 0 0 1 11.63-14.61l65-15A18.23 18.23 0 0 1 144 96a16.27 16.27 0 0 1 13.79 9.09l30 70A17.9 17.9 0 0 1 189 181a17 17 0 0 1-5.5 11.61l-37.89 31a231.91 231.91 0 0 0 110.78 110.78l31-37.89A17 17 0 0 1 299 291a17.85 17.85 0 0 1 5.91 1.21l70 30A16.25 16.25 0 0 1 384 336a17.41 17.41 0 0 1-.39 3.37z"/>
                                 </svg> 
-                            </a>
+                            </div>
                         </div>
                         <div class="contact-info">
                             <p>Phone</p>
@@ -3564,11 +3643,11 @@
                     </div>
                     <div class="project-card contacnt-card">
                         <div class="social-links-container">
-                            <a href="" target="_blank" class="social-icon magnetic sfx-click sfx-hover" aria-label="LinkedIn">
+                            <div target="_blank" class="social-icon magnetic sfx-click sfx-hover" aria-label="Location">
                                  <svg viewBox="0 0 384 512" xmlns="http://www.w3.org/2000/svg">
                                     <path fill="#00ffcc" d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z"/>
                                 </svg>
-                            </a>
+                            </div>
                         </div>
                         <div class="contact-info">
                             <p>Location</p>
