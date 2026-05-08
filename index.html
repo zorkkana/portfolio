@@ -3947,75 +3947,147 @@ window.addEventListener('scroll', () => {
 
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <script>
-        // 1. Check if we are on a mobile device
         const isMobile = window.innerWidth < 768;
-        const modal2 = document.getElementById('whatareudoung'); // Select your modal
-        let clickCount = 0; // The counter
+        const modal2 = document.getElementById('whatareudoung');
+        let clickCount = 0;
 
         particlesJS('particles-js', {
             particles: {
-                // 2. Optimization: Half the particles on mobile
-                number: { 
-                    value: isMobile ? 40 : 80, 
-                    density: { enable: true, value_area: 800 } 
+                number: {
+                    value: isMobile ? 40 : 80,
+                    density: { enable: true, value_area: 800 }
                 },
                 color: { value: '#ffffff' },
                 shape: { type: 'circle' },
                 opacity: { value: 0.5, random: true },
                 size: { value: 3, random: true },
-                line_linked: { 
-                    enable: true, 
-                    distance: 150, 
-                    color: '#00ffcc', 
-                    opacity: 0.4, 
-                    width: 1 
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: '#00ffcc',
+                    opacity: 0.4,
+                    width: 1
                 },
-                move: { 
-                    enable: true, 
-                    speed: isMobile ? 1 : 2, // Slow down speed on mobile to save CPU
-                    direction: 'none', 
-                    random: false, 
-                    straight: false, 
-                    out_mode: 'out' 
+                move: {
+                    enable: true,
+                    speed: isMobile ? 1 : 2,
+                    direction: 'none',
+                    random: false,
+                    straight: false,
+                    out_mode: 'out'
                 }
             },
             interactivity: {
                 detect_on: 'canvas',
-                events: { 
-                    onhover: { enable: !isMobile, mode: 'repulse' }, // Disable hover on touch screens (no mouse)
-                    onclick: { enable: true, mode: 'push' }, 
-                    resize: true 
+                events: {
+                    // Disable built-in repulse — replaced by custom trampoline below
+                    onhover: { enable: false },
+                    onclick: { enable: true, mode: 'push' },
+                    resize: true
                 },
-                modes: { repulse: { distance: 100, duration: 0.4 }, push: { particles_nb: 4 } }
+                modes: {
+                    push: { particles_nb: 4 }
+                }
             },
-            // 3. Optimization: Turn off retina_detect
-            // This stops the canvas from rendering at 3x resolution which kills mobile GPUs
-            retina_detect: false 
+            retina_detect: false
         });
+
+        // ── Custom trampoline avoidance (desktop only) ──────────────────────────
+        if (!isMobile) {
+            const container  = document.getElementById('particles-js');
+            const mouse      = { x: null, y: null };
+
+            // Track mouse relative to the canvas element
+            container.addEventListener('mousemove', e => {
+                const rect = container.getBoundingClientRect();
+                mouse.x = e.clientX - rect.left;
+                mouse.y = e.clientY - rect.top;
+            });
+            container.addEventListener('mouseleave', () => {
+                mouse.x = null;
+                mouse.y = null;
+            });
+
+            const RADIUS   = 140;   // avoidance bubble radius (px)
+            const STRENGTH = 1.4;   // peak push force
+            const MAX_SPD  = 12;    // hard velocity cap
+
+            function trampolineLoop() {
+                const pjs = window.pJSDom?.[0]?.pJS;
+                if (!pjs) { requestAnimationFrame(trampolineLoop); return; }
+
+                const particles = pjs.particles.array;
+
+                particles.forEach(p => {
+                    // ── First time seen: snapshot the natural base velocity ──
+                    if (p._baseVx === undefined) {
+                        p._baseVx = p.vx;
+                        p._baseVy = p.vy;
+                    }
+
+                    // ── Spring push when mouse is nearby ──
+                    if (mouse.x !== null) {
+                        const dx   = p.x - mouse.x;
+                        const dy   = p.y - mouse.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+
+                        if (dist < RADIUS && dist > 0.5) {
+                            // Smoothstep: 0 at edge → 1 at centre — gives soft entry, hard core
+                            const t     = 1 - dist / RADIUS;
+                            const force = STRENGTH * t * t * (3 - 2 * t);
+
+                            p.vx += (dx / dist) * force;
+                            p.vy += (dy / dist) * force;
+                            p._kicked = true;
+                        }
+                    }
+
+                    // ── Velocity cap (prevents runaway particles) ──
+                    const spd = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
+                    if (spd > MAX_SPD) {
+                        p.vx = (p.vx / spd) * MAX_SPD;
+                        p.vy = (p.vy / spd) * MAX_SPD;
+                    }
+
+                    // ── Spring-back: gently restore kicked particles to base velocity ──
+                    // This is what gives the "trampoline return" — not an instant snap,
+                    // but a gradual lerp that lets them overshoot then settle.
+                    if (p._kicked) {
+                        p.vx = p.vx * 0.94 + p._baseVx * 0.06;
+                        p.vy = p.vy * 0.94 + p._baseVy * 0.06;
+
+                        const dvx = p.vx - p._baseVx;
+                        const dvy = p.vy - p._baseVy;
+                        if (dvx * dvx + dvy * dvy < 0.01) p._kicked = false;
+                    }
+                });
+
+                requestAnimationFrame(trampolineLoop);
+            }
+
+            // Give particles.js a moment to initialise before we start hooking in
+            setTimeout(trampolineLoop, 600);
+        }
+
+        // ── Easter egg: 10 clicks opens the hidden modal ─────────────────────
         const particlesContainer = document.getElementById('particles-js');
 
-        // 1. Listen for clicks on the particles container
         particlesContainer.addEventListener('click', () => {
             clickCount++;
-            
             if (clickCount === 10) {
                 modal2.classList.add('active');
-                    clickCount = 0; 
+                clickCount = 0;
             }
         });
 
-        // 2. Function to close the modal (referenced in your HTML button)
-        window.closeModal2 = function() {
+        window.closeModal2 = function () {
             modal2.classList.remove('active');
         };
 
-        // 4. Optimization: Kill the animation when user scrolls away
+        // ── Pause canvas when scrolled out of view (perf) ────────────────────
         const pObserver = new IntersectionObserver(([entry]) => {
             const canvas = particlesContainer.querySelector('canvas');
-            if (canvas) {
-                // This is a trick: pausing the display stops the browser's paint cycles
-                canvas.style.display = entry.isIntersecting ? 'block' : 'none';
-            }
+            if (canvas) canvas.style.display = entry.isIntersecting ? 'block' : 'none';
         }, { threshold: 0.1 });
 
         if (particlesContainer) pObserver.observe(particlesContainer);
