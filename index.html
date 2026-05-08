@@ -767,6 +767,16 @@
         .skills span.animate {
             opacity: 1;
             transform: translateY(0);
+            transition: 
+                opacity 0.6s ease var(--stagger-delay, 0s), 
+                transform 0.6s ease var(--stagger-delay, 0s);
+        }
+        .skills .PPCard span.animate {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.6s ease , 
+                        transform 0.6s ease ;
+          
         }
 
         .skills span:hover {
@@ -774,6 +784,12 @@
             transform: scale(1.05);
             background: rgba(0, 255, 204, 0.2);
             cursor: pointer;
+        }
+        .skills div {
+            margin: 0;
+            padding: 0;
+            
+            
         }
         @media (max-width: 768px) {
             /* Force exactly 2 columns */
@@ -785,17 +801,31 @@
 
             /* Transform the pills into "App Buttons" */
             .skills span {
+              display: flex;          /* Changed from inline to flex */
+                width: 100%;            /* Takes up 100% of the parent's width */
+                box-sizing: border-box; /* Ensures padding doesn't make it wider than 100% */
+                
                 justify-content: center;
+                align-items: center;    /* Vertically centers content if there's extra height */
                 text-align: center;
                 padding: 0.8rem 0.4rem;
-                font-size: 0.75rem; /* Shrink the text slightly */
-                gap: 6px; 
+                font-size: 0.75rem;
+                gap: 6px;
             }
+            .skills span.animate {
+                opacity: 1;
+                transform: translateY(0);
+                transition: 
+                    opacity 0.6s ease , 
+                    transform 0.6s ease ;
+            }
+            
 
             /* Make the icon slightly bigger so it acts as the centerpiece */
             .skills span i {
                 font-size: 1.4rem; 
             }
+          
         }
         .languages {
             margin-top: 1rem;
@@ -3106,27 +3136,27 @@
                 </div>
             </div>
             <div class="skills stagger-animation">
-                <span class="magnetic sfx-hover"><i class="fa-brands fa-python"></i> Python: Advanced</span>
-                <span class="magnetic sfx-hover"><i class="fa-brands fa-html5"></i> Html: Advanced</span>
-                <span class="magnetic sfx-hover"><i class="fa-brands fa-css3-alt"></i> Css: Advanced</span>
-                <span class="magnetic sfx-hover"><i class="fa-brands fa-sass"></i> Sass: Advanced</span>
-                <span class="magnetic sfx-hover"><i class="fa-brands fa-react"></i> React: Excellent</span>
-                <span class="magnetic sfx-hover"><i class="fa-brands fa-github"></i> GitHub: Excellent</span>
-                <span class="magnetic sfx-hover"><i class="fa-brands fa-unity"></i> Unity: Excellent</span>
-                <span class="magnetic sfx-hover"><i class="fa-solid fa-vial"></i> A/B testing: Excellent</span>
-                <span class="magnetic sfx-hover"><i class="fa-solid fa-magnifying-glass-chart"></i> SEO: Excellent</span>
-                <span class="magnetic sfx-hover"><i class="fa-brands fa-wordpress"></i> WordPress: Excellent</span>
-                <span class="magnetic sfx-hover"><i class="fa-brands fa-aws"></i> AWS: Excellent</span>
-                <span class="magnetic sfx-hover"><i class="fa-brands fa-windows"></i> Visual Basic: Strong</span>
-                <span class="magnetic sfx-hover"><i class="fa-solid fa-code"></i> C#: Strong</span>
-                <span class="magnetic sfx-hover"><i class="fa-brands fa-cpanel"></i> cPanel: Great</span>
-                <span class="magnetic sfx-hover"><i class="fa-brands fa-js"></i> JavaScript: Great</span>
-                <span class="magnetic sfx-hover"><i class="fa-brands fa-php"></i> Php: Great</span>
-                <span class="magnetic sfx-hover"><i class="fa-solid fa-database"></i> SQL: Great</span>
-                <span class="magnetic sfx-hover"><i class="fa-solid fa-server"></i> NoSQL: Great</span>
-                <span class="magnetic sfx-hover"><i class="fa-brands fa-docker"></i> Docker: Great</span>
-                <span class="magnetic sfx-hover"><i class="fa-solid fa-shield-halved"></i> Cyber Security: Great</span>
-                <span class="magnetic sfx-hover"><i class="fa-solid fa-ellipsis"></i> Many more...</span>
+                <div class="magnetic"><span class="sfx-hover"><i class="fa-brands fa-python"></i> Python: Advanced</span></div>
+                <div class="magnetic"><span class="sfx-hover"><i class="fa-brands fa-html5"></i> Html: Advanced</span></div>
+                <div class="magnetic"><span class="sfx-hover"><i class="fa-brands fa-css3-alt"></i> Css: Advanced</span></div>
+                <div class="magnetic"><span class="sfx-hover"><i class="fa-brands fa-sass"></i> Sass: Advanced</span></div>
+                <div class="magnetic"><span class="sfx-hover"><i class="fa-brands fa-react"></i> React: Excellent</span></div>
+                <div class="magnetic"><span class="sfx-hover"><i class="fa-brands fa-github"></i> GitHub: Excellent</span></div>
+                <div class="magnetic"><span class="sfx-hover"><i class="fa-brands fa-unity"></i> Unity: Excellent</span></div>
+                <div class="magnetic"><span class="sfx-hover"><i class="fa-solid fa-vial"></i> A/B testing: Excellent</span></div>
+                <div class="magnetic"><span class="sfx-hover"><i class="fa-solid fa-magnifying-glass-chart"></i> SEO: Excellent</span></div>
+                <div class="magnetic"><span class="sfx-hover"><i class="fa-brands fa-wordpress"></i> WordPress: Excellent</span></div>
+                <div class="magnetic"><span class="sfx-hover"><i class="fa-brands fa-aws"></i> AWS: Excellent</span></div>
+                <div class="magnetic"><span class="sfx-hover"><i class="fa-brands fa-windows"></i> Visual Basic: Strong</span></div>
+                <div class="magnetic"><span class="sfx-hover"><i class="fa-solid fa-code"></i> C#: Strong</span></div>
+                <div class="magnetic"><span class="sfx-hover"><i class="fa-brands fa-cpanel"></i> cPanel: Great</span></div>
+                <div class="magnetic"><span class="sfx-hover"><i class="fa-brands fa-js"></i> JavaScript: Great</span></div>
+                <div class="magnetic"><span class="sfx-hover"><i class="fa-brands fa-php"></i> Php: Great</span></div>
+                <div class="magnetic"><span class="sfx-hover"><i class="fa-solid fa-database"></i> SQL: Great</span></div>
+                <div class="magnetic"><span class="sfx-hover"><i class="fa-solid fa-server"></i> NoSQL: Great</span></div>
+                <div class="magnetic"><span class="sfx-hover"><i class="fa-brands fa-docker"></i> Docker: Great</span></div>
+                <div class="magnetic"><span class="sfx-hover"><i class="fa-solid fa-shield-halved"></i> Cyber Security: Great</span></div>
+                <div class="magnetic"><span class="sfx-hover"><i class="fa-solid fa-ellipsis"></i> Many more...</span></div>
             </div>
         </div>
     </section>
@@ -3165,9 +3195,9 @@
                         <h3>School Project: SwordShop</h3>
                         <p>Developed a web application for purchasing Minecraft swords, featuring a responsive design and an SQL database for inventory management. Built using React for the frontend.</p>
                         <div class="skills stagger-animation">
-                            <span class="magnetic sfx-hover"><i class="fa-brands fa-react"></i> React</span>
-                            <span class="magnetic sfx-hover"><i class="fa-solid fa-database"></i> SQL</span>
-                            <span class="magnetic sfx-hover"><i class="fa-brands fa-sass"></i> Sass</span>
+                            <div class="PPCard magnetic"><span class="sfx-hover"><i class="fa-brands fa-react"></i> React</span></div>
+                            <div class="PPCard magnetic"><span class="sfx-hover"><i class="fa-solid fa-database"></i> SQL</span></div>
+                            <div class="PPCard magnetic"><span class="sfx-hover"><i class="fa-brands fa-sass"></i> Sass</span></div>
 
                         </div>
                     </div>
@@ -3176,9 +3206,9 @@
                         <h3>School Project: Spotity</h3>
                         <p>Created a gig information platform with a NoSQL database and React frontend. Its media responsive design ensures a great user experience across devices. it provides updates on music events.</p>
                         <div class="skills stagger-animation">
-                            <span class="magnetic sfx-hover"><i class="fa-brands fa-react"></i> React</span>
-                            <span class="magnetic sfx-hover"><i class="fa-solid fa-server"></i> NoSQL</span>
-                            <span class="magnetic sfx-hover"><i class="fa-brands fa-sass"></i> Sass</span>
+                            <div class="PPCard magnetic"><span class="sfx-hover"><i class="fa-brands fa-react"></i> React</span></div>
+                            <div class="PPCard magnetic"><span class="sfx-hover"><i class="fa-solid fa-server"></i> NoSQL</span></div>
+                            <div class="PPCard magnetic"><span class="sfx-hover"><i class="fa-brands fa-sass"></i> Sass</span></div>
 
                         </div>
                     </div>
@@ -3187,9 +3217,9 @@
                         <h3>School Project: Yes Man's Sky</h3>
                         <p>A downloadable space action-adventure game built in Unity with C#. Explore the galaxy, complete missions, and experience the thrill of interstellar space travel.</p>
                         <div class="skills stagger-animation">
-                            <span class="magnetic sfx-hover"><i class="fa-brands fa-github"></i> GitHub</span>
-                            <span class="magnetic sfx-hover"><i class="fa-brands fa-unity"></i> Unity</span>
-                            <span class="magnetic sfx-hover"><i class="fa-solid fa-code"></i> C#</span>
+                            <div class="PPCard magnetic"><span class="sfx-hover"><i class="fa-brands fa-github"></i> GitHub</span></div>
+                            <div class="PPCard magnetic"><span class="sfx-hover"><i class="fa-brands fa-unity"></i> Unity</span></div>
+                            <div class="PPCard magnetic"><span class="sfx-hover"><i class="fa-solid fa-code"></i> C#</span></div>
                         </div>
                         <a class="sfx-hover sfx-click" href="https://zorkkana.itch.io/yes-mans-sky" target="_blank">Check It Out</a>
                     </div>
@@ -3981,35 +4011,35 @@ window.addEventListener('scroll', () => {
     </script>
 
     <script defer>
-    document.addEventListener('DOMContentLoaded', () => {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animate');
-                } else {
-                    if (entry.boundingClientRect.top > 0) {
-                        entry.target.classList.remove('animate');
+        document.addEventListener('DOMContentLoaded', () => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate');
+                    } else {
+                        if (entry.boundingClientRect.top > 0) {
+                            entry.target.classList.remove('animate');
+                        }
                     }
-                }
+                });
+            }, { threshold: 0.1 });
+
+            const selectors = 'h2, .btn, .avatar, .bio p, .project-card, .experience-card, .languages, .company-logo, .logo-cluster-container, .terminal-window, .contact form, .skills span';
+            
+            document.querySelectorAll(selectors).forEach(element => {
+                observer.observe(element);
             });
-        }, { threshold: 0.1 });
 
-        const selectors = 'h2, .btn, .avatar, .bio p, .project-card, .experience-card, .languages, .company-logo, .logo-cluster-container, .terminal-window, .contact form, .skills span';
-        
-        document.querySelectorAll(selectors).forEach(element => {
-            observer.observe(element);
-        });
+            // INSTEAD of transitionDelay, we inject a CSS Variable (--stagger-delay)
+            document.querySelectorAll('.project-card').forEach((card, index) => {
+                card.style.setProperty('--stagger-delay', `${index * 0.1}s`);
+            });
 
-        // INSTEAD of transitionDelay, we inject a CSS Variable (--stagger-delay)
-        document.querySelectorAll('.project-card').forEach((card, index) => {
-            card.style.setProperty('--stagger-delay', `${index * 0.1}s`);
+            document.querySelectorAll('.skills span').forEach((skill, index) => {
+                skill.style.setProperty('--stagger-delay', `${index * 0.025}s`);
+            });
         });
-
-        document.querySelectorAll('.skills span').forEach((skill, index) => {
-            skill.style.setProperty('--stagger-delay', `${index * 0.05}s`);
-        });
-    });
-</script>
+    </script>
 
        <script defer>
         const initTypewriter = () => {
