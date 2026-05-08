@@ -991,7 +991,7 @@
             margin-bottom: 2rem;
         }
         .contact-info-grid{
-            gap: 4rem;
+            gap: 5rem;
             margin-bottom: 0rem;
         }
        
@@ -1047,7 +1047,18 @@
             transition: all 0.3s ease;
         }
          .contacnt-card{
-            padding: 2rem 0 ;
+            padding: 2rem; 
+            display: flex;
+            flex-direction: row;
+            gap: 1rem;
+            align-items: center;
+        }
+        .contact-info{
+
+        }
+        .contact-info p{
+            margin: 0;
+            color: #00ffcc;
         }
         /* Experience Section */
         .experience {
@@ -1306,6 +1317,11 @@
             }
             
             .terminal-header { justify-content: center; }
+             .contacnt-card{
+              
+                flex-direction: column;
+                text-align: center;
+            }
         }
 
         /* Contact Section */
@@ -3516,26 +3532,45 @@
             </div>
                <div class="project-grid contact-info-grid">
                     <div class="project-card contacnt-card">
-                        <h3 class="center">oskari.kaile@portawebia.com</h3>
-                         <svg xmlns="http://www.w3.org/2000/svg" 
+                        <div class="social-links-container">
+                            <a href="" target="_blank" class="social-icon magnetic sfx-click sfx-hover" aria-label="LinkedIn">
+                                <svg xmlns="http://www.w3.org/2000/svg" 
                                 viewBox="0 0 512 512" 
                                 style="width: 30px; height: 30px; margin: auto;"> <path fill="#00ffcc" d="M502.3 190.8c3.9-3.1 9.7-.2 9.7 4.7V400c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V195.6c0-5 5.7-7.8 9.7-4.7 22.4 17.4 52.1 39.5 154.1 113.6 21.1 15.4 56.7 47.8 92.2 47.6 35.7.3 72-32.8 92.3-47.6 102-74.1 131.6-96.3 154-113.7zM256 320c23.2.4 56.6-29.2 73.4-41.4 132.7-96.3 142.8-104.7 173.4-128.7 5.8-4.5 9.2-11.5 9.2-18.9v-19c0-26.5-21.5-48-48-48H48C21.5 64 0 85.5 0 112v19c0 7.4 3.4 14.3 9.2 18.9 30.6 23.9 40.7 32.4 173.4 128.7 16.8 12.2 50.2 41.8 73.4 41.4z"/>
-                            </svg>      
+                            </svg>     
+                            </a>
+                        </div>
+                        <div class="contact-info">
+                            <p>Email</p>
+                            <h3 class="center">oskari.kaile@portawebia.com</h3>
+                        </div>
                     </div>
                     <div class="project-card contacnt-card">
-                        <h3 class="center">+358 40 1340637 </h3>
-                        <svg xmlns="http://www.w3.org/2000/svg" 
-                                viewBox="0 0 512 512" 
-                                style="width: 30px; height: 30px; margin: auto;"> <path fill="#00ffcc" d="M400 32H48A48 48 0 0 0 0 80v352a48 48 0 0 0 48 48h352a48 48 0 0 0 48-48V80a48 48 0 0 0-48-48zm-16.39 307.37l-15 65A15 15 0 0 1 354 416C194 416 64 286.29 64 126a15.7 15.7 0 0 1 11.63-14.61l65-15A18.23 18.23 0 0 1 144 96a16.27 16.27 0 0 1 13.79 9.09l30 70A17.9 17.9 0 0 1 189 181a17 17 0 0 1-5.5 11.61l-37.89 31a231.91 231.91 0 0 0 110.78 110.78l31-37.89A17 17 0 0 1 299 291a17.85 17.85 0 0 1 5.91 1.21l70 30A16.25 16.25 0 0 1 384 336a17.41 17.41 0 0 1-.39 3.37z"/>
-                            </svg>    
+                        <div class="social-links-container">
+                            <a href="" target="_blank" class="social-icon magnetic sfx-click sfx-hover" aria-label="LinkedIn">
+                               <svg viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill="#00ffcc" d="M400 32H48A48 48 0 0 0 0 80v352a48 48 0 0 0 48 48h352a48 48 0 0 0 48-48V80a48 48 0 0 0-48-48zm-16.39 307.37l-15 65A15 15 0 0 1 354 416C194 416 64 286.29 64 126a15.7 15.7 0 0 1 11.63-14.61l65-15A18.23 18.23 0 0 1 144 96a16.27 16.27 0 0 1 13.79 9.09l30 70A17.9 17.9 0 0 1 189 181a17 17 0 0 1-5.5 11.61l-37.89 31a231.91 231.91 0 0 0 110.78 110.78l31-37.89A17 17 0 0 1 299 291a17.85 17.85 0 0 1 5.91 1.21l70 30A16.25 16.25 0 0 1 384 336a17.41 17.41 0 0 1-.39 3.37z"/>
+                                </svg> 
+                            </a>
+                        </div>
+                        <div class="contact-info">
+                            <p>Phone</p>
+                            <h3 class="center">+358 40 1340637 </h3>
+                        </div>
+                          
                     </div>
                     <div class="project-card contacnt-card">
-                        <h3 class="center">Finland tampere</h3>
-                        <svg xmlns="http://www.w3.org/2000/svg" 
-                                viewBox="0 0 512 512" 
-                                style="width: 30px; height: 30px; margin: auto;"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free v5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="#00ffcc" d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0z"/></svg>
-                            </svg>    
-
+                        <div class="social-links-container">
+                            <a href="" target="_blank" class="social-icon magnetic sfx-click sfx-hover" aria-label="LinkedIn">
+                                 <svg viewBox="0 0 384 512" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill="#00ffcc" d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z"/>
+                                </svg>
+                            </a>
+                        </div>
+                        <div class="contact-info">
+                            <p>Location</p>
+                            <h3 class="center">Finland tampere</h3>
+                        </div>
                     </div>
                 </div>
         </div>
