@@ -999,7 +999,7 @@
             background: rgba(255, 255, 255, 0.05);
             padding: 2rem;
             border-radius: 15px;
-            border: 1px solid #00ffcc;
+            border: 1px solid rgba(0, 255, 204, 0.2);
             
             /* Reveal starting point */
             opacity: 0;
@@ -1011,7 +1011,7 @@
         .project-card.animate:hover {
             transform: translateY(-10px);
             box-shadow: 0 0 30px rgba(0, 255, 204, 0.5);
-            
+            border: 1px solid #00ffcc;
             /* 
             Force the hover transition to happen immediately (0s delay).
             Because we are targeting .animate:hover, it easily overrides the entrance delay.
@@ -1132,12 +1132,12 @@
             background: rgba(255, 255, 255, 0.05);
             padding: 2rem;
             border-radius: 15px;
-            border: 1px solid #00ffcc;
+            border: 1px solid rgba(0, 255, 204, 0.2);
             position: relative;
             opacity: 0;
             backdrop-filter: blur(2px);
             transform: translateX(-20px);
-            transition: opacity 0.6s ease, transform 0.6s ease, background 0.3s ease; /* Smooth move */
+            transition: opacity 0.6s ease, transform 0.6s ease, background 0.3s ease, border 0.3s ease, box-shadow 0.3s ease; /* Smooth move */
         }
         .experience-card.animate {
             opacity: 1;
@@ -1148,6 +1148,8 @@
         .experience-card:hover {
             transform: translateX(15px); /* Card slides right */
             background: rgba(255, 255, 255, 0.08);
+            border: 1px solid #00ffcc;
+            box-shadow: 0 0 30px rgba(0, 255, 204, 0.5);
         }
 
         .experience-item:hover::before {
