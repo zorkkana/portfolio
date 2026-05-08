@@ -818,7 +818,21 @@
             
             
         }
+        .skills-container{
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+         
+            gap: 2rem;
+            margin-bottom: 2rem;
+        
+        }
+        .skills-container .project-cards{
+            min-height: 260px;
+        }
         @media (max-width: 768px) {
+            .skills-container {
+                grid-template-columns: 1fr; /* Switch to single column on mobile */
+            }
             /* Force exactly 2 columns */
             .skills {
                 display: grid;
@@ -3229,28 +3243,58 @@
                    
                 </div>
             </div>
-            <div class="skills stagger-animation">
-                <div class="magnetic"><span class="sfx-hover"><i class="fa-brands fa-python"></i> Python: Advanced</span></div>
-                <div class="magnetic"><span class="sfx-hover"><i class="fa-brands fa-html5"></i> Html: Advanced</span></div>
-                <div class="magnetic"><span class="sfx-hover"><i class="fa-brands fa-css3-alt"></i> Css: Advanced</span></div>
-                <div class="magnetic"><span class="sfx-hover"><i class="fa-brands fa-sass"></i> Sass: Advanced</span></div>
-                <div class="magnetic"><span class="sfx-hover"><i class="fa-brands fa-react"></i> React: Excellent</span></div>
-                <div class="magnetic"><span class="sfx-hover"><i class="fa-brands fa-github"></i> GitHub: Excellent</span></div>
-                <div class="magnetic"><span class="sfx-hover"><i class="fa-brands fa-unity"></i> Unity: Excellent</span></div>
-                <div class="magnetic"><span class="sfx-hover"><i class="fa-solid fa-vial"></i> A/B testing: Excellent</span></div>
-                <div class="magnetic"><span class="sfx-hover"><i class="fa-solid fa-magnifying-glass-chart"></i> SEO: Excellent</span></div>
-                <div class="magnetic"><span class="sfx-hover"><i class="fa-brands fa-wordpress"></i> WordPress: Excellent</span></div>
-                <div class="magnetic"><span class="sfx-hover"><i class="fa-brands fa-aws"></i> AWS: Excellent</span></div>
-                <div class="magnetic"><span class="sfx-hover"><i class="fa-brands fa-windows"></i> Visual Basic: Strong</span></div>
-                <div class="magnetic"><span class="sfx-hover"><i class="fa-solid fa-code"></i> C#: Strong</span></div>
-                <div class="magnetic"><span class="sfx-hover"><i class="fa-brands fa-cpanel"></i> cPanel: Great</span></div>
-                <div class="magnetic"><span class="sfx-hover"><i class="fa-brands fa-js"></i> JavaScript: Great</span></div>
-                <div class="magnetic"><span class="sfx-hover"><i class="fa-brands fa-php"></i> Php: Great</span></div>
-                <div class="magnetic"><span class="sfx-hover"><i class="fa-solid fa-database"></i> SQL: Great</span></div>
-                <div class="magnetic"><span class="sfx-hover"><i class="fa-solid fa-server"></i> NoSQL: Great</span></div>
-                <div class="magnetic"><span class="sfx-hover"><i class="fa-brands fa-docker"></i> Docker: Great</span></div>
-                <div class="magnetic"><span class="sfx-hover"><i class="fa-solid fa-shield-halved"></i> Cyber Security: Great</span></div>
-                <div class="magnetic"><span class="sfx-hover"><i class="fa-solid fa-ellipsis"></i> Many more...</span></div>
+            <div class="skills-container stagger-animation">
+                
+                <!-- Frontend -->
+                <div class="project-card">
+                    <h3>Frontend</h3>
+                    <div class="skills">
+                        <div class="magnetic"><span class="sfx-hover"><i class="fa-brands fa-html5"></i> HTML: Advanced</span></div>
+                        <div class="magnetic"><span class="sfx-hover"><i class="fa-brands fa-css3-alt"></i> CSS: Advanced</span></div>
+                        <div class="magnetic"><span class="sfx-hover"><i class="fa-brands fa-sass"></i> Sass: Advanced</span></div>
+                        <div class="magnetic"><span class="sfx-hover"><i class="fa-brands fa-js"></i> JavaScript: Great</span></div>
+                        <div class="magnetic"><span class="sfx-hover"><i class="fa-brands fa-react"></i> React: Excellent</span></div>
+                    </div>
+                </div>
+
+                <!-- Backend & Databases -->
+                <div class="project-card">
+                    <h3>Backend & Databases</h3>
+                    <div class="skills">
+                        <div class="magnetic"><span class="sfx-hover"><i class="fa-brands fa-python"></i> Python: Advanced</span></div>
+                        <div class="magnetic"><span class="sfx-hover"><i class="fa-solid fa-code"></i> C#: Strong</span></div>
+                        <div class="magnetic"><span class="sfx-hover"><i class="fa-brands fa-php"></i> PHP: Great</span></div>
+                        <div class="magnetic"><span class="sfx-hover"><i class="fa-solid fa-database"></i> SQL: Great</span></div>
+                        <div class="magnetic"><span class="sfx-hover"><i class="fa-solid fa-server"></i> NoSQL: Great</span></div>
+                        <div class="magnetic"><span class="sfx-hover"><i class="fa-brands fa-windows"></i> Visual Basic: Strong</span></div>
+
+                    </div>
+                </div>
+
+                <!-- Tools -->
+                <div class="project-card">
+                    <h3>Tools and Technologies</h3>
+                    <div class="skills">
+                        <div class="magnetic"><span class="sfx-hover"><i class="fa-brands fa-aws"></i> AWS: Excellent</span></div>
+                        <div class="magnetic"><span class="sfx-hover"><i class="fa-brands fa-docker"></i> Docker: Great</span></div>
+                        <div class="magnetic"><span class="sfx-hover"><i class="fa-brands fa-github"></i> GitHub: Excellent</span></div>
+                        <div class="magnetic"><span class="sfx-hover"><i class="fa-brands fa-cpanel"></i> cPanel: Great</span></div>
+                        <div class="magnetic"><span class="sfx-hover"><i class="fa-brands fa-wordpress"></i> WordPress: Excellent</span></div>
+                        <div class="magnetic"><span class="sfx-hover"><i class="fa-brands fa-unity"></i> Unity: Excellent</span></div>
+                    </div>
+                </div>
+
+                <!-- Practices and Other -->
+                <div class="project-card">
+                    <h3>Practices and Other</h3>
+                    <div class="skills">
+                        <div class="magnetic"><span class="sfx-hover"><i class="fa-solid fa-shield-halved"></i> Cyber Security: Great</span></div>
+                        <div class="magnetic"><span class="sfx-hover"><i class="fa-solid fa-vial"></i> A/B Testing: Excellent</span></div>
+                        <div class="magnetic"><span class="sfx-hover"><i class="fa-solid fa-magnifying-glass-chart"></i> SEO: Excellent</span></div>
+                        <div class="magnetic"><span class="sfx-hover"><i class="fa-solid fa-ellipsis"></i> Many more...</span></div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>
