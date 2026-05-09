@@ -1710,21 +1710,27 @@
             opacity: 0;
             backdrop-filter: blur(2px);
             transform: translateY(20px);
+            pointer-events: none; /* Keeps it strictly unclickable while hidden */
             transition: opacity 0.5s ease, transform 0.5s ease;
         }
 
-        /* 2. Entrance Animation (When JS adds the .animate class) */
         .project-card.animate {
             opacity: 1;
             transform: translateY(0);
             
-            /* 
-            We apply the transition + the CSS variable here! 
-            If the variable isn't found, it defaults to 0s. 
-            */
+            /* Handles the visual slide-in smoothly */
             transition: 
                 opacity 0.6s ease var(--stagger-delay, 0s), 
                 transform 0.6s ease var(--stagger-delay, 0s);
+            
+        
+            animation: enableInteraction 0s linear calc(0.6s + var(--stagger-delay, 0s)) forwards;
+        }
+
+        @keyframes enableInteraction {
+            to {
+                pointer-events: auto;
+            }
         }
 
         
