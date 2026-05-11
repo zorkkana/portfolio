@@ -1490,7 +1490,7 @@
         }
  
         .main-logo {
-            width: 220px;
+            width: auto;
             filter: drop-shadow(0 0 20px rgba(0, 255, 204, 0.3));
             animation: breathing 4s ease-in-out infinite;
         }
@@ -3399,7 +3399,13 @@
                         <div class="tiles"></div>
                     </div>
                     <div class="avatar-container">
-                        <img src="/images/omaa2.webp" alt="Oskari" class="avatar">
+                        <img 
+                        src="/images/omaa2.webp" 
+                        srcset="/images/omaa2-134.webp 134w, /images/omaa2.webp 1000w" 
+                        sizes="(max-width: 600px) 134px, 1000px"
+                        alt="Oskari" 
+                        class="avatar"
+                        loading="lazy">
                         <span class="status-dot"></span>
                     </div>
                     
@@ -3752,7 +3758,10 @@
                             <div class="shine"></div>
                             <div class="tiles"></div>
                         </div>
-                        <img src="/images/fanikauppa.webp" alt="SwordShop" height="198" >
+                        <img src="/images/fanikauppa.webp" 
+                        srcset="/images/fanikauppa-198.webp 1x, /images/fanikauppa.webp 2x" 
+                        alt="SwordShop" 
+                        height="198">
                         
                         <h3>SwordShop</h3>
                         <p>Developed a web application for purchasing Minecraft swords, featuring a responsive design and an SQL database for inventory management. Built using React for the frontend.</p>
@@ -3772,7 +3781,10 @@
                             <div class="shine"></div>
                             <div class="tiles"></div>
                         </div>
-                        <img src="/images/music.webp" alt="Spotity" height="198" >
+                        <img src="/images/music.webp" 
+                        srcset="/images/music-198.webp 1x, /images/music.webp 2x" 
+                        alt="Spotify" 
+                        height="198">
                         <h3>Spotity</h3>
                         <p>Created a gig information platform with a NoSQL database and React frontend. Its media responsive design ensures a great user experience across devices. it provides updates on music events.</p>
                         <div class="skills stagger-animation">
@@ -3791,7 +3803,10 @@
                             <div class="shine"></div>
                             <div class="tiles"></div>
                         </div>
-                        <img src="/images/Yesmansky.webp" alt="Yes Man's Sky" height="198">
+                        <img src="/images/Yesmansky.webp" 
+                        srcset="/images/Yesmansky-198.webp 1x, /images/Yesmansky.webp 2x" 
+                        alt="Yes Man's Sky" 
+                        height="198">
                         <h3>Yes Man's Sky</h3>
                         <p>A downloadable space action-adventure game built in Unity with C#. Explore the galaxy, complete missions, and experience the thrill of interstellar space travel.</p>
                         <div class="skills stagger-animation">
@@ -3813,7 +3828,7 @@
                     <div class="experience-company-logo_container">
                             <!-- tredu -->
                             <a href="https://www.tredu.fi/" target="_blank" class="social-icon magnetic sfx-click sfx-hover" aria-label="Tampereen seudun ammattiopisto Tredu">
-                                <img src="/images/tredu-logo.png" width="50px"  alt="Tampereen seudun ammattiopisto Tredu" class="experience-company-logo">
+                                <img src="/images/tredu-logo.webp" width="50px" height="15.16px" alt="Tampereen seudun ammattiopisto Tredu" class="experience-company-logo">
                             </a>
                     </div>
                     <h3>Tampere Region Vocational College Tredu (Software Developer)</h3>
@@ -3886,7 +3901,7 @@
                         <div class="experience-company-logo_container">
                             <!-- lemonsoft -->
                             <a href="https://lemonsoft.fi/" target="_blank" class="social-icon magnetic sfx-click sfx-hover" aria-label="Lemonsoft">
-                                <img src="/images/Lemonsoft.png" width="50px" alt="Lemonsoft" class="experience-company-logo">
+                                <img src="/images/Lemonsoft.webp" width="50px" height="50px" alt="Lemonsoft" class="experience-company-logo">
                             </a>
                         </div>
                         <h3>Summer Job @ Lemonsoft Oyj</h3>
@@ -3904,7 +3919,7 @@
                         <div class="experience-company-logo_container">
                             <!-- lemonsoft -->
                             <a href="https://lemonsoft.fi/" target="_blank" class="social-icon magnetic sfx-click sfx-hover" aria-label="Lemonsoft">
-                                <img src="/images/Lemonsoft.png" width="50px" alt="Lemonsoft" class="experience-company-logo">
+                                <img src="/images/Lemonsoft.webp" width="50px" height="50px" alt="Lemonsoft" class="experience-company-logo">
                             </a>
                         </div>
                         <h3>Internship @ Lemonsoft Oyj</h3>
@@ -3922,7 +3937,7 @@
                         <div class="experience-company-logo_container">
                             <!-- lemonsoft -->
                             <a href="https://lemonsoft.fi/" target="_blank" class="social-icon magnetic sfx-click sfx-hover" aria-label="Lemonsoft">
-                                <img src="/images/Lemonsoft.png" width="50px" alt="Lemonsoft" class="experience-company-logo">
+                                <img src="/images/Lemonsoft.webp" width="50px" height="50px" alt="Lemonsoft" class="experience-company-logo">
                             </a>
                         </div>
                         <h3>Summer Job @ Lemonsoft Oyj</h3>
@@ -3940,7 +3955,7 @@
                         <div class="experience-company-logo_container">
                             <!-- Pco GmbH & Co. KG -->
                             <a href="https://www.pco-online.de/" target="_blank" class="social-icon magnetic sfx-click sfx-hover" aria-label="Pco GmbH & Co. KG">
-                                <img src="/images/pco-gmbh-co-kg.png" width="50px" alt="Pco GmbH & Co. KG" class="experience-company-logo">
+                                <img src="/images/pco-gmbh-co-kg.png" width="50px" height="21px" alt="Pco GmbH & Co. KG" class="experience-company-logo">
                             </a>
                         </div>
                         <h3>International Internship @ Pco GmbH & Co. KG</h3>
@@ -3958,7 +3973,7 @@
                         <div class="experience-company-logo_container">
                             <!-- ArtXperience Oy -->
                             <a href="https://artxperience.net/" target="_blank" class="social-icon magnetic sfx-click sfx-hover" aria-label="ArtXperience Oy">
-                                <img src="/images/ArtX-Logo-500px.png" width="50px" alt="ArtXperience Oy" class="experience-company-logo">
+                                <img src="/images/ArtX-Logo-500px.png" width="50px" height="26.14px" alt="ArtXperience Oy" class="experience-company-logo">
                             </a>
                         </div>
                         <h3>Internship @ Lingonperry (ArtXperience Oy)</h3>
@@ -3976,7 +3991,7 @@
                         <div class="experience-company-logo_container">
                             <!-- Portawebia Oy -->
                             <a href="https://www.portawebia.com" target="_blank" class="social-icon magnetic sfx-click sfx-hover" aria-label="Portawebia Oy">
-                                <img src="/images/Portawebia.png" width="50px" alt="Portawebia Oy" class="experience-company-logo own-company-logo">
+                                <img src="/images/Portawebia.png" width="50px" height="43.83px" alt="Portawebia Oy" class="experience-company-logo own-company-logo">
                             </a>
                         </div>
                         <h3>Own company @  Portawebia Oy</h3>
@@ -4066,7 +4081,7 @@
         </div>
 
         <div class="logo-cluster-container">
-            <div class="magnetic"><img src="/images/Portawebia.png" loading="lazy" decoding="async" alt="Portawebia Logo" class="company-logo main-logo sfx-hover"></div>
+            <div class="magnetic"><img src="/images/Portawebia.png" height="220px" width="250.8px" loading="lazy" decoding="async" alt="Portawebia Logo" class="company-logo main-logo sfx-hover"></div>
             
             <div class="tech-stack-float">
                 <div class="magnetic"><div class="floating-icon icon-1 sfx-hover"><img src="/images/WordPress_blue_logo.svg.png" alt="WordPress" loading="lazy" decoding="async"></div></div>
