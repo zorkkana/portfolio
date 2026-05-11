@@ -62,6 +62,9 @@ Interactive elements utilize a "magnetic pull" effect, making the UI feel like a
 ```bash
 ├── images/          # Optimized assets & SVG Icons
 ├── sounds/          # Custom UI SFX & Ambient Track
+├── libs/            # Js Libraries 
+├── data/            # Json Data 
+├── fonts/           # Custom fonts
 ├── index.html       # Main Mission Control & Integrated Logic
 └── README.md        # Technical Documentation
 ```
