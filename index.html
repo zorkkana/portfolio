@@ -4413,6 +4413,7 @@
     <script>
         const form = document.querySelector('.contact-form');
     const modal = document.getElementById('thankYouModal');
+    const modal2 = document.getElementById('whatareudoung');
 
     form.onsubmit = async (e) => {
         e.preventDefault(); // Stop the page from refreshing
@@ -4440,6 +4441,10 @@
 
     function closeModal() {
         modal.classList.remove('active');
+    }
+
+    function closeModal2() {
+        modal2.classList.remove('active');
     }
     </script>
     <script>
