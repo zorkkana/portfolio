@@ -60,11 +60,14 @@ Interactive elements utilize a "magnetic pull" effect, making the UI feel like a
 ## 📁 Repository Structure
 
 ```bash
+├── css/             # Stylesheet (extracted from index.html)
+│   └── styles.css
+├── js/              # Modular JS systems (cursor, audio, globe, particles, etc.)
 ├── images/          # Optimized assets & SVG Icons
 ├── sounds/          # Custom UI SFX & Ambient Track
-├── libs/            # Js Libraries 
-├── data/            # Json Data 
-├── fonts/           # Custom fonts
-├── index.html       # Main Mission Control & Integrated Logic
+├── libs/            # Third-party JS libraries (Three.js addons, Typed, Lenis, Tilt, satellite.js)
+├── data/            # JSON data
+├── fonts/           # Custom fonts (Orbitron, Roboto)
+├── index.html       # Main Mission Control markup
 └── README.md        # Technical Documentation
 ```

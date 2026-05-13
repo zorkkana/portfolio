@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+package.json
+package-lock.json
+
+# Prettier
+.prettierrc.json
+.prettierignore
+.prettiercache
+
+# Backups
+*.bak
+index.html.bak
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Env
+.env
+.env.local
