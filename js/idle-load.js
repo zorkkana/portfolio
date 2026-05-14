@@ -2,8 +2,12 @@ window.addEventListener('load', () => {
     const runner = window.requestIdleCallback || ((cb) => setTimeout(cb, 1));
 
     runner(() => {
+        const isLowEnd =
+            (navigator.deviceMemory && navigator.deviceMemory <= 4) ||
+            (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4);
         const TILE_SIZE = 60;
-        const TILE_PROB = 0.3;
+        // Fewer animated tiles on weak devices — grid lines stay identical
+        const TILE_PROB = isLowEnd ? 0.15 : 0.3;
 
         function initGrid(bg) {
             const canvas = document.createElement('canvas');

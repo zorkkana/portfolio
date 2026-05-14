@@ -8,6 +8,12 @@ window.addEventListener(
     { passive: true }
 );
 
+const isLowEndDust =
+    (navigator.deviceMemory && navigator.deviceMemory <= 4) ||
+    (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) ||
+    window.innerWidth < 768;
+const DUST_PARTICLE_COUNT = isLowEndDust ? 35 : 80;
+
 const canvases = document.querySelectorAll('.dust-canvas');
 
 canvases.forEach((canvas) => {
@@ -59,7 +65,7 @@ canvases.forEach((canvas) => {
     }
 
     function init() {
-        particlesArray = Array.from({ length: 80 }, () => new Particle()); // Slightly fewer particles for better perf
+        particlesArray = Array.from({ length: DUST_PARTICLE_COUNT }, () => new Particle());
     }
 
     function animate() {

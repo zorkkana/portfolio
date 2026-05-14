@@ -10,15 +10,20 @@ async function initParticles() {
         });
 
         const isMobile = window.innerWidth < 768;
+        const isLowEnd =
+            (navigator.deviceMemory && navigator.deviceMemory <= 4) ||
+            (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4);
         const modal2 = document.getElementById('whatareudoung');
         const particlesContainer = document.getElementById('particles-js');
         let isVisible = false; // Track visibility
         let clickCount = 0;
 
+        const particleCount = isMobile ? (isLowEnd ? 18 : 30) : (isLowEnd ? 45 : 80);
+
         particlesJS('particles-js', {
             particles: {
                 number: {
-                    value: isMobile ? 30 : 80, // Lowered counts for TBT reduction
+                    value: particleCount, // Scaled by device capability
                     density: { enable: true, value_area: 800 },
                 },
                 color: { value: '#ffffff' },
@@ -50,7 +55,7 @@ async function initParticles() {
             retina_detect: false, // Keep false for performance
         });
 
-        if (!isMobile) {
+        if (!isMobile && !isLowEnd) {
             const mouse = { x: null, y: null };
             // Passive listener for better scroll performance
             particlesContainer.addEventListener(

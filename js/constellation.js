@@ -17,6 +17,15 @@
     // Check for "Reduced Motion" preference for accessibility
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+    // Detect weak hardware so we can render fewer stars/dust without changing the look
+    const isLowEnd =
+        (navigator.deviceMemory && navigator.deviceMemory <= 4) ||
+        (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) ||
+        window.innerWidth < 768;
+    const STAR_COUNT = isLowEnd ? 130 : 240;
+    const DUST_BACK = isLowEnd ? 45 : 90;
+    const DUST_FRONT = isLowEnd ? 28 : 55;
+
     // 2. Optimized Starfield (SVG with Feathering/Blur)
     function initStars() {
         const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -35,7 +44,7 @@
 
         const fragment = document.createDocumentFragment();
 
-        for (let i = 0; i < 240; i++) {
+        for (let i = 0; i < STAR_COUNT; i++) {
             const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
             const r = Math.random() < 0.12 ? 1.4 : Math.random() < 0.4 ? 0.8 : 0.45;
             const op = 0.2 + Math.random() * 0.6;
@@ -170,8 +179,8 @@
 
     // 6. Init
     initStars();
-    createDust(90, 0);
-    createDust(55, 1);
+    createDust(DUST_BACK, 0);
+    createDust(DUST_FRONT, 1);
     observer.observe(wrap);
 
     window.addEventListener(
