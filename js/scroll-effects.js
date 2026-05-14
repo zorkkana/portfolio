@@ -1,4 +1,4 @@
-// 1. Global state to avoid layout thrashing
+// cache scrollY once per scroll instead of reading it inside draw()
 let currentScroll = window.scrollY;
 window.addEventListener(
     'scroll',
@@ -17,17 +17,16 @@ const DUST_PARTICLE_COUNT = isLowEndDust ? 35 : 80;
 const canvases = document.querySelectorAll('.dust-canvas');
 
 canvases.forEach((canvas) => {
-    const ctx = canvas.getContext('2d', { alpha: true }); // Optimized context
+    const ctx = canvas.getContext('2d', { alpha: true });
     let particlesArray = [];
     let animationFrameId;
     let isVisible = false;
 
-    // 2. Efficient Resizing
     function resizeCanvas() {
         const parent = canvas.parentElement;
         canvas.width = parent.offsetWidth;
         canvas.height = parent.offsetHeight;
-        init(); // Re-init particles on resize to fit new bounds
+        init();
     }
 
     class Particle {
@@ -54,7 +53,6 @@ canvases.forEach((canvas) => {
         draw() {
             ctx.fillStyle = this.color;
 
-            // Use the global currentScroll instead of querying window.scrollY
             let parallaxY = (this.y + currentScroll * this.parallaxSpeed) % canvas.height;
             if (parallaxY < 0) parallaxY += canvas.height;
 
@@ -69,7 +67,7 @@ canvases.forEach((canvas) => {
     }
 
     function animate() {
-        if (!isVisible) return; // STOP animating if not in view
+        if (!isVisible) return;
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         for (let i = 0; i < particlesArray.length; i++) {
@@ -79,7 +77,6 @@ canvases.forEach((canvas) => {
         animationFrameId = requestAnimationFrame(animate);
     }
 
-    // 3. Intersection Observer: Only run JS when canvas is visible
     const observer = new IntersectionObserver(
         (entries) => {
             entries.forEach((entry) => {
@@ -96,7 +93,6 @@ canvases.forEach((canvas) => {
 
     observer.observe(canvas);
 
-    // Initial Setup
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas, { passive: true });
 });

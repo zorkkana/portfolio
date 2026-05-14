@@ -5,21 +5,19 @@ let lastTrailUpdate = 0;
 let isVisible = true;
 let issEl = null;
 
-// --- OPTIMIZATIONS (Invisible to the eye) ---
 const isMobileGlobe = window.innerWidth < 768;
 
-// Throttle FPS: 30 FPS on mobile, 60 FPS on desktop
+// 30fps on mobile, 60 on desktop
 const fpsInterval = isMobileGlobe ? 1000 / 30 : 1000 / 60;
 let lastFrameTime = 0;
 
-// Cache DOM Elements
 const latValEl = document.getElementById('lat-val');
 const lngValEl = document.getElementById('lng-val');
 const altValEl = document.getElementById('alt-val');
 let lastDomUpdate = 0;
 const DOM_UPDATE_INTERVAL = 250;
 
-// --- NEW: Parallax mouse offsets ---
+// parallax tilt from mouse
 let targetLatOffset = 0;
 let targetLngOffset = 0;
 let currentLatOffset = 0;
@@ -27,19 +25,17 @@ let currentLngOffset = 0;
 
 window.addEventListener('mousemove', (e) => {
     if (window.innerWidth > 768) {
-        // Normalize mouse position to range between -1 and 1
         const mouseX = (e.clientX / window.innerWidth) * 2 - 1;
         const mouseY = (e.clientY / window.innerHeight) * 2 - 1;
 
-        // Map to a maximum of 5 degrees rotation
+        // cap at ~3deg either way
         targetLngOffset = mouseX * -3;
-        targetLatOffset = mouseY * 3; // Inverted so dragging mouse down tilts camera down
+        targetLatOffset = mouseY * 3; // inverted so mouse down tilts down
     } else {
         targetLatOffset = 0;
         targetLngOffset = 0;
     }
 });
-// -----------------------------------
 
 function getLatLngAlt(date) {
     const posVel = satellite.propagate(satrec, date);
@@ -65,7 +61,7 @@ function generateOrbitTrail(centerDate) {
     return trail;
 }
 
-let isTrackingISS = false; // Controls when the camera locks onto the ISS
+let isTrackingISS = false;
 
 async function initGlobe() {
     const landData = await fetch('data/ne_110m_admin_0_countries.geojson.json').then((res) =>
@@ -78,6 +74,7 @@ async function initGlobe() {
         );
         satrec = satellite.twoline2satrec(tleData.line1, tleData.line2);
     } catch (e) {
+        // fallback TLE if the api is down
         satrec = satellite.twoline2satrec(
             '1 25544U 98067A   24117.50000000  .00016717  00000-0  30164-3 0  9994',
             '2 25544  51.6416 281.3340 0004928  14.0044  51.2185 15.49815024450654'
@@ -86,7 +83,6 @@ async function initGlobe() {
 
     const globeEl = document.getElementById('hero-globe');
 
-    // Initial camera position (zoomed out) to make the entrance look dramatic
     world = Globe()(globeEl)
         .backgroundColor('rgba(0,0,0,0)')
         .showGlobe(true)
@@ -109,7 +105,7 @@ async function initGlobe() {
 
         .htmlElement(() => {
             const el = document.createElement('div');
-            issEl = el; // <-- save it
+            issEl = el;
             el.style.width = '0px';
             el.style.height = '0px';
             el.style.pointerEvents = 'none';
@@ -122,17 +118,15 @@ async function initGlobe() {
             return el;
         });
 
-    // --- THE DELAYED ENTRANCE ANIMATION ---
     world.onGlobeReady(() => {
-        // Wait 1000ms (1 second) after the globe is technically "ready" before showing it
+        // small pause before the entrance so the page settles first
         setTimeout(() => {
-            // 1. Unhide the globe (triggers the CSS fade-in and scale-up)
             globeEl.classList.add('globe-ready');
 
             const now = new Date();
             const current = getLatLngAlt(now);
 
-            // 2. Start the cinematic flight to the ISS (3.5 seconds long)
+            // cinematic fly-in
             world.pointOfView(
                 {
                     lat: current.lat - 20,
@@ -142,11 +136,11 @@ async function initGlobe() {
                 3500
             );
 
-            // 3. Enable real-time tracking once the flight arrives
+            // hand off to live tracking once we arrive
             setTimeout(() => {
                 isTrackingISS = true;
             }, 3500);
-        }, 500); // This is your 1-second "extra peace" delay
+        }, 500);
     });
 
     world.renderer().setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -180,7 +174,7 @@ async function initGlobe() {
         issMarker.lng = current.lng;
         issMarker.alt = current.alt;
 
-        // Kill the transition on globe.gl's wrapper before updating
+        // kill globe.gl's wrapper transition so the marker doesn't snap-tween across the globe
         const wrapper = issEl?.parentElement;
         if (wrapper) {
             wrapper.style.transition = 'none';
@@ -200,7 +194,7 @@ async function initGlobe() {
             );
         }
 
-        // Re-enable transition after one frame so normal movement stays smooth
+        // restore transition next frame
         requestAnimationFrame(() => {
             if (wrapper) wrapper.style.transition = '';
         });
@@ -236,10 +230,8 @@ function updateFrame(timestamp) {
 
     world.htmlElementsData([issMarker]);
 
-    // Only override the camera position if the entrance animation is finished
     if (isTrackingISS) {
-        // NEW: Smoothly interpolate the current offset towards the target offset
-        // The 0.05 multiplier controls the "smoothness" speed
+        // ease mouse-parallax offset toward target
         currentLatOffset += (targetLatOffset - currentLatOffset) * 0.05;
         currentLngOffset += (targetLngOffset - currentLngOffset) * 0.05;
 

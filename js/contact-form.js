@@ -3,11 +3,10 @@ const modal = document.getElementById('thankYouModal');
 const modal2 = document.getElementById('whatareudoung');
 
 form.onsubmit = async (e) => {
-    e.preventDefault(); // Stop the page from refreshing
+    e.preventDefault();
 
     const formData = new FormData(form);
 
-    // Send data to Formspree via AJAX
     const response = await fetch(form.action, {
         method: 'POST',
         body: formData,
@@ -17,9 +16,7 @@ form.onsubmit = async (e) => {
     });
 
     if (response.ok) {
-        // Show the popup
         modal.classList.add('active');
-        // Clear the form
         form.reset();
     } else {
         alert('Oops! There was a problem sending your message.');

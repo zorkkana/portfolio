@@ -4,7 +4,6 @@ const activationDistance = 80;
 const pullStrength = 0.4;
 
 window.addEventListener('mousemove', (e) => {
-    // ONLY run if the screen is wider than 768px
     if (window.innerWidth > 768) {
         magneticElements.forEach((el) => {
             const rect = el.getBoundingClientRect();
@@ -29,7 +28,7 @@ window.addEventListener('mousemove', (e) => {
             }
         });
     } else {
-        // Force reset on mobile just in case of screen rotation
+        // reset on mobile in case of rotation
         magneticElements.forEach((el) => {
             el.style.transform = 'translate(0px, 0px) scale(1)';
         });

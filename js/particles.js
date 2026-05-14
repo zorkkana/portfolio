@@ -15,7 +15,7 @@ async function initParticles() {
             (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4);
         const modal2 = document.getElementById('whatareudoung');
         const particlesContainer = document.getElementById('particles-js');
-        let isVisible = false; // Track visibility
+        let isVisible = false;
         let clickCount = 0;
 
         const particleCount = isMobile ? (isLowEnd ? 18 : 30) : (isLowEnd ? 45 : 80);
@@ -23,13 +23,13 @@ async function initParticles() {
         particlesJS('particles-js', {
             particles: {
                 number: {
-                    value: particleCount, // Scaled by device capability
+                    value: particleCount,
                     density: { enable: true, value_area: 800 },
                 },
                 color: { value: '#ffffff' },
                 shape: { type: 'circle' },
                 opacity: { value: 0.5, random: true },
-                size: { value: 3, random: true }, // Smaller particles = less paint work
+                size: { value: 3, random: true },
                 line_linked: {
                     enable: true,
                     distance: 130,
@@ -39,7 +39,7 @@ async function initParticles() {
                 },
                 move: {
                     enable: true,
-                    speed: isMobile ? 0.8 : 1.5, // Slower is easier on the CPU
+                    speed: isMobile ? 0.8 : 1.5,
                     direction: 'none',
                     out_mode: 'out',
                 },
@@ -52,12 +52,11 @@ async function initParticles() {
                 },
                 modes: { push: { particles_nb: 3 } },
             },
-            retina_detect: false, // Keep false for performance
+            retina_detect: false,
         });
 
         if (!isMobile && !isLowEnd) {
             const mouse = { x: null, y: null };
-            // Passive listener for better scroll performance
             particlesContainer.addEventListener(
                 'mousemove',
                 (e) => {
@@ -77,7 +76,8 @@ async function initParticles() {
                 { passive: true }
             );
 
-            const RADIUS_SQ = 140 * 140; // Use squared radius to avoid Math.sqrt
+            // squared radius so we can skip sqrt on the hot path
+            const RADIUS_SQ = 140 * 140;
             const STRENGTH = 1.4;
             const MAX_SPD = 12;
 
@@ -106,10 +106,10 @@ async function initParticles() {
                     if (mouse.x !== null) {
                         const dx = p.x - mouse.x;
                         const dy = p.y - mouse.y;
-                        const distSq = dx * dx + dy * dy; // Avoid SQRT here
+                        const distSq = dx * dx + dy * dy;
 
                         if (distSq < RADIUS_SQ && distSq > 0.25) {
-                            const dist = Math.sqrt(distSq); // Only SQRT if absolutely necessary
+                            const dist = Math.sqrt(distSq);
                             const t = 1 - dist / 140;
                             const force = STRENGTH * t * t * (3 - 2 * t);
                             p.vx += (dx / dist) * force;
@@ -118,10 +118,8 @@ async function initParticles() {
                         }
                     }
 
-                    // Optimized velocity capping
                     const spdSq = p.vx * p.vx + p.vy * p.vy;
                     if (spdSq > 144) {
-                        // 12^2
                         const spd = Math.sqrt(spdSq);
                         p.vx = (p.vx / spd) * MAX_SPD;
                         p.vy = (p.vy / spd) * MAX_SPD;
@@ -139,7 +137,7 @@ async function initParticles() {
             requestAnimationFrame(trampolineLoop);
         }
 
-        // Easter egg click
+        // easter egg: 10 clicks
         particlesContainer.addEventListener('click', () => {
             if (++clickCount === 10) {
                 modal2.classList.add('active');
@@ -147,7 +145,6 @@ async function initParticles() {
             }
         });
 
-        // ── IMPORTANT: Toggle isVisible ──
         const pObserver = new IntersectionObserver(
             ([entry]) => {
                 isVisible = entry.isIntersecting;
@@ -163,6 +160,5 @@ async function initParticles() {
     }
 }
 
-// Kickoff
 if (document.readyState === 'complete') initParticles();
 else window.addEventListener('load', initParticles);

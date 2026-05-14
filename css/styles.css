@@ -35,7 +35,7 @@ html {
 html,
 body {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  -webkit-tap-highlight-color: transparent; /* For some older browsers */
+  -webkit-tap-highlight-color: transparent;
 }
 ::-webkit-scrollbar {
   width: 8px;
@@ -48,19 +48,16 @@ body {
   border-radius: 10px;
   box-shadow: 0 0 10px #00ffcc;
 }
-/* Standard syntax */
 ::selection {
-  background-color: #00ffcc2c; /* The highlight color */
-  color: #ffffff; /* The text color when highlighted */
+  background-color: #00ffcc2c;
+  color: #ffffff;
 }
 
-/* Chrome, Safari, and Opera */
 ::-webkit-selection {
   background-color: #00ffcc2c;
   color: #ffffff;
 }
 
-/* Firefox */
 ::-moz-selection {
   background-color: #00ffcc2c;
   color: #ffffff;
@@ -120,19 +117,17 @@ html.lenis body {
   mask-composite: add;
 }
 
-/* Universal cursor hide for desktop */
+/* hide native cursor on desktop, custom one takes over */
 @media (pointer: fine) {
   * {
     cursor: none !important;
   }
 }
 
-/* Ensure our custom cursor itself doesn't get hidden or interfere */
 .cursor-dot,
 .cursor-outline {
-  pointer-events: none; /* This makes the dots 'invisible' to the mouse */
+  pointer-events: none;
 }
-/* Hide the default cursor - only do this on desktop */
 @media (pointer: fine) {
   body {
     cursor: none;
@@ -173,13 +168,12 @@ html.lenis body {
   width: 30px;
   height: 30px;
   border: 2px solid rgba(0, 255, 204, 0.5);
-  /* This transition makes the 'lag' effect smooth */
+  /* gives the ring a lerp-y trailing feel */
   transition:
     transform 0.15s ease-out,
     opacity 0.3s ease;
 }
 
-/* Hover State: When hovering over links/buttons */
 .cursor-active .cursor-dot {
   transform: translate(-50%, -50%) scale(0.5);
 }
@@ -192,38 +186,35 @@ html.lenis body {
 @media (max-width: 768px) {
   .cursor-dot,
   .cursor-outline {
-    display: none; /* Hide custom cursor on mobile */
+    display: none;
   }
-  /* Universal cursor hide for desktop */
   @media (pointer: fine) {
     * {
       cursor: default !important;
     }
   }
 }
-/* Update your .cursor-active classes to ensure they override the base state */
 body.cursor-active .cursor-dot {
-  transform: translate(-50%, -50%); /* Dot shrinks */
-  background-color: #fff; /* Dot turns white for contrast */
+  transform: translate(-50%, -50%);
+  background-color: #fff;
 }
 
 body.cursor-active .cursor-outline {
-  transform: translate(-50%, -50%) scale(1.1); /* Kept the scale for that 'zoom' effect */
+  transform: translate(-50%, -50%) scale(1.1);
   border-color: #00ffcc;
-  border-radius: 25%; /* Smoothly moves from 50% to 25% */
+  border-radius: 25%;
 }
 
 .center {
   text-align: center;
 }
 
-/* Navigation */
+/* nav */
 nav {
   position: fixed;
   top: 20px;
   left: 50%;
 
-  /* Keep the horizontal centering while adding the vertical offset */
   transform: translateX(-50%) translateY(-100px);
   width: 80%;
   background: rgba(0, 0, 0, 0.8);
@@ -233,11 +224,9 @@ nav {
   border-radius: 100px;
   border: #00ffcc 1px solid;
   transition: all 0.3s ease-out;
-  /* Animation Trigger */
   animation: dropDown 0.8s ease-out forwards;
 }
 
-/* Define the Animation */
 @keyframes dropDown {
   from {
     opacity: 0;
@@ -249,7 +238,6 @@ nav {
   }
 }
 nav:hover {
-  /* Instead of turning fully solid, it fills with a glowing gas effect */
   background: rgb(1 35 28 / 30%);
   box-shadow:
     0 0 15px rgba(0, 255, 204, 0.6),
@@ -268,7 +256,6 @@ nav:hover .nav-links.active {
 }
 @media (max-width: 1050px) {
   nav:hover {
-    /* Instead of turning fully solid, it fills with a glowing gas effect */
     box-shadow: none;
   }
   nav:hover .nav-links.active {
@@ -290,10 +277,9 @@ nav .logo {
   color: #00ffcc;
   text-decoration: none;
   text-shadow: 0 0 10px #00ffcc;
-  /* 1. Base neon color */
   color: #00ffcc;
 
-  /* 2. Create the "Moving Light" - A gradient with a bright white center */
+  /* moving white highlight clipped to text = neon sweep */
   background: linear-gradient(
     to right,
     #00ffcc 0%,
@@ -303,15 +289,12 @@ nav .logo {
     #00ffcc 100%
   );
 
-  /* 3. Make the background move behind the text */
   background-size: 200% auto;
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent; /* This makes the gradient visible */
+  -webkit-text-fill-color: transparent;
 
-  /* 4. The static glow (so it always looks like neon) */
   text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
 
-  /* 5. Trigger the animation */
   animation: neonSweep 6s linear infinite;
 }
 
@@ -358,13 +341,12 @@ nav ul li a:active {
   height: 100%;
   width: 0%;
   background: #00ffcc;
-  /* Massive glow effect to make it look like raw energy */
   box-shadow:
     0 0 10px #00ffcc,
     0 0 20px #00ffcc;
   transition: width 0.1s ease-out;
   will-change: width;
-  border-radius: 5px; /* Gives the head of the line a soft tip */
+  border-radius: 5px;
 }
 .hero {
   height: 100vh;
@@ -376,8 +358,7 @@ nav ul li a:active {
   text-align: center;
   overflow: hidden;
 }
-/* Hero Section with Particles */
-/* ISS GLOBE CONTAINER */
+/* iss globe */
 #hero-globe {
   position: absolute;
   bottom: -50%;
@@ -387,36 +368,33 @@ nav ul li a:active {
   z-index: 0;
   pointer-events: none;
 
-  /* NEW: Pre-load hidden state */
+  /* hidden until JS adds .globe-ready */
   opacity: 0;
   transform: translateY(500px) scale(0.95);
-  /* Super smooth, cinematic ease-out */
   transition:
     opacity 1s ease-out,
     transform 1s ease-out;
-  contain: strict; /* tells browser this element won't affect layout outside */
+  contain: strict;
   will-change: transform;
 }
 
-/* NEW: The state triggered by JS when fully loaded */
 #hero-globe.globe-ready {
   opacity: 1;
   transform: translateY(0) scale(1);
 }
 
-/* Scroll class */
 #hero-globe.is-fixed {
   position: fixed;
   z-index: -1;
 }
 @media (max-height: 1000px) {
   #hero-globe {
-    height: 100vh; /* Adjusted for smaller screens */
+    height: 100vh;
   }
 }
 @media (max-height: 850px) {
   #hero-globe {
-    height: 100vh; /* Adjusted for smaller screens */
+    height: 100vh;
   }
 }
 
@@ -430,10 +408,10 @@ nav ul li a:active {
   animation: fadeInUp 1s ease-out 1s forwards;
 }
 .hero .container {
-  z-index: 2; /* Sit above the globe */
+  z-index: 2;
   top: -5rem;
   position: relative;
-  pointer-events: none; /* Allows clicks to pass through to the globe */
+  pointer-events: none; /* let clicks pass through to the globe */
 }
 .hero h1 {
   font-family: 'Orbitron', sans-serif;
@@ -449,7 +427,7 @@ nav ul li a:active {
   animation: fadeInUp 1s ease-out 0.5s forwards;
   opacity: 0;
 }
-/* Shared Sci-Fi Structure & Animation */
+/* buttons */
 .btn,
 .btn-hollow {
   display: inline-block;
@@ -465,20 +443,15 @@ nav ul li a:active {
   pointer-events: all;
   animation: fadeInUp 1s ease-out 1s forwards;
 
-  /* Snappy, physical transition for hover and click states */
   transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-/* -------------------------------------- */
-/* PRIMARY BUTTON: High Priority / Solid  */
-/* -------------------------------------- */
+/* primary */
 .btn {
   background: #fd7a33;
-  /* Dark text on a bright background makes the neon look "lit" */
   color: #ffff;
   border: 2px solid #fd7a33;
 
-  /* Strong outward glow + a slight inner white highlight for a glass tube effect */
   box-shadow:
     0 0 15px rgba(253, 122, 51, 0.6),
     0 0 30px rgba(253, 122, 51, 0.3),
@@ -486,7 +459,6 @@ nav ul li a:active {
 }
 
 .btn:hover {
-  /* Maximum brightness and expands toward the user */
   box-shadow:
     0 0 20px #fd7a33,
     0 0 40px #fd7a33;
@@ -495,21 +467,17 @@ nav ul li a:active {
 }
 
 .btn:active {
-  /* The "click" physics - pushes down and dims slightly */
   transform: translateY(1px) scale(0.98);
   box-shadow: 0 0 10px #fd7a33;
 }
 
-/* ---------------------------------------- */
-/* SECONDARY BUTTON: Low Priority / Hollow  */
-/* ---------------------------------------- */
+/* hollow */
 .btn-hollow {
   backdrop-filter: blur(3px);
   background: transparent;
   color: #fd7a33;
   border: 2px solid #fd7a33;
 
-  /* Very subtle resting glow so it doesn't compete with the primary button */
   box-shadow:
     0 0 10px rgba(253, 122, 51, 0.2),
     inset 0 0 10px rgba(253, 122, 51, 0.1);
@@ -517,7 +485,6 @@ nav ul li a:active {
 }
 
 .btn-hollow:hover {
-  /* Instead of turning fully solid, it fills with a glowing gas effect */
   background: rgba(253, 122, 51, 0.15);
   color: #fff;
   box-shadow:
@@ -529,32 +496,26 @@ nav ul li a:active {
 }
 
 .btn-hollow:active {
-  /* The "click" physics */
   transform: translateY(1px) scale(0.98);
   box-shadow: 0 0 5px rgba(253, 122, 51, 0.4);
 }
-/* --- BUTTON STAGGER EFFECT --- */
-
-/* Helper class dynamically added by JS */
+/* button stagger */
 .stagger-btn {
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden; /* Crucial: hides the incoming text below the button */
+  overflow: hidden; /* hides the incoming bottom letter */
 }
 
-/* The container for each individual button letter */
 .btn-letter-wrap {
   position: relative;
   display: inline-block;
-  /* Snappy transition to match the sci-fi button feel */
   transition:
     transform 0.4s cubic-bezier(0.6, 0, 0.4, 1),
     opacity 0.4s cubic-bezier(0.6, 0, 0.4, 1);
   transition-delay: calc(var(--index) * 0.02s);
 }
 
-/* The visible letter */
 .btn-letter-top {
   display: block;
   opacity: 1;
@@ -562,31 +523,24 @@ nav ul li a:active {
   transition-delay: calc(var(--index) * 0.02s + 0.12s);
 }
 
-/* The hidden letter waiting below */
 .btn-letter-bottom {
   position: absolute;
   top: 100%;
   left: 0;
   opacity: 0;
-  /* No transition here — opacity only animates on hover */
   transition: none;
 }
 
-/* --- THE HOVER EXECUTION --- */
-
-/* Slide the text up */
 .btn:hover .btn-letter-wrap,
 .btn-hollow:hover .btn-letter-wrap {
   transform: translateY(-100%);
 }
 
-/* Fade out top layer */
 .btn:hover .btn-letter-top,
 .btn-hollow:hover .btn-letter-top {
   opacity: 0;
 }
 
-/* Fade in bottom layer */
 .btn:hover .btn-letter-bottom,
 .btn-hollow:hover .btn-letter-bottom {
   opacity: 1;
@@ -594,7 +548,7 @@ nav ul li a:active {
   transition-delay: calc(var(--index) * 0.02s + 0.12s);
 }
 
-/* Sections */
+/* sections */
 section {
   padding: 6rem 0;
   position: relative;
@@ -648,11 +602,9 @@ h2 {
   margin: 1rem auto;
   opacity: 0;
   gap: 5px;
-  /* 1. Define a default extra delay of 0 seconds */
   --extra-delay: 0s;
 }
 
-/* 2. When .slower is added, change the variable to 2 seconds */
 .sh-line.slower {
   --extra-delay: 3s;
 }
@@ -683,11 +635,9 @@ h2 {
 
 .sh-line.animate {
   opacity: 1;
-  /* Add the extra delay to the container's un-hide as well */
   transition: opacity 0.1s calc(0.5s + var(--extra-delay));
 }
 
-/* 3. Use calc() to add the base delay and the extra delay together */
 .sh-line.animate .sh-seg-l,
 .sh-line.animate .sh-seg-r {
   animation: sh-seg-expand 0.7s cubic-bezier(0.25, 1, 0.5, 1) calc(0.9s + var(--extra-delay)) both;
@@ -736,10 +686,10 @@ h2 {
   min-height: auto;
 }
 
-/* About Section */
+/* about */
 .about {
   background: #1e1e3f;
-  z-index: 5; /* Ensures it covers the bottom of the globe */
+  z-index: 5; /* covers the bottom of the globe */
 }
 .about-content {
   display: grid;
@@ -762,7 +712,6 @@ h2 {
   object-fit: cover;
   animation: fadeIn 1s ease-out;
 }
-/* Optional: Avatar scaling effect */
 .avatar {
   opacity: 0;
   transform: scale(0.8);
@@ -776,7 +725,6 @@ h2 {
   transform: scale(1);
 }
 
-/* Avatar Card Styling */
 .avatar-card {
   text-align: center;
   max-width: 350px;
@@ -788,14 +736,12 @@ h2 {
   overflow: hidden;
 }
 
-/* Hover Effect: The whole card glows and lifts */
 .avatar-card:hover {
   transform: translateY(-10px);
   box-shadow: 0 15px 40px rgba(0, 255, 204, 0.15);
   border-color: #00ffcc;
 }
 
-/* Avatar Image & Container */
 .avatar-container {
   position: relative;
   width: 150px;
@@ -825,7 +771,7 @@ h2 {
 }
 
 .last-name {
-  color: #00ffcc; /* Accent color for the last name */
+  color: #00ffcc;
 }
 
 .profile-title {
@@ -837,7 +783,6 @@ h2 {
   font-family: monospace;
 }
 
-/* Bottom Stats Row */
 .profile-stats {
   margin-top: 1rem;
   display: flex;
@@ -889,9 +834,9 @@ h2 {
 }
 
 .skills span {
-  display: inline-flex; /* Changed to flex for icon alignment */
-  align-items: center; /* Vertically centers the icon and text */
-  gap: 8px; /* Adds perfect spacing between icon and text */
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   opacity: 0;
   transform: translateY(20px);
   background: rgba(0, 255, 204, 0.1);
@@ -905,11 +850,10 @@ h2 {
     box-shadow 0.3s ease,
     background 0.3s ease;
 
-  /* Ensure the magnetic JS doesn't lag during flex calculation */
+  /* magnetic JS animates transform, hint the compositor */
   will-change: transform, opacity;
 }
 
-/* Optional: Make the icon slightly larger than the text for visual balance */
 .skills span i {
   font-size: 1.1rem;
 }
@@ -951,23 +895,22 @@ h2 {
 }
 @media (max-width: 768px) {
   .skills-container {
-    grid-template-columns: 1fr; /* Switch to single column on mobile */
+    grid-template-columns: 1fr;
   }
-  /* Force exactly 2 columns */
   .skills {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 0.5rem;
   }
 
-  /* Transform the pills into "App Buttons" */
+  /* pills become full-width app-style buttons on mobile */
   .skills span {
-    display: flex; /* Changed from inline to flex */
-    width: 100%; /* Takes up 100% of the parent's width */
-    box-sizing: border-box; /* Ensures padding doesn't make it wider than 100% */
+    display: flex;
+    width: 100%;
+    box-sizing: border-box;
 
     justify-content: center;
-    align-items: center; /* Vertically centers content if there's extra height */
+    align-items: center;
     text-align: center;
     padding: 0.8rem 0.4rem;
     font-size: 0.75rem;
@@ -981,7 +924,6 @@ h2 {
       transform 0.6s ease;
   }
 
-  /* Make the icon slightly bigger so it acts as the centerpiece */
   .skills span i {
     font-size: 1.4rem;
   }
@@ -1015,7 +957,7 @@ h2 {
 }
 
 .flag-wrapper {
-  width: 50px; /* Controls flag size */
+  width: 50px;
   height: 33px;
   display: flex;
   align-items: center;
@@ -1024,12 +966,11 @@ h2 {
 .flag-svg {
   width: 100%;
   height: 100%;
-  border-radius: 5px; /* Slight rounding for a cleaner look */
+  border-radius: 5px;
   object-fit: cover;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* On hover: Bring the flag to life */
 .languages li:hover .flag-svg {
   filter: grayscale(0) opacity(1) brightness(1);
   transform: scale(1.15);
@@ -1070,7 +1011,7 @@ h2 {
   }
 }
 
-/* Projects Section */
+/* projects / edu */
 .edu {
   overflow: hidden;
   background: radial-gradient(circle at center, #0a0a23 0%, #0a0a23 100%);
@@ -1089,14 +1030,14 @@ h2 {
   width: 120%;
   height: 120%;
 
-  /* Increased stroke to 0.4 so the 'dim' version is actually visible */
+  /* stroke 0.4 — anything lower disappears under the mask */
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100' viewBox='0 0 56 100'%3E%3Cpath d='M28 66L0 50L0 16L28 0L56 16L56 50L28 66L28 100' fill='none' stroke='rgba(0, 255, 204, 0.4)' stroke-width='1'/%3E%3C/svg%3E");
   background-size: 56px 100px;
   z-index: 0;
 
   animation: drift 20s linear infinite;
 
-  /* The mask now fades to 15% visibility instead of 0% */
+  /* mask fades to 15% not 0 so grid stays visible outside the spotlight */
   -webkit-mask-image: radial-gradient(
     circle 500px at var(--mouse-x, 50%) var(--mouse-y, 50%),
     black 0%,
@@ -1163,11 +1104,9 @@ h2 {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  /* Reveal starting point */
   opacity: 0;
   transform: translateY(30px);
 
-  /* Default transition for when you scroll up and it fades OUT */
   transition:
     opacity 0.3s ease,
     transform 0.3s ease;
@@ -1184,10 +1123,7 @@ h2 {
   transform: translateY(-10px);
   box-shadow: 0 0 30px rgba(0, 255, 204, 0.5);
   border: 1px solid #00ffcc;
-  /* 
-            Force the hover transition to happen immediately (0s delay).
-            Because we are targeting .animate:hover, it easily overrides the entrance delay.
-            */
+  /* 0s delay so hover overrides the staggered entrance delay */
   transition:
     transform 0.3s ease 0s,
     box-shadow 0.3s ease 0s;
@@ -1246,7 +1182,7 @@ h2 {
   margin: 0;
   color: #00ffcc;
 }
-/* Experience Section */
+/* experience */
 .experience {
   background: #1e1e3f;
   z-index: 2;
@@ -1257,23 +1193,22 @@ h2 {
   flex-direction: column;
   gap: 2rem;
   position: relative;
-  padding-left: 90px; /* Increased from 50px to make room for years */
+  padding-left: 90px; /* room for sideways year labels */
 }
 .experience-year {
   position: absolute;
-  left: -85px; /* Positioned to the left of the timeline line */
-  top: 3rem; /* Aligned with the center of the dot */
-  transform: translateY(-50%) rotate(-90deg); /* Centers it and flips it sideways */
+  left: -85px;
+  top: 3rem;
+  transform: translateY(-50%) rotate(-90deg);
   transform-origin: center;
   color: #00ffcc;
   font-weight: bold;
-  font-family: monospace; /* Looks great for tech/dev timelines */
+  font-family: monospace;
   font-size: 0.9rem;
   letter-spacing: 2px;
   white-space: nowrap;
-  opacity: 0.7; /* Makes it look slightly more integrated */
+  opacity: 0.7;
 }
-/* Optional: Make the year light up when you hover the item */
 .experience-item:hover .experience-year {
   opacity: 1;
   text-shadow: 0 0 8px #00ffcc;
@@ -1282,7 +1217,7 @@ h2 {
   opacity: 1;
 }
 
-/* 1. THE LINE SEGMENTS (Static) */
+/* timeline line */
 .experience-item::after {
   content: '';
   position: absolute;
@@ -1295,12 +1230,11 @@ h2 {
   z-index: 0;
 }
 
-/* Stops the line at the very last dot */
 .experience-item:last-child::after {
   display: none;
 }
 
-/* 2. THE DOTS (Static) */
+/* timeline dots */
 .experience-item::before {
   content: '';
   position: absolute;
@@ -1322,7 +1256,7 @@ h2 {
   box-shadow: 0 0 12px #00ffcc;
 }
 
-/* 3. THE CARD (The part that moves) */
+/* card */
 .experience-card {
   background: radial-gradient(
     circle at top left,
@@ -1343,7 +1277,7 @@ h2 {
     transform 0.6s ease,
     background 0.3s ease,
     border 0.3s ease,
-    box-shadow 0.3s ease; /* Smooth move */
+    box-shadow 0.3s ease;
 }
 .projects .experience-card {
   background: radial-gradient(
@@ -1361,9 +1295,9 @@ h2 {
   border: 1px solid rgba(0, 255, 204, 1);
 }
 
-/* HOVER EFFECT: Only the card moves, the dot stays and lights up */
+/* card slides, dot stays put */
 .experience-card:hover {
-  transform: translateX(15px); /* Card slides right */
+  transform: translateX(15px);
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid #00ffcc;
   box-shadow: 0 0 30px rgba(0, 255, 204, 0.5);
@@ -1374,12 +1308,10 @@ h2 {
   box-shadow: 0 0 12px #00ffcc;
 }
 
-/* 4. ENTRY ANIMATION (Keeps your sliding entry effect) */
 .experience-item {
   position: relative;
 }
 
-/* Typography */
 .experience-card h3 {
   font-size: 1.5rem;
   color: #fff;
@@ -1402,18 +1334,18 @@ h2 {
 
 @media (max-width: 768px) {
   .experience-list {
-    padding-left: 20px; /* Reduced padding for smaller screens */
+    padding-left: 20px;
   }
   .experience-year {
-    left: -15px; /* Adjusted for smaller screens */
-    font-size: 0.75rem; /* Slightly smaller text */
+    left: -15px;
+    font-size: 0.75rem;
   }
 
   .project-card.skill-list h3 {
     text-align: center;
   }
 }
-/* Company Section */
+/* company */
 .company {
   background: #0a0a23;
   text-align: center;
@@ -1428,7 +1360,7 @@ h2 {
   margin: 0 auto;
 }
 
-/* --- TERMINAL STYLES --- */
+/* terminal */
 .terminal-window {
   background: rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(10px);
@@ -1489,7 +1421,6 @@ h2 {
   font-family: monospace;
 }
 
-/* --- LOGO & CLUSTER STYLES --- */
 .logo-cluster-container {
   display: flex;
   flex-direction: column;
@@ -1529,7 +1460,7 @@ h2 {
   overflow: hidden;
   justify-content: center;
   align-items: center;
-  animation: breathing 4s ease-in-out infinite; /* All use same breathing now */
+  animation: breathing 4s ease-in-out infinite;
 }
 
 .floating-icon img {
@@ -1543,7 +1474,7 @@ h2 {
   max-width: 800px;
   margin: 0 auto 3rem;
 }
-/* Randomizing the breathing start times so they don't move in a perfect line */
+/* desync delays so icons don't bob in lockstep */
 .icon-1 {
   animation-delay: 0.5s;
   animation-duration: 4.2s;
@@ -1568,7 +1499,6 @@ h2 {
   animation-delay: 1s;
   animation-duration: 4.1s;
 }
-/* --- ANIMATIONS --- */
 @keyframes breathing {
   0%,
   100% {
@@ -1579,18 +1509,15 @@ h2 {
   }
 }
 
-/* --- RESPONSIVE FIX --- */
 @media (max-width: 992px) {
   .company-container {
     grid-template-columns: 1fr;
   }
 
-  /* Text/Terminal stays on top */
   .terminal-window {
     order: 1;
   }
 
-  /* Logo/Icons move below */
   .logo-cluster-container {
     order: 2;
     margin-top: 2rem;
@@ -1608,7 +1535,7 @@ h2 {
   }
 }
 
-/* Contact Section */
+/* contact */
 .contact {
   background: #1e1e3f;
 }
@@ -1658,7 +1585,6 @@ h2 {
   cursor: pointer;
 }
 
-/* Contact Section */
 .contact-section {
   padding: 80px 10%;
   background: #0a0a23;
@@ -1669,7 +1595,6 @@ h2 {
   margin: 0 auto;
 }
 
-/* Reusing the Terminal style from Company section */
 .contact-form-window {
   background: rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(4px);
@@ -1700,7 +1625,6 @@ h2 {
   gap: 2rem;
 }
 
-/* Input Groups */
 .input-group {
   display: flex;
   flex-direction: column;
@@ -1716,7 +1640,6 @@ h2 {
   text-transform: uppercase;
 }
 
-/* Inputs and Textarea */
 .contact-form input,
 .contact-form textarea {
   background: rgba(255, 255, 255, 0.05);
@@ -1729,7 +1652,6 @@ h2 {
   outline: none;
 }
 
-/* Focus Effect: This is the "Cyber" touch */
 .contact-form input:focus,
 .contact-form textarea:focus {
   border-color: #00ffcc;
@@ -1738,18 +1660,16 @@ h2 {
 }
 .form-footer {
   display: flex;
-  justify-content: space-between; /* Pushes button left, icons right */
+  justify-content: space-between;
   align-items: center;
   margin-top: 20px;
 }
 
-/* Placeholder styling */
 ::placeholder {
   color: rgba(255, 255, 255, 0.3);
   font-size: 0.9rem;
 }
 
-/* Submit Button Customization */
 .submit-btn {
   align-self: flex-start;
 }
@@ -1760,7 +1680,6 @@ h2 {
   gap: 2rem;
   margin-top: 1rem;
 }
-/* Social Links Footer */
 .social-links-container {
   display: flex;
   justify-content: center;
@@ -1773,7 +1692,7 @@ h2 {
   justify-content: center;
   width: 60px;
   height: 60px;
-  border-radius: 50%; /* Keeps them perfectly circular */
+  border-radius: 50%;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(0, 255, 204, 0.2);
   transition:
@@ -1786,20 +1705,19 @@ h2 {
 .social-icon svg {
   width: 28px;
   height: 28px;
-  fill: #ccc; /* Starts off slightly muted */
+  fill: #ccc;
   transition: fill 0.3s ease;
 }
 
-/* Hover Effects */
 .social-icon:hover {
-  transform: translateY(-8px); /* Lifts up slightly */
+  transform: translateY(-8px);
   border-color: #00ffcc;
   background: rgba(0, 255, 204, 0.08);
   box-shadow: 0 10px 20px rgba(0, 255, 204, 0.2);
 }
 
 .social-icon:hover svg {
-  fill: #00ffcc; /* Icon turns neon cyan */
+  fill: #00ffcc;
 }
 
 .experience-company-logo {
@@ -1809,7 +1727,7 @@ h2 {
   transition: all 0.3s ease;
 }
 .experience-card:hover .experience-company-logo {
-  filter: grayscale(0%) brightness(100%); /* Returns to original color */
+  filter: grayscale(0%) brightness(100%);
   opacity: 1;
 }
 .own-company-logo {
@@ -1821,7 +1739,6 @@ h2 {
   top: 20px;
 }
 
-/* Responsive adjustment */
 @media (max-width: 768px) {
   .person-details {
     display: grid;
@@ -1843,7 +1760,7 @@ h2 {
 footer {
   background: rgba(10, 10, 35, 0.8);
   backdrop-filter: blur(15px);
-  padding: 4rem 0 2rem 0; /* More space on top */
+  padding: 4rem 0 2rem 0;
   position: relative;
 }
 
@@ -1867,7 +1784,6 @@ footer {
   font-weight: bold;
 }
 
-/* The "Space/System" Status Indicator */
 .footer-status {
   font-family: 'Orbitron', sans-serif;
   font-size: 0.7rem;
@@ -1892,7 +1808,6 @@ footer {
     padding: 3rem 1rem;
   }
 }
-/* Initial hidden state for animated elements */
 .fade-in {
   opacity: 0;
   transform: translateY(50px);
@@ -1901,18 +1816,16 @@ footer {
     transform 0.5s ease;
 }
 
-/* Visible state when the animation triggers */
 .fade-in.animate {
   opacity: 1;
   transform: translateY(0);
 }
 
-/* Project cards slide-in effect */
 .project-card {
   opacity: 0;
   backdrop-filter: blur(2px);
   transform: translateY(20px);
-  pointer-events: none; /* Keeps it strictly unclickable while hidden */
+  pointer-events: none; /* unclickable while hidden */
   transition:
     opacity 0.5s ease,
     transform 0.5s ease;
@@ -1922,7 +1835,6 @@ footer {
   opacity: 1;
   transform: translateY(0);
 
-  /* Handles the visual slide-in smoothly */
   transition:
     opacity 0.6s ease var(--stagger-delay, 0s),
     transform 0.6s ease var(--stagger-delay, 0s);
@@ -1936,7 +1848,6 @@ footer {
   }
 }
 
-/* Company logo zoom-in effect */
 .company-logo {
   opacity: 0;
   transform: scale(0.8);
@@ -1950,7 +1861,6 @@ footer {
   transform: scale(1);
 }
 
-/* Animations */
 @keyframes fadeInDown {
   from {
     opacity: 0;
@@ -1992,15 +1902,14 @@ footer {
   height: 100%;
 }
 
-/* New classes for the effect */
 .scroll-word {
-  opacity: 0.1; /* Starting state for unrevealed words */
+  opacity: 0.1;
   filter: blur(10px);
   display: inline-block;
   transition:
     opacity 0.1s ease-out,
     filter 0.1s ease-out;
-  will-change: opacity, filter; /* Optimizes performance during scroll */
+  will-change: opacity, filter;
 }
 
 @media (max-width: 768px) {
@@ -2019,22 +1928,22 @@ footer {
     margin: 0 auto;
   }
   .experience-list {
-    padding-left: 20px; /* Less space for years on mobile */
+    padding-left: 20px;
   }
   .experience-item::after {
-    left: -20px; /* Adjust line position for mobile */
+    left: -20px;
   }
   .experience-item::before {
-    left: -20px; /* Adjust dot position for mobile */
+    left: -20px;
   }
   .experience-year {
-    left: -60px; /* Move years to the right of the line on mobile */
+    left: -60px;
   }
 }
 
-/* Hamburger icon styling */
+/* hamburger */
 .hamburger {
-  display: none; /* Hidden on big screens */
+  display: none;
   cursor: pointer;
 }
 
@@ -2044,37 +1953,32 @@ footer {
   height: 3px;
   background: #00ffcb;
   border-radius: 100px;
-  transition: all 0.4s cubic-bezier(0.68, -0.6, 0.32, 1.6); /* Adds a slight "bounce" */
+  transition: all 0.4s cubic-bezier(0.68, -0.6, 0.32, 1.6); /* overshoot for bounce */
   position: relative;
 }
 
-/* Space the lines out using margins */
 .hamburger span:nth-child(2) {
   margin: 5px 0;
 }
 
-/* The "X" Transformation */
+/* hamburger -> X */
 .hamburger.active span:nth-child(1) {
-  /* Move down and rotate */
   transform: translateY(8px) rotate(45deg);
 }
 
 .hamburger.active span:nth-child(2) {
-  /* Shrink to nothing in the center */
   opacity: 0;
   transform: scale(0);
 }
 
 .hamburger.active span:nth-child(3) {
-  /* Move up and rotate */
   transform: translateY(-8px) rotate(-45deg);
 }
 
-/* Default nav links styling for larger screens */
 .nav-links {
   list-style: none;
   display: flex;
-  gap: 0.5rem; /* Space between links */
+  gap: 0.5rem;
 }
 .nav-links svg {
   width: auto;
@@ -2114,18 +2018,16 @@ footer {
     0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* The container for each individual letter */
+/* nav letter stagger */
 .letter-wrap {
   position: relative;
   display: inline-block;
-  /* Snappy transition to match the sci-fi button feel */
   transition:
     transform 0.4s cubic-bezier(0.6, 0, 0.4, 1),
     opacity 0.4s cubic-bezier(0.6, 0, 0.4, 1);
   transition-delay: calc(var(--index) * 0.02s);
 }
 
-/* The letter currently visible */
 .letter-top {
   display: block;
   opacity: 1;
@@ -2133,31 +2035,24 @@ footer {
   transition-delay: calc(var(--index) * 0.02s + 0.12s);
 }
 
-/* The letter waiting below */
 .letter-bottom {
   position: absolute;
   top: 100%;
   left: 0;
   opacity: 0;
-  /* No transition here — opacity only animates on hover */
   transition: none;
 }
 
-/* --- THE MAGIC MOMENT --- */
-
-/* Slide the wrap up */
 .nav-links li a:hover .letter-wrap,
 .nav-links li a.active-link .letter-wrap {
   transform: translateY(-100%);
 }
 
-/* Fade out the top letter */
 .nav-links li a:hover .letter-top,
 .nav-links li a.active-link .letter-top {
   opacity: 0;
 }
 
-/* Fade in the bottom letter (this one is already your accent color!) */
 .nav-links li a:hover .letter-bottom,
 .nav-links li a.active-link .letter-bottom {
   opacity: 1;
@@ -2165,7 +2060,6 @@ footer {
   transition-delay: calc(var(--index) * 0.02s + 0.12s);
 }
 
-/* Make sure the active link has the heavier font weight */
 .nav-links li a.active-link .letter-bottom {
   font-weight: 600;
 }
@@ -2174,17 +2068,15 @@ footer {
   font-weight: 600;
 }
 
-/* Ensure the hover effect still works on the active link */
 .active-link::before {
-  color: #fff; /* Flip the color or keep it consistent */
+  color: #fff;
 }
 .toplink {
   margin-top: 0;
 }
-/* Mobile styles */
 @media (max-width: 1050px) {
   .hamburger {
-    display: block; /* Show hamburger on small screens */
+    display: block;
   }
   .nav-links {
     display: flex;
@@ -2200,15 +2092,14 @@ footer {
     border: none;
     overflow: hidden;
 
-    /* CLOSED STATE */
     max-height: 0;
     opacity: 0;
 
-    /* CLOSING LOGIC: Wait for max-height (0.5s) before snapping opacity to 0 */
+    /* opacity + border snap after max-height finishes, so the menu fully collapses before they vanish */
     transition:
       max-height 0.5s ease,
       opacity 0s ease 0.4s,
-      /* 0s duration, but 0.5s DELAY */ border 0s ease 0.4s; /* Remove border after closing animation */
+      border 0s ease 0.4s;
   }
   .nav-links li a {
     padding: 1.5rem 1rem;
@@ -2245,31 +2136,28 @@ footer {
     transform: translateY(0);
   }
 
-  /* Fade out the top letter as it moves up */
+  /* disable letter swap on mobile, click target is the whole row */
   .nav-links li a:hover .letter-top {
     opacity: 1;
   }
 
-  /* Fade in the bottom letter as it moves into place */
   .nav-links li a:hover .letter-bottom {
     opacity: 0;
   }
 
   .nav-links.active {
-    /* OPEN STATE */
     max-height: 500px;
     opacity: 1;
     border: 1px #00ffcc solid;
     border-top: none;
 
-    /* OPENING LOGIC: Snap opacity to 1 immediately, animate height */
     transition:
       max-height 0.5s ease,
       opacity 0s ease 0s,
-      /* 0s duration, 0s delay */ border 0s ease 0s; /* Show border immediately */
+      border 0s ease 0s;
   }
   .nav-links li {
-    text-align: center; /* Center align text */
+    text-align: center;
   }
   nav {
     background: rgb(7 7 14) !important;
@@ -2288,7 +2176,7 @@ footer {
   }
 }
 
-/* TELEMETRY HUD STYLE (Separated view) */
+/* iss telemetry hud */
 .iss-hud {
   position: relative;
   background: rgba(0, 0, 0, 0.7);
@@ -2323,13 +2211,12 @@ footer {
   right: 12px;
   width: 8px;
   height: 8px;
-  background-color: #ff3e3e; /* Red for recording/live, or #00ff41 for green */
+  background-color: #ff3e3e;
   border-radius: 50%;
   box-shadow: 0 0 8px #ff3e3e;
   animation: pulse 1.5s infinite;
 }
 
-/* The "blinking" effect */
 @keyframes pulse {
   0% {
     opacity: 1;
@@ -2354,7 +2241,6 @@ footer {
   background-size: cover;
 }
 
-/* Ensure the SVG fills the width and removes the bottom gap */
 svg {
   display: block;
   width: 100%;
@@ -2383,7 +2269,7 @@ svg {
   }
 }
 
-/* Twinkling stars */
+/* clouds */
 .cloud-stars {
   position: absolute;
   top: 0;
@@ -2407,7 +2293,6 @@ svg {
   }
 }
 
-/* Shared layer styles */
 .cloud-layer {
   position: absolute;
   top: 0;
@@ -2422,7 +2307,6 @@ svg {
   height: 100%;
 }
 
-/* Ambient drift animations */
 @keyframes drift-back {
   0%,
   100% {
@@ -2465,7 +2349,7 @@ svg {
 }
 
 .auto-type {
-  /* Keeps the line height so the page doesn't jump */
+  /* reserves line height so page doesn't jump as typewriter fills in */
   min-height: 1.2em;
 }
 
@@ -2484,8 +2368,8 @@ svg {
   animation: animate 10s linear infinite;
   z-index: 0;
   contain: layout;
-  filter: blur(0px); /* Start with no blur */
-  transition: filter 0.3s ease; /* Smooth blur transition */
+  filter: blur(0px);
+  transition: filter 0.3s ease;
 }
 .shotingstarspan::before {
   content: '';
@@ -2497,7 +2381,7 @@ svg {
   background: linear-gradient(90deg, #fff, transparent);
 }
 .shotingstarspan.absolute {
-  position: absolute; /* Switches to absolute when class is added */
+  position: absolute;
 }
 @keyframes animate {
   0% {
@@ -2562,36 +2446,34 @@ svg {
   animation-duration: 1.75s;
 }
 
-/* Modal Overlay */
+/* modal */
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(10, 10, 35, 0.9); /* Dark background with blur */
+  background: rgba(10, 10, 35, 0.9);
   backdrop-filter: blur(8px);
-  display: none; /* Hidden by default */
+  display: none;
   justify-content: center;
   align-items: center;
   z-index: 1000;
   transition: 0.3s;
 }
 
-/* Show class for JS */
 .modal-overlay.active {
   display: flex;
 }
 
-/* Define the slide-up animation */
 @keyframes slideUp {
   from {
-    transform: translateY(50px); /* Starts 50px below its final position */
-    opacity: 0; /* Starts invisible */
+    transform: translateY(50px);
+    opacity: 0;
   }
   to {
-    transform: translateY(0); /* Ends at its original position */
-    opacity: 1; /* Fully visible */
+    transform: translateY(0);
+    opacity: 1;
   }
 }
 
@@ -2600,11 +2482,8 @@ svg {
   width: 90%;
   text-align: center;
 
-  /* Apply the animation */
   animation: slideUp 0.4s ease-out forwards;
 }
-
-/* Ensure the parent container (like your About section) has 'position: relative' */
 
 .dust-canvas {
   position: absolute;
@@ -2613,8 +2492,8 @@ svg {
   width: 100%;
   height: 100%;
   filter: blur(1px);
-  z-index: 0; /* Pushes it behind all your text and cards */
-  pointer-events: none; /* CRITICAL: Stops the canvas from blocking clicks/hovers */
+  z-index: 0;
+  pointer-events: none; /* canvas must not eat clicks */
 }
 .Background {
   background-color: #0a0a23;
@@ -2634,7 +2513,7 @@ svg {
   font-family: 'Orbitron', sans-serif;
   font-size: 10px;
   letter-spacing: 2px;
-  cursor: none; /* Remember our custom cursor! */
+  cursor: none;
   z-index: 1000;
   backdrop-filter: blur(2px);
   background: rgba(0, 255, 204, 0.05);
@@ -2648,7 +2527,6 @@ svg {
   animation: dropUP 0.8s ease-out forwards;
 }
 
-/* Define the Animation */
 @keyframes dropUP {
   from {
     opacity: 0;
@@ -2665,7 +2543,7 @@ svg {
   box-shadow: 0 0 15px rgba(0, 255, 204, 0.2);
 }
 
-/* Sound Wave Animation */
+/* sound wave */
 .sound-wave {
   display: flex;
   align-items: flex-end;
@@ -2673,17 +2551,17 @@ svg {
   height: 12px;
   position: relative;
   left: 5px;
-  --wave-scale: 1; /* NEW: Sets a default variable */
+  --wave-scale: 1; /* JS scales this with volume */
 }
 
 .bar {
   width: 2px;
   background: #00ffcc;
-  height: 12px; /* Set to the maximum height */
-  transform-origin: bottom; /* Ensures it scales from the bottom up */
-  transform: scaleY(0.33); /* Rests at about 4px (33% of 12px) */
-  transition: transform 0.3s ease; /* Smoothly glides back to resting state when paused */
-  border-radius: 2px; /* Optional: rounds the tips for a slightly cleaner look */
+  height: 12px;
+  transform-origin: bottom;
+  transform: scaleY(0.33); /* rests at ~4px */
+  transition: transform 0.3s ease;
+  border-radius: 2px;
 }
 
 .playing .bar {
@@ -2702,39 +2580,35 @@ svg {
   100% {
     transform: scaleY(0.33);
   }
-  /* NEW: Uses the variable for the peak of the bounce */
   50% {
     transform: scaleY(var(--wave-scale));
   }
 }
-/* Default PC behavior */
 #audio-status {
   display: inline-block;
   transition:
     opacity 0.5s ease,
     max-width 0.5s ease,
     margin 0.5s ease;
-  max-width: 200px; /* High enough to fit the text */
+  max-width: 200px;
   opacity: 1;
 }
 
-/* Mobile specific overrides */
 @media (max-width: 768px) {
   .audio-control {
     cursor: pointer;
     position: fixed;
-    /* Ensure the button itself has a consistent size when text is hidden */
     min-width: 40px;
     height: 40px;
-    justify-content: center; /* Keeps the bars centered */
+    justify-content: center;
     overflow: hidden;
   }
 
   #audio-status {
-    position: relative; /* Takes it out of the layout flow */
-    left: 45px; /* Spacing from the icon */
+    position: relative;
+    left: 45px;
     opacity: 0;
-    transform: translateX(-10px); /* Small slide effect */
+    transform: translateX(-10px);
     white-space: nowrap;
     pointer-events: none;
     transition: all 0.5s ease;
@@ -2742,12 +2616,11 @@ svg {
     overflow: hidden;
   }
 
-  /* The class we toggle with JS */
+  /* shown briefly via JS on tap, since hover doesn't exist on mobile */
   #audio-status.mobile-visible {
     opacity: 1;
     transform: translateX(0);
     max-width: 200px;
-    /* We expand the button width slightly to fit the text when visible */
     position: relative;
     left: 0;
     margin-left: 10px;
@@ -2756,12 +2629,10 @@ svg {
 }
 .magnetic {
   transition: transform 0.2s cubic-bezier(0.33, 1, 0.68, 1);
-  will-change: transform; /* Optimization for the GPU */
+  will-change: transform;
 }
 
-/* ============================================================
-   BASE SCENE
-   ============================================================ */
+/* space divider scene */
 .space-divider {
   position: relative;
   width: 100%;
@@ -2770,7 +2641,7 @@ svg {
   overflow: hidden;
 }
 
-/* ---- MAIN PLANET ---- */
+/* main planet */
 .layer-planet {
   position: absolute;
   width: 280px;
@@ -2847,7 +2718,7 @@ svg {
   border: 1px solid rgba(255, 255, 255, 0.04);
 }
 
-/* ---- SMALL PLANET ---- */
+/* small planet */
 .layer-planet-small-1 {
   position: absolute;
   width: 110px;
@@ -2899,7 +2770,7 @@ svg {
   overflow: hidden;
 }
 
-/* ---- DISTANT SMALL PLANET ---- */
+/* distant planet */
 .layer-planet-small-2 {
   position: absolute;
   width: 50px;
@@ -2915,7 +2786,7 @@ svg {
     inset -8px -6px 12px rgba(0, 0, 0, 0.7);
 }
 
-/* ---- NEBULA ---- */
+/* nebula */
 .nebula {
   position: absolute;
   border-radius: 50%;
@@ -2947,7 +2818,7 @@ svg {
   z-index: 2;
 }
 
-/* ---- STARFIELD ---- */
+/* starfield */
 .layer-stars {
   position: absolute;
   inset: 0;
@@ -2955,7 +2826,7 @@ svg {
   pointer-events: none;
 }
 
-/* ---- DUST CANVAS — behind planets now ---- */
+/* dust canvas, behind planets */
 #sd-dust {
   position: absolute;
   inset: 0;
@@ -2965,9 +2836,7 @@ svg {
   z-index: 3;
 }
 
-/* ============================================================
-    SKILL ORBIT SYSTEM
-    ============================================================ */
+/* skill orbit system */
 .orbit-track {
   position: absolute;
   top: 50%;
@@ -2978,7 +2847,7 @@ svg {
   pointer-events: none;
 }
 
-/* Arm that rotates — holds the badge at a radius */
+/* rotating arm holds the badge at a radius */
 .orb-arm {
   position: absolute;
   top: 50%;
@@ -2990,7 +2859,7 @@ svg {
   pointer-events: none;
 }
 
-/* The visible badge */
+/* counter-rotates so the label stays upright */
 .orb-badge {
   position: absolute;
   left: 0;
@@ -3023,7 +2892,6 @@ svg {
   background: rgba(80, 220, 255, 0.85);
 }
 
-/* Small planet badges slightly smaller */
 .orb-badge-sm {
   font-size: 9px;
   padding: 2px 7px 2px 6px;
@@ -3051,7 +2919,6 @@ svg {
   }
 }
 
-/* ---- ANIMATIONS ---- */
 @keyframes planetDrift {
   0% {
     background-position: 0% 50%;
@@ -3087,13 +2954,16 @@ svg {
   will-change: transform;
 }
 
-/* ─── Grid background ──────────────────────────── */
+/* card grid background */
 .card-grid-bg {
   position: absolute;
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  /* This mask will now clip correctly */
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 60px 60px;
   -webkit-mask-image: radial-gradient(circle at 65% 0%, black 0%, black 20%, transparent 65%);
   mask-image: radial-gradient(circle at 65% 0%, black 0%, black 20%, transparent 65%);
   overflow: hidden;
@@ -3103,7 +2973,6 @@ svg {
   mask-image: radial-gradient(circle at 65% 0%, black 0%, black 20%, transparent 50%);
 }
 
-/* Shine orb */
 .card-grid-bg .shine {
   position: absolute;
   inset: 0;
@@ -3128,13 +2997,11 @@ svg {
   );
 }
 
-/* Tile container */
 .card-grid-bg .tiles {
   position: absolute;
   inset: 0;
 }
 
-/* Individual tile */
 .tile {
   position: absolute;
   background-color: rgba(59, 130, 246, 0.07);
@@ -3154,7 +3021,7 @@ svg {
   }
 }
 
-/* Grid lines are injected as simple divs */
+/* grid lines — injected as divs */
 .grid-line-v,
 .grid-line-h {
   position: absolute;

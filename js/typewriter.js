@@ -8,7 +8,6 @@ const initTypewriter = () => {
                 const text = el.getAttribute('data-text');
 
                 if (entry.isIntersecting) {
-                    // Trigger typing if it's not already running
                     if (!el.typedInstance) {
                         el.innerText = '';
                         el.style.visibility = 'visible';
@@ -21,8 +20,7 @@ const initTypewriter = () => {
                         });
                     }
                 } else {
-                    // ONLY reset if the element is ABOVE the viewport
-                    // entry.boundingClientRect.top > 0 means it went off the top
+                    // only reset when scrolled past the top — keeps it intact while scrolling down
                     if (entry.boundingClientRect.top > 0) {
                         if (el.typedInstance) {
                             el.typedInstance.destroy();
@@ -35,7 +33,7 @@ const initTypewriter = () => {
             });
         },
         {
-            threshold: 0, // Using 0 ensures it triggers exactly when it leaves
+            threshold: 0,
             rootMargin: '0px',
         }
     );

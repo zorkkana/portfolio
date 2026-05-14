@@ -6,7 +6,7 @@
     let isVisible = false;
     let scrollY = window.scrollY;
 
-    // CACHE THESE VALUES OUTSIDE THE UPDATE LOOP
+    // cache layout reads — don't hit them every frame
     let dividerTop = 0;
     let dividerHeight = 0;
     let viewH = window.innerHeight;
@@ -17,10 +17,8 @@
         viewH = window.innerHeight;
     }
 
-    // Initial measure
     measure();
 
-    // Re-measure only when the user resizes the window (not every frame!)
     window.addEventListener('resize', measure, { passive: true });
 
     const observer = new IntersectionObserver(
@@ -44,13 +42,11 @@
     function update() {
         if (!isVisible) return;
 
-        // NO DOM READS HERE - Use the cached variables
         const dividerCenter = dividerTop + dividerHeight / 2;
         const progress = 1 - (dividerCenter - scrollY) / viewH;
 
         for (let i = 0; i < layers.length; i++) {
             const px = progress * speeds[i] * 100;
-            // translate3d is correct, but use 'px' unit and avoid unnecessary toFixed if possible
             layers[i].style.transform = `translate3d(${px}px, 0, 0)`;
         }
 

@@ -1,8 +1,7 @@
 window.addEventListener('load', () => {
     const script = document.createElement('script');
-    script.src = 'libs/lenis.min.js'; // Path to your file
+    script.src = 'libs/lenis.min.js';
     script.onload = () => {
-        // Initialize Lenis only after the file is fully loaded
         const lenis = new Lenis({
             duration: 1.2,
             easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),

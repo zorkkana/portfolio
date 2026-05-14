@@ -1,7 +1,6 @@
 (function () {
     'use strict';
 
-    // 1. Setup and Variables
     const wrap = document.getElementById('spaceDivider');
     if (!wrap) return;
 
@@ -14,10 +13,9 @@
     let isPaused = false;
     let ticking = false;
 
-    // Check for "Reduced Motion" preference for accessibility
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // Detect weak hardware so we can render fewer stars/dust without changing the look
+    // drop counts on weak hardware so it still feels the same
     const isLowEnd =
         (navigator.deviceMemory && navigator.deviceMemory <= 4) ||
         (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) ||
@@ -26,14 +24,13 @@
     const DUST_BACK = isLowEnd ? 45 : 90;
     const DUST_FRONT = isLowEnd ? 28 : 55;
 
-    // 2. Optimized Starfield (SVG with Feathering/Blur)
     function initStars() {
         const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
         svg.setAttribute('width', '100%');
         svg.setAttribute('height', '100%');
         svg.style.cssText = 'position:absolute;inset:0;pointer-events:none;';
 
-        // Add a "Feather" filter to make stars look soft
+        // soft feather so stars don't look like hard pixels
         const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
         defs.innerHTML = `
             <filter id="starBlur" x="-50%" y="-50%" width="200%" height="200%">
@@ -54,7 +51,7 @@
             c.setAttribute('r', r);
             c.setAttribute('fill', 'white');
             c.setAttribute('opacity', op);
-            c.setAttribute('filter', 'url(#starBlur)'); // Apply the feathering
+            c.setAttribute('filter', 'url(#starBlur)');
 
             if (!prefersReducedMotion && Math.random() < 0.28) {
                 const delay = (Math.random() * 5).toFixed(1);
@@ -67,7 +64,6 @@
         starContainer.appendChild(svg);
     }
 
-    // 3. Dust Particles with Feathered Gradients
     canvas.width = W;
     canvas.height = H;
     const dust = [];
@@ -110,10 +106,9 @@
             if (p.x < -10) p.x = W + 10;
             if (p.x > W + 10) p.x = -10;
 
-            // Drawing the feathered particle
             const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 2);
             gradient.addColorStop(0, `rgba(${p.col}, ${p.op})`);
-            gradient.addColorStop(1, `rgba(${p.col}, 0)`); // Fades out at edges
+            gradient.addColorStop(1, `rgba(${p.col}, 0)`);
 
             ctx.beginPath();
             ctx.fillStyle = gradient;
@@ -124,7 +119,6 @@
         requestAnimationFrame(animateDust);
     }
 
-    // 4. Parallax (Hardware Accelerated)
     const els = {
         stars: document.getElementById('sdStars'),
         neb1: document.getElementById('sdNeb1'),
@@ -149,20 +143,19 @@
         ticking = false;
         const rect = wrap.getBoundingClientRect();
 
-        // Don't calculate if off-screen
         if (rect.top > window.innerHeight || rect.bottom < 0) return;
 
         const offset = window.innerHeight / 2 - rect.top;
 
         for (let key in els) {
             if (els[key]) {
-                // translate3d forces GPU rendering
+                // translate3d to get on the GPU
                 els[key].style.transform = `translate3d(0, ${offset * (speeds[key] || 0)}px, 0)`;
             }
         }
     }
 
-    // 5. Visibility Observer (The Lighthouse "Secret Sauce")
+    // pause work when off-screen — big lighthouse win
     const observer = new IntersectionObserver(
         (entries) => {
             entries.forEach((entry) => {
@@ -177,7 +170,6 @@
         { threshold: 0.01 }
     );
 
-    // 6. Init
     initStars();
     createDust(DUST_BACK, 0);
     createDust(DUST_FRONT, 1);
@@ -194,7 +186,6 @@
         { passive: true }
     );
 
-    // Handle Resize
     window.addEventListener(
         'resize',
         () => {

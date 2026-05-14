@@ -26,7 +26,7 @@
     <link rel="canonical" href="https://oskarikaile.github.io/" />
     <link rel="icon" type="image/png" href="images/O.png" />
 
-    <!-- Preload only the bold versions if they are used in your Hero section -->
+    <!-- preload hero fonts -->
     <link
       rel="preload"
       href="fonts/orbitron-v35-latin-700.woff2"
@@ -51,7 +51,6 @@
       }
     </script>
 
-    <!-- Three.js importmap: unchanged, this is fine -->
     <script type="importmap">
       {
         "imports": {
@@ -61,11 +60,8 @@
       }
     </script>
 
-    <!-- ALL scripts get defer — they now load after HTML is parsed -->
-
     <script src="libs/satellite.min.js" defer></script>
     <script src="libs/typed.umd.js" defer></script>
-    <!-- Lenis Smooth Scroll -->
     <script src="js/lenis-loader.js" defer></script>
 
     <link rel="stylesheet" href="css/styles.css" />
@@ -1855,7 +1851,7 @@
       <span class="shotingstarspan"></span>
 
       <div class="space-divider" id="spaceDivider">
-        <!-- Dust particles (canvas) — z-index 3, behind planets -->
+        <!-- dust particles canvas, behind planets -->
         <canvas id="sd-dust"></canvas>
 
         <!-- Nebula glow patches -->
@@ -1869,7 +1865,7 @@
         <!-- Distant planet (top left) -->
         <div class="layer-planet-small-2" id="sdPxs"></div>
 
-        <!-- Small cyan planet — orbits: WordPress, SQL, Shopify, Sass -->
+        <!-- small cyan planet -->
         <div class="layer-planet-small-1" id="sdPsm">
           <div class="sm-atmo"></div>
           <div class="sm-craters">
@@ -1896,7 +1892,7 @@
           </div>
         </div>
 
-        <!-- Main teal planet — orbits: React, Python, C#, Unity, AWS, Docker -->
+        <!-- main teal planet -->
         <div class="layer-planet" id="sdPmain">
           <div class="planet-atmo"></div>
           <div class="planet-craters">
@@ -1908,7 +1904,7 @@
           <!-- Orbit tracks -->
           <div class="orbit-track" style="width: 340px; height: 340px"></div>
           <div class="orbit-track" style="width: 440px; height: 440px"></div>
-          <!-- Inner ring: core stack -->
+          <!-- inner ring -->
           <div class="orb-arm" style="--r: 170px; --dur: 10s; --start: 0s">
             <span class="orb-badge">React</span>
           </div>
@@ -1918,7 +1914,7 @@
           <div class="orb-arm" style="--r: 170px; --dur: 10s; --start: -6.66s">
             <span class="orb-badge">C#</span>
           </div>
-          <!-- Outer ring: tools & platforms -->
+          <!-- outer ring -->
           <div class="orb-arm" style="--r: 220px; --dur: 16s; --start: 0s">
             <span class="orb-badge">Unity</span>
           </div>
@@ -2227,7 +2223,6 @@
     <script src="js/globe.js" defer></script>
     <script src="js/globe-scroll.js" defer></script>
 
-    <!-- No external script tag here anymore -->
 
     <script src="js/particles.js" defer></script>
 
@@ -2240,7 +2235,7 @@
     <script src="js/tilt.js" defer></script>
     <script src="js/scroll-progress.js" defer></script>
     <script src="js/btn-text.js" defer></script>
-    <script src="js/idle-load.js" defer></script>
+    <script src="js/idle-load.js" ></script>
     <script src="js/cloud-parallax.js" defer></script>
   </body>
 </html>

@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.observe(element);
     });
 
-    // INSTEAD of transitionDelay, we inject a CSS Variable (--stagger-delay)
+    // stagger via css var so transition-delay stays composable
     document.querySelectorAll('.project-card').forEach((card, index) => {
         card.style.setProperty('--stagger-delay', `${index * 0.1}s`);
     });

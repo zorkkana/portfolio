@@ -6,14 +6,13 @@ window.addEventListener('load', () => {
             (navigator.deviceMemory && navigator.deviceMemory <= 4) ||
             (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4);
         const TILE_SIZE = 60;
-        // Fewer animated tiles on weak devices — grid lines stay identical
+        // fewer animated tiles on weak devices, grid lines stay the same
         const TILE_PROB = isLowEnd ? 0.15 : 0.3;
 
         function initGrid(bg) {
             const canvas = document.createElement('canvas');
             canvas.className = 'tiles-canvas';
 
-            // background without pushing any sibling content around.
             canvas.style.cssText = `
                 position: absolute;
                 inset: 0;
@@ -22,7 +21,7 @@ window.addEventListener('load', () => {
                 pointer-events: none;
             `;
 
-            // the canvas's absolute coords are relative to it.
+            // canvas is absolute, so the parent needs a positioning context
             if (getComputedStyle(bg).position === 'static') {
                 bg.style.position = 'relative';
             }
@@ -31,18 +30,23 @@ window.addEventListener('load', () => {
             const ctx = canvas.getContext('2d', { alpha: true });
 
             let tiles = [];
-            let animationFrame;
+            let animationFrame = 0;
             let isVisible = false;
+            let hasTiles = false;
 
-            bg.style.backgroundImage = `
-                linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px)
-            `;
-            bg.style.backgroundSize = `${TILE_SIZE}px ${TILE_SIZE}px`;
+            function startAnimate() {
+                if (!isVisible || !hasTiles || animationFrame) return;
+                animationFrame = requestAnimationFrame(animate);
+            }
 
-            function rebuild() {
-                const W = bg.offsetWidth;
-                const H = bg.offsetHeight;
+            function stopAnimate() {
+                if (animationFrame) {
+                    cancelAnimationFrame(animationFrame);
+                    animationFrame = 0;
+                }
+            }
+
+            function rebuild(W, H) {
                 if (!W || !H) return;
 
                 const dpr = window.devicePixelRatio || 1;
@@ -65,9 +69,13 @@ window.addEventListener('load', () => {
                         }
                     }
                 }
+                hasTiles = tiles.length > 0;
+                // ensure the loop is running once we actually have tiles to draw
+                startAnimate();
             }
 
             function animate(time) {
+                animationFrame = 0;
                 if (!isVisible) return;
 
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -85,22 +93,23 @@ window.addEventListener('load', () => {
             const observer = new IntersectionObserver(
                 (entries) => {
                     isVisible = entries[0].isIntersecting;
-                    if (isVisible) animate(performance.now());
-                    else cancelAnimationFrame(animationFrame);
+                    if (isVisible) startAnimate();
+                    else stopAnimate();
                 },
                 { threshold: 0.01 }
             );
-
             observer.observe(bg);
 
             let resizeTimer;
-            const resizer = new ResizeObserver(() => {
+            const resizer = new ResizeObserver((entries) => {
+                const rect = entries[0].contentRect;
                 clearTimeout(resizeTimer);
-                resizeTimer = setTimeout(rebuild, 200);
+                resizeTimer = setTimeout(() => rebuild(rect.width, rect.height), 200);
             });
             resizer.observe(bg);
 
-            rebuild();
+            // ResizeObserver fires its initial entry on observe(), so rebuild
+            // will be driven from there once the parent actually has a size.
         }
 
         document.querySelectorAll('.card-grid-bg').forEach(initGrid);

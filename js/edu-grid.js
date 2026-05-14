@@ -4,8 +4,6 @@ document.addEventListener('mousemove', (e) => {
 
     const rect = grid.getBoundingClientRect();
 
-    // Calculate position relative to the grid element itself
-    // Math: Mouse position - Grid's starting edge = Corrected Coordinate
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
 
